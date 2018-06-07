@@ -20,15 +20,12 @@ echo "Root folder is [${ROOT_FOLDER}]"
 echo "Repo resource folder is [${REPO_RESOURCE}]"
 echo "Tools resource folder is [${TOOLS_RESOURCE}]"
 
-ls ${ROOT_FOLDER}
-ls ${ROOT_FOLDER}/${REPO_RESOURCE}
-
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
 echo "Packaging JAR"
-${ROOT_FOLDER}/${REPO_RESOURCE}/mvnw clean package -DskipTests
+./mvnw clean package -DskipTests
 
-jar_count=`find ${ROOT_FOLDER}/${REPO_RESOURCE}/target -type f -name *.jar | wc -l`
+jar_count=`find ./target -type f -name *.jar | wc -l`
 
 if [ $jar_count -gt 1 ]; then
   echo "More than one jar found, don't know which one to deploy. Exiting"
@@ -36,7 +33,7 @@ if [ $jar_count -gt 1 ]; then
 fi
 
 # Put some useful output properties
-JAR_FILE=`find ${ROOT_FOLDER}/${REPO_RESOURCE}/target -type f -name *.jar`
+JAR_FILE=`find ./target -type f -name *.jar`
 BUILD_DATE=`date`
 
 echo "JAR_FILE=${JAR_FILE}" >> "${propsFile}"
