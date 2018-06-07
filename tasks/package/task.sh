@@ -20,10 +20,13 @@ echo "Root folder is [${ROOT_FOLDER}]"
 echo "Repo resource folder is [${REPO_RESOURCE}]"
 echo "Tools resource folder is [${TOOLS_RESOURCE}]"
 
+ls ${ROOT_FOLDER}
+ls ${ROOT_FOLDER}/${REPO_RESOURCE}
+
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
 echo "Packaging JAR"
-./mvnw clean package -DskipTests
+${ROOT_FOLDER}/${REPO_RESOURCE}/mvnw clean package -DskipTests
 
 jar_count=`find ${ROOT_FOLDER}/${REPO_RESOURCE}/target -type f -name *.jar | wc -l`
 
