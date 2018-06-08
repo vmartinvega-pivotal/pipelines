@@ -25,7 +25,8 @@ echo ""
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
 echo "--- Building ---"
-mvn -s ${MAVEN_SETTINGS} -X clean install -DskipTests=true ${BUILD_OPTIONS}
+#mvn -s ${MAVEN_SETTINGS} -X clean install -DskipTests=true ${BUILD_OPTIONS}
+mvn -X clean install -DskipTests=true ${BUILD_OPTIONS}
 echo "--- Building ---"
 echo ""
 

@@ -25,7 +25,8 @@ echo ""
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
 echo "--- Testing ---"
-mvn -s ${MAVEN_SETTINGS} test -Dmaven.test.failure.ignore=true ${BUILD_OPTIONS}
+#mvn -s ${MAVEN_SETTINGS} test -Dmaven.test.failure.ignore=true ${BUILD_OPTIONS}
+mvn test -Dmaven.test.failure.ignore=true ${BUILD_OPTIONS}
 echo "--- Testing ---"
 echo ""
 
