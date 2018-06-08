@@ -14,8 +14,8 @@ resources:
   source:
     uri: ((tools-scripts-url))
     branch: ((tools-branch))
-    username: ((github-username))
-    password: ((github-password))
+    username: ((github-tools-username))
+    password: ((github-tools-password))
     skip_ssl_verification: true
 
 - name: keyval
@@ -28,16 +28,39 @@ resource_types:
       repository: swce/keyval-resource
 
 jobs:
-- name: package
+- name: build
   public: true
   plan:
   - aggregate:
     - get: tools
     - get: repo
       trigger: true
-  - task: package
+  - task: build
     privileged: true
-    file: tools/tasks/package/task.yml
+    file: tools/tasks/build/task.yml
+    params:
+      BUILD_OPTIONS: ((build-options))
+      MAVEN_SETTINGS: ((maven-settings))
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+
+- name: unit-test
+  public: true
+  plan:
+  - aggregate:
+    - get: tools
+    - get: repo
+    - get: keyval
+      passed:
+      - prod-deploy
+      trigger: false
+  - task: unit-test
+    privileged: true
+    file: tools/tasks/unit-test/task.yml
+    params:
+      BUILD_OPTIONS: ((build-options))
+      MAVEN_SETTINGS: ((maven-settings))
   - put: keyval
     params:
       file: keyvalout/keyval.properties

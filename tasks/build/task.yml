@@ -16,4 +16,8 @@ outputs:
   - name: keyvalout
 
 run:
-  path: tools/tasks/package/task.sh
+  path: tools/tasks/build/task.sh
+
+params:
+  MAVEN_SETTINGS:
+  BUILD_OPTIONS:
