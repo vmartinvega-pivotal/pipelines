@@ -35,6 +35,10 @@ echo "--- Sonarqube ---"
 echo "--- Sonarqube ---"
 echo ""
 
+# Adding values to keyvalout
+BUILD_DATE=`date`
+echo "SONARQUBE_DATE=${BUILD_DATE}" >> "${propsFile}"
+
 cp -r "${ROOT_FOLDER}/${REPO_RESOURCE}"/. "${ROOT_FOLDER}/${OUTPUT_RESOURCE}/"
 
 echo "Done!!"

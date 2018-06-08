@@ -35,6 +35,10 @@ mvn test -Dmaven.test.failure.ignore=true ${BUILD_OPTIONS}
 echo "--- Testing ---"
 echo ""
 
+# Adding values to keyvalout
+BUILD_DATE=`date`
+echo "TEST_DATE=${BUILD_DATE}" >> "${propsFile}"
+
 cp -r "${ROOT_FOLDER}/${REPO_RESOURCE}"/. "${ROOT_FOLDER}/${OUTPUT_RESOURCE}/"
 
 echo "Done!!"
