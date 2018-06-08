@@ -41,7 +41,7 @@ jobs:
     params:
       BUILD_OPTIONS: ((build-options))
       MAVEN_SETTINGS: ((maven-settings))
-      TRUSTSTORE_FILE: ((truststore-file))
+      TRUSTSTORE_FILE: ((truststore))
   - put: keyval
     params:
       file: keyvalout/keyval.properties
