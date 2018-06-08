@@ -54,7 +54,7 @@ jobs:
     - get: keyval
       passed:
       - build
-      trigger: false
+      trigger: true
   - task: unit-test
     privileged: true
     file: tools/tasks/unit-test/task.yml
