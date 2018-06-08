@@ -17,19 +17,17 @@ propsDir="${ROOT_FOLDER}/${KEYVALOUTPUT_RESOURCE}"
 propsFile="${propsDir}/keyval.properties"
 
 echo "--- Task Params ---"
-echo ""
 echo "MAVEN_SETTINGS: [${MAVEN_SETTINGS}]"
 echo "BUILD_OPTIONS: [${BUILD_OPTIONS}]"
-echo ""
 echo "--- Task Params ---"
+echo ""
 
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
 echo "--- Testing ---"
-echo ""
 mvn -s ${MAVEN_SETTINGS} test -Dmaven.test.failure.ignore=true ${BUILD_OPTIONS}
-echo ""
 echo "--- Testing ---"
+echo ""
 
 cp -r "${ROOT_FOLDER}/${REPO_RESOURCE}"/. "${ROOT_FOLDER}/${OUTPUT_RESOURCE}/"
 

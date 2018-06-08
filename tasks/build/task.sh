@@ -17,19 +17,17 @@ propsDir="${ROOT_FOLDER}/${KEYVALOUTPUT_RESOURCE}"
 propsFile="${propsDir}/keyval.properties"
 
 echo "--- Task Params ---"
-echo ""
 echo "MAVEN_SETTINGS: [${MAVEN_SETTINGS}]"
 echo "BUILD_OPTIONS: [${BUILD_OPTIONS}]"
-echo ""
 echo "--- Task Params ---"
+echo ""
 
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
 echo "--- Building ---"
-echo ""
 mvn -s ${MAVEN_SETTINGS} -X clean install -DskipTests=true ${BUILD_OPTIONS}
-echo ""
 echo "--- Building ---"
+echo ""
 
 # Adding values to keyvalout
 BUILD_DATE=`date`
