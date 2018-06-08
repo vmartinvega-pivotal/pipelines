@@ -53,7 +53,7 @@ jobs:
     - get: repo
     - get: keyval
       passed:
-      - prod-deploy
+      - build
       trigger: false
   - task: unit-test
     privileged: true
