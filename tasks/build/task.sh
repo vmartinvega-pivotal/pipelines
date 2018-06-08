@@ -12,20 +12,25 @@ export REPO_RESOURCE=repo
 export TOOLS_RESOURCE=tools
 export OUTPUT_RESOURCE=out
 export KEYVALOUTPUT_RESOURCE=keyvalout
+export TRUSTSTORE_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/settings/${TRUSTSTORE}"
+export MAVEN_SETTINGS_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/settings/${MAVEN_SETTINGS}"
 
 propsDir="${ROOT_FOLDER}/${KEYVALOUTPUT_RESOURCE}"
 propsFile="${propsDir}/keyval.properties"
 
 echo "--- Task Params ---"
 echo "MAVEN_SETTINGS: [${MAVEN_SETTINGS}]"
+echo "MAVEN_SETTINGS_FILE: [${MAVEN_SETTINGS_FILE}]"
 echo "BUILD_OPTIONS: [${BUILD_OPTIONS}]"
+echo "TRUSTSTORE: [${TRUSTSTORE}]"
+echo "TRUSTSTORE_FILE: [${TRUSTSTORE_FILE}]"
 echo "--- Task Params ---"
 echo ""
 
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
 echo "--- Building ---"
-#mvn -s ${MAVEN_SETTINGS} -X clean install -DskipTests=true ${BUILD_OPTIONS}
+#mvn -s ${MAVEN_SETTINGS} -X clean install -DskipTests=true -Djavax.net.ssl.trustStore=${TRUSTSTORE_FILE} ${BUILD_OPTIONS}
 mvn -X clean install -DskipTests=true ${BUILD_OPTIONS}
 echo "--- Building ---"
 echo ""

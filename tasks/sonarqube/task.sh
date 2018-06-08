@@ -22,6 +22,7 @@ echo "--- Task Params ---"
 echo "MAVEN_SETTINGS: [${MAVEN_SETTINGS}]"
 echo "MAVEN_SETTINGS_FILE: [${MAVEN_SETTINGS_FILE}]"
 echo "BUILD_OPTIONS: [${BUILD_OPTIONS}]"
+echo "SONAR_BRANCH: [${SONAR_BRANCH}]"
 echo "TRUSTSTORE: [${TRUSTSTORE}]"
 echo "TRUSTSTORE_FILE: [${TRUSTSTORE_FILE}]"
 echo "--- Task Params ---"
@@ -29,10 +30,9 @@ echo ""
 
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
-echo "--- Testing ---"
-#mvn -s ${MAVEN_SETTINGS} test -Dmaven.test.failure.ignore=true ${BUILD_OPTIONS}
-mvn test -Dmaven.test.failure.ignore=true ${BUILD_OPTIONS}
-echo "--- Testing ---"
+echo "--- Sonarqube ---"
+#mvn -s ${MAVEN_SETTINGS} --batch-mode sonar:sonar -Djavax.net.ssl.trustStore=${TRUSTSTORE_FILE} -Dsonar.branch=${SONAR_BRANCH}
+echo "--- Sonarqube ---"
 echo ""
 
 cp -r "${ROOT_FOLDER}/${REPO_RESOURCE}"/. "${ROOT_FOLDER}/${OUTPUT_RESOURCE}/"

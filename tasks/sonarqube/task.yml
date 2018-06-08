@@ -16,9 +16,10 @@ outputs:
   - name: keyvalout
 
 run:
-  path: tools/tasks/build/task.sh
+  path: tools/tasks/sonarqube/task.sh
 
 params:
   MAVEN_SETTINGS:
   BUILD_OPTIONS:
   TRUSTSTORE:
+  SONAR_BRANCH:

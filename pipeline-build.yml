@@ -41,6 +41,7 @@ jobs:
     params:
       BUILD_OPTIONS: ((build-options))
       MAVEN_SETTINGS: ((maven-settings))
+      TRUSTSTORE_FILE: ((truststore-file))
   - put: keyval
     params:
       file: keyvalout/keyval.properties
@@ -61,6 +62,29 @@ jobs:
     params:
       BUILD_OPTIONS: ((build-options))
       MAVEN_SETTINGS: ((maven-settings))
+      TRUSTSTORE: ((truststore))
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+
+- name: sonarqube
+  public: true
+  plan:
+  - aggregate:
+    - get: tools
+    - get: repo
+    - get: keyval
+      passed:
+      - unit-test
+      trigger: true
+  - task: sonarqube
+    privileged: true
+    file: tools/tasks/sonarqube/task.yml
+    params:
+      BUILD_OPTIONS: ((build-options))
+      MAVEN_SETTINGS: ((maven-settings))
+      TRUSTSTORE: ((truststore))
+      SONAR_BRANCH: ((sonar-branch))
   - put: keyval
     params:
       file: keyvalout/keyval.properties
