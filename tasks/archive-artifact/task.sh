@@ -25,6 +25,10 @@ echo "BUILD_OPTIONS: [${BUILD_OPTIONS}]"
 echo "SONAR_BRANCH: [${SONAR_BRANCH}]"
 echo "TRUSTSTORE: [${TRUSTSTORE}]"
 echo "TRUSTSTORE_FILE: [${TRUSTSTORE_FILE}]"
+echo "USERNAME: [${USERNAME}]"
+echo "PASSWORD: [...]"
+echo "BRANCHNAME: [${BRANCHNAME}]"
+echo "SONAR_BRANCH: [${SONAR_BRANCH}]"
 echo "--- Task Params ---"
 echo ""
 
@@ -34,19 +38,22 @@ echo "--- Archive Artifact ---"
 
 REGEXP="\d+\.\d+\.\d+"
 POM_FILE="pom.xml"
-BRANCHNAME="2.0"
+#BRANCHNAME="2.0"
 
+# Extracts the POM version from file
 POM_VERSION=$(python parse-pom.py $POM_FILE "version")
 echo "POM_VERSION=${POM_VERSION}"
 
+# Checks version is ok with branchname
 checkversion=$(python check-version.py $REGEXP $POM_VERSION $BRANCHNAME)
 echo "CheckVersion result=${checkversion}"
 
+# Calculate next release based on tags
 PATCH_LEVEL=$(expr `git tag|grep '${BRANCHNAME}.[0-9][0-9]*\$' | awk -F '.' '{ print $3 }' | sort -n | tail -n 1` + 1 || echo 0)
 NEXT_RELEASE=${BRANCHNAME}.${PATCH_LEVEL}
 echo "Calculated next release: ${NEXT_RELEASE}"
 
-# tagExists function
+# Check tag exists
 VERSION=$(python regex-match.py $REGEXP $POM_VERSION "find" 0) 
 echo "VERSION=${VERSION}"
 TAG=$(git tag | grep '${VERSION}' || echo 'OK')
@@ -65,6 +72,12 @@ then
       echo "WARN: Patched pom version with value ${NEW_POM_VERSION}"
       #git commit -a -m "Changed pom version from ${POM_VERSION} to ${NEW_POM_VERSION}"
     fi
+
+    # Maven release prepare
+    mvn -s ${MAVEN_SETTINGS_FILE} --batch-mode release:clean release:prepare -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Djavax.net.ssl.trustStore=${TRUSTSTORE_FILE} -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUSTSTORE_FILE}"
+
+    # Maven release perform
+    mvn -s $MAVEN_SETTINGS --batch-mode release:perform -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUSTSTORE_FILE} -Dsonar.branch=${SONAR_BRANCH}" -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Djavax.net.ssl.trustStore=${TRUSTSTORE_FILE}"
 else
     echo "ERROR: Pom Version ${POM_VERSION} does not match release name ${BRANCHNAME}"
     exit 1
