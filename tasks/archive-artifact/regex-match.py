@@ -22,6 +22,6 @@ if __name__ == "__main__":
     
     m = re.search(reg, val)
     if m:
-      print m.group(0)
+      print m.group(index)
     else:
-      print "nofind"
+      print "false"
