@@ -88,28 +88,3 @@ jobs:
   - put: keyval
     params:
       file: keyvalout/keyval.properties
-
-- name: archive-artifact
-  public: true
-  plan:
-  - aggregate:
-    - get: tools
-    - get: repo
-    - get: keyval
-      passed:
-      - sonarqube
-      trigger: true
-  - task: archive-artifact
-    privileged: true
-    file: tools/tasks/archive-artifact/task.yml
-    params:
-      BUILD_OPTIONS: ((build-options))
-      MAVEN_SETTINGS: ((maven-settings))
-      TRUSTSTORE: ((truststore))
-      SONAR_BRANCH: ((sonar-branch))
-  - put: keyval
-    params:
-      file: keyvalout/keyval.properties
-  - put: repo
-    params:
-      repository: repo-modified

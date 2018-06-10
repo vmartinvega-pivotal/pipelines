@@ -14,6 +14,7 @@ inputs:
 outputs:
   - name: out
   - name: keyvalout
+  - name: repo-modified
 
 run:
   path: tools/tasks/archive-artifact/task.sh
