@@ -6,7 +6,7 @@ set -o errexit
 set -o errtrace
 set -o pipefail
 
-export DEBUG_LOCAL="true"
+export DEBUG_LOCAL="false"
 export ROOT_FOLDER
 ROOT_FOLDER="$( pwd )"
 export REPO_RESOURCE=repo
@@ -41,7 +41,7 @@ fi
 echo "--- Archive Artifact ---"
 
 REGEXP="\d+\.\d+\.\d+"
-POM_FILE="../../../unzip-sink/pom.xml"
+POM_FILE="pom.xml"
 #BRANCHNAME="2.0"
 
 # Extracts the POM version from file
