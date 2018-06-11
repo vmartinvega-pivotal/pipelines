@@ -33,27 +33,34 @@ echo "SONAR_BRANCH: [${SONAR_BRANCH}]"
 echo "--- Task Params ---"
 echo ""
 
+
+getPythonFile () {
+  PYTHON_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/$1"
+  if [[ $DEBUG_LOCAL = "true" ]]
+  then
+    PYTHON_FILE="../../python/$1"
+  fi
+  return ${PYTHON_FILE}
+}
+
+
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
 echo "--- Archive Artifact ---"
 
 echo "Installing git ..."
-apt get install git -y
+apt install git -y
 
 echo "Installing maven ..."
-sudo apt install maven
+apt install maven -y
 
 REGEXP="\d+\.\d+\.\d+"
 POM_FILE="pom.xml"
 #BRANCHNAME="2.0"
 
 # Extracts the POM version from file
-PYTHON_PARSE_POM_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/parse-pom.py"
-if [[ $DEBUG_LOCAL = "true" ]]
-then
-  PYTHON_PARSE_POM_FILE="../../python/parse-pom.py"
-fi
-POM_VERSION=$(python ${PYTHON_PARSE_POM_FILE} $POM_FILE "version")
+PYTHON_FILE=getPythonFile("parse-pom.py")
+POM_VERSION=$(python ${PYTHON_FILE} $POM_FILE "version")
 echo "POM_VERSION=${POM_VERSION}"
 
 # Checks version is ok with branchname
