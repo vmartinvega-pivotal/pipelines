@@ -88,8 +88,22 @@ echo "TagExists result=${tagexists}"
 
 if [[ $checkversion = "true" ]]
 then
+    git clone repo repo-modified
+
     if [[ $tagexists = "true" ]]
     then
+      
+
+      cd repo-modified
+      #    echo "new line" >> some-file.txt
+
+       #   git add .
+
+        #  git config --global user.name "YOUR NAME"
+         # git config --global user.email "YOUR EMAIL ADDRESS"
+
+         # git commit -m "Changed some-file.txt"
+
       echo "WARN: The software is already tagged with this release"
       NEW_POM_VERSION="${NEXT_RELEASE}-SNAPSHOT"
       NEW_POM_FILE="${POM_FILE}.new"
