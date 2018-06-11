@@ -42,7 +42,7 @@ POM_FILE="pom.xml"
 #BRANCHNAME="2.0"
 
 # Extracts the POM version from file
-PYTHON_PARSE_POM_FILE="${ROOT_FOLDER}/${REPO_RESOURCE}/python/parse-pom.py"
+PYTHON_PARSE_POM_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/parse-pom.py"
 if [[ $DEBUG_LOCAL = "true" ]]
 then
   PYTHON_PARSE_POM_FILE="../../python/parse-pom.py"
@@ -51,7 +51,7 @@ POM_VERSION=$(python ${PYTHON_PARSE_POM_FILE} $POM_FILE "version")
 echo "POM_VERSION=${POM_VERSION}"
 
 # Checks version is ok with branchname
-PYTHON_CHECK_VERSION_FILE="${ROOT_FOLDER}/${REPO_RESOURCE}/python/check-version.py"
+PYTHON_CHECK_VERSION_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/check-version.py"
 if [[ $DEBUG_LOCAL = "true" ]]
 then
   PYTHON_CHECK_VERSION_FILE="../../python/check-version.py"
@@ -65,7 +65,7 @@ NEXT_RELEASE=${BRANCHNAME}.${PATCH_LEVEL}
 echo "Calculated next release: ${NEXT_RELEASE}"
 
 # Check tag exists
-PYTHON_REGEX_MATCH_FILE="${ROOT_FOLDER}/${REPO_RESOURCE}/python/regex-match.py"
+PYTHON_REGEX_MATCH_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/regex-match.py"
 if [[ $DEBUG_LOCAL = "true" ]]
 then
   PYTHON_REGEX_MATCH_FILE="../../python/regex-match.py"
@@ -75,7 +75,7 @@ echo "VERSION=${VERSION}"
 TAG=$(git tag | grep '${VERSION}' || echo 'OK')
 echo "Tag=${TAG}"
 
-PYTHON_TAG_EXISTS_FILE="${ROOT_FOLDER}/${REPO_RESOURCE}/python/tag-exists.py"
+PYTHON_TAG_EXISTS_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/tag-exists.py"
 if [[ $DEBUG_LOCAL = "true" ]]
 then
   PYTHON_TAG_EXISTS_FILE="../../python/tag-exists.py"
@@ -90,7 +90,7 @@ then
       echo "WARN: The software is already tagged with this release"
       NEW_POM_VERSION="${NEXT_RELEASE}-SNAPSHOT"
       NEW_POM_FILE="${POM_FILE}.new"
-      PYTHON_MODIFY_VERSION_POM_FILE="${ROOT_FOLDER}/${REPO_RESOURCE}/python/modify-version-pom.py"
+      PYTHON_MODIFY_VERSION_POM_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/modify-version-pom.py"
       if [[ $DEBUG_LOCAL = "true" ]]
       then
         PYTHON_MODIFY_VERSION_POM_FILE="../../python/modify-version-pom.py"
