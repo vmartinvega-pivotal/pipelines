@@ -6,7 +6,7 @@ set -o errexit
 set -o errtrace
 set -o pipefail
 
-export DEBUG_LOCAL="false"
+export DEBUG_LOCAL="true"
 export ROOT_FOLDER
 ROOT_FOLDER="$( pwd )"
 export REPO_RESOURCE=repo
@@ -33,43 +33,33 @@ echo "SONAR_BRANCH: [${SONAR_BRANCH}]"
 echo "--- Task Params ---"
 echo ""
 
-
-getPythonFile () {
-  PYTHON_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/$1"
-  if [[ $DEBUG_LOCAL = "true" ]]
-  then
-    PYTHON_FILE="../../python/$1"
-  fi
-  return ${PYTHON_FILE}
-}
-
-
-cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
+if [[ $DEBUG_LOCAL = "false" ]]
+then
+  cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
+fi
 
 echo "--- Archive Artifact ---"
 
-echo "Installing git ..."
-apt install git -y
-
-echo "Installing maven ..."
-apt install maven -y
-
 REGEXP="\d+\.\d+\.\d+"
-POM_FILE="pom.xml"
+POM_FILE="../../../unzip-sink/pom.xml"
 #BRANCHNAME="2.0"
 
 # Extracts the POM version from file
-PYTHON_FILE=getPythonFile("parse-pom.py")
+PYTHON_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/parse-pom.py"
+if [[ $DEBUG_LOCAL = "true" ]]
+then
+  PYTHON_FILE="../../python/parse-pom.py"
+fi
 POM_VERSION=$(python ${PYTHON_FILE} $POM_FILE "version")
 echo "POM_VERSION=${POM_VERSION}"
 
 # Checks version is ok with branchname
-PYTHON_CHECK_VERSION_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/check-version.py"
+PYTHON_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/check-version.py"
 if [[ $DEBUG_LOCAL = "true" ]]
 then
-  PYTHON_CHECK_VERSION_FILE="../../python/check-version.py"
+  PYTHON_FILE="../../python/check-version.py"
 fi
-checkversion=$(python ${PYTHON_CHECK_VERSION_FILE} $REGEXP $POM_VERSION $BRANCHNAME)
+checkversion=$(python ${PYTHON_FILE} $REGEXP $POM_VERSION $BRANCHNAME)
 echo "CheckVersion result=${checkversion}"
 
 # Calculate next release based on tags
@@ -78,22 +68,22 @@ NEXT_RELEASE=${BRANCHNAME}.${PATCH_LEVEL}
 echo "Calculated next release: ${NEXT_RELEASE}"
 
 # Check tag exists
-PYTHON_REGEX_MATCH_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/regex-match.py"
+PYTHON_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/regex-match.py"
 if [[ $DEBUG_LOCAL = "true" ]]
 then
-  PYTHON_REGEX_MATCH_FILE="../../python/regex-match.py"
+  PYTHON_FILE="../../python/regex-match.py"
 fi
-VERSION=$(python ${PYTHON_REGEX_MATCH_FILE} $REGEXP $POM_VERSION "find" 0) 
+VERSION=$(python ${PYTHON_FILE} $REGEXP $POM_VERSION "find" 0) 
 echo "VERSION=${VERSION}"
 TAG=$(git tag | grep '${VERSION}' || echo 'OK')
 echo "Tag=${TAG}"
 
-PYTHON_TAG_EXISTS_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/tag-exists.py"
+PYTHON_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/tag-exists.py"
 if [[ $DEBUG_LOCAL = "true" ]]
 then
-  PYTHON_TAG_EXISTS_FILE="../../python/tag-exists.py"
+  PYTHON_FILE="../../python/tag-exists.py"
 fi
-tagexists=$(python ${PYTHON_TAG_EXISTS_FILE} ${TAG} ${VERSION})
+tagexists=$(python ${PYTHON_FILE} ${TAG} ${VERSION})
 echo "TagExists result=${tagexists}"
 
 if [[ $checkversion = "true" ]]
@@ -103,12 +93,12 @@ then
       echo "WARN: The software is already tagged with this release"
       NEW_POM_VERSION="${NEXT_RELEASE}-SNAPSHOT"
       NEW_POM_FILE="${POM_FILE}.new"
-      PYTHON_MODIFY_VERSION_POM_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/modify-version-pom.py"
+      PYTHON_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/modify-version-pom.py"
       if [[ $DEBUG_LOCAL = "true" ]]
       then
-        PYTHON_MODIFY_VERSION_POM_FILE="../../python/modify-version-pom.py"
+        PYTHON_FILE="../../python/modify-version-pom.py"
       fi
-      $(python ${PYTHON_MODIFY_VERSION_POM_FILE} ${POM_FILE} ${NEW_POM_FILE} ${NEW_POM_VERSION})
+      $(python ${PYTHON_FILE} ${POM_FILE} ${NEW_POM_FILE} ${NEW_POM_VERSION})
       echo "WARN: Patched pom version with value ${NEW_POM_VERSION}"
       #git commit -a -m "Changed pom version from ${POM_VERSION} to ${NEW_POM_VERSION}"
     fi

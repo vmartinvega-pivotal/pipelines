@@ -1,0 +1,10 @@
+#!/bin/bash
+
+getPythonFile () {
+  return 5
+}
+
+A=$(getPythonFile)
+
+echo $A
+
