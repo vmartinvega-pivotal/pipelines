@@ -37,6 +37,12 @@ cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
 echo "--- Archive Artifact ---"
 
+echo "Installing git ..."
+apt get install git -y
+
+echo "Installing maven ..."
+sudo apt install maven
+
 REGEXP="\d+\.\d+\.\d+"
 POM_FILE="pom.xml"
 #BRANCHNAME="2.0"
