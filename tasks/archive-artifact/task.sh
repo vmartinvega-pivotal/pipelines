@@ -42,7 +42,6 @@ echo "--- Archive Artifact ---"
 
 REGEXP="\d+\.\d+\.\d+"
 POM_FILE="pom.xml"
-#BRANCHNAME="2.0"
 
 # Extracts the POM version from file
 PYTHON_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/parse-pom.py"

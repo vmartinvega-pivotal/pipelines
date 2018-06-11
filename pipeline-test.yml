@@ -36,6 +36,7 @@ jobs:
   - aggregate:
     - get: tools
     - get: repo
+    - get: keyval
       trigger: true
   - task: archive-artifact
     privileged: true
