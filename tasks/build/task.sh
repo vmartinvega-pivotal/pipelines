@@ -14,14 +14,7 @@ export OUTPUT_RESOURCE=out
 export KEYVALOUTPUT_RESOURCE=keyvalout
 export TRUSTSTORE_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/settings/${TRUSTSTORE}"
 
-echo "Generating settings.xml / gradle properties for Maven in local m2"
-# shellcheck source=/dev/null
-source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/generate-settings.sh
-
-echo "Storing private key in the container to access git"
-source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/store-github-private-key.sh
-
-source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/resource-utils.sh
+source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/source-all.sh
 
 propsDir="${ROOT_FOLDER}/${KEYVALOUTPUT_RESOURCE}"
 propsFile="${propsDir}/keyval.properties"
@@ -41,4 +34,4 @@ echo "BUILD_DATE=${BUILD_DATE}" >> "${propsFile}"
 
 cp -r "${ROOT_FOLDER}/${REPO_RESOURCE}"/. "${ROOT_FOLDER}/${OUTPUT_RESOURCE}/"
 
-echo "Done!!"
+echo "Build Done!!"
