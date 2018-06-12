@@ -119,8 +119,8 @@ function tagExists(){
 }
 
 # Checks version is ok with branchname
-#checkversion="$(checkVersion $BRANCHNAME $POM_FILE)"
-#echo "CheckVersion result=${checkversion}"
+checkversion="$(checkVersion $BRANCHNAME $POM_FILE)"
+echo "CheckVersion result=${checkversion}"
 
 # Check tag exists
 #tagexists="$(tagExists ${POM_FILE})"
