@@ -131,10 +131,8 @@ PATCH_LEVEL=$(expr `git tag | grep '${BRANCHNAME}.[0-9][0-9]*\$' | awk -F '.' '{
 NEXT_RELEASE=${BRANCHNAME}.${PATCH_LEVEL}
 echo "Calculated next release: ${NEXT_RELEASE}"
 
-if [ $checkversion == true ]; then
-then
-    if [[ $tagexists = "true" ]]   
-    then
+if [ "$checkversion" == true ]; then
+    if [ "$tagexists" == true ]; then   
       #    echo "new line" >> some-file.txt
 
        #   git add .
