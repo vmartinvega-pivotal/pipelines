@@ -14,6 +14,8 @@ export OUTPUT_RESOURCE=out
 export KEYVALOUTPUT_RESOURCE=keyvalout
 export TRUSTSTORE_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/settings/${TRUSTSTORE}"
 
+echo "M2_SETTINGS_REPO_MIRROR_URL(tash bash): $M2_SETTINGS_REPO_MIRROR_URL"
+
 echo "Generating settings.xml / gradle properties for Maven in local m2"
 # shellcheck source=/dev/null
 source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/generate-settings.sh

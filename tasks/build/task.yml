@@ -17,3 +17,6 @@ outputs:
 
 run:
   path: tools/tasks/build/task.sh
+
+params:
+  M2_SETTINGS_REPO_ID:
