@@ -46,11 +46,17 @@ POM_FILE="pom.xml"
 # Result string: pom version
 #
 function getPomVersion(){
-  echo "function getPomVersion"
-  echo ""
-  echo "arg1 (Pom File): $1"
-  echo ""
   echo $(python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/parse-pom.py $1 "version")
+}
+
+# Gets version from pom version based on a regular expression
+# Arguments:
+# 2 - Pom version
+#
+# Result string: version
+#
+function getVersionFromPomVersion(){
+  echo $(python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/regex-match.py "\d+\.\d+\.\d+" $1 "find" 0)
 }
 
 # Checks if the branch name starts with the version extracted from the POM version
@@ -82,20 +88,6 @@ function checkVersion(){
   fi
 }
 
-# Gets version from pom version based on a regular expression
-# Arguments:
-# 2 - Pom version
-#
-# Result string: version
-#
-function getVersionFromPomVersion(){
-  echo "function getVersionFromPomVersion"
-  echo ""
-  echo "arg1 (Pom Version): $1"
-  echo ""
-  echo $(python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/regex-match.py "\d+\.\d+\.\d+" $1 "find" 0)
-}
-
 # Checks there is a tag on git for the current branch that ends with the version extracted from the POM version
 # Arguments:
 # 1 - Pom file
@@ -103,8 +95,7 @@ function getVersionFromPomVersion(){
 # Result string: true/false
 #
 function tagExists(){
-  echo "function tagExists"
-  echo ""
+  echo "-- function tagExists --"
   echo "arg1 (Pom File): $1"
   echo ""
   POM_VERSION="$(getPomVersion $1)"
@@ -114,6 +105,15 @@ function tagExists(){
   TAG=$(git tag | grep '${VERSION}' || echo 'OK')
   echo "tagExists step3 - TAG: ${TAG}"
   result=$(python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/tag-exists.py ${TAG} ${VERSION})
+  echo "tagExists result: ${result}"
+  echo "-- function tagExists --"
+  echo ""
+  if [[ $result = "true" ]]
+  then
+    true
+  else
+    false
+  fi
 }
 
 # Checks version is ok with branchname
@@ -121,8 +121,8 @@ function tagExists(){
 #echo "CheckVersion result=${checkversion}"
 
 # Check tag exists
-tagexists="$(tagExists ${POM_FILE})"
-echo "TagExists result=${tagexists}"
+#tagexists="$(tagExists ${POM_FILE})"
+#echo "TagExists result=${tagexists}"
 
 # Calculate next release based on tags
 PATCH_LEVEL=$(expr `git tag | grep '${BRANCHNAME}.[0-9][0-9]*\$' | awk -F '.' '{ print $3 }' | sort -n | tail -n 1` + 1 || echo 0)
@@ -130,7 +130,7 @@ NEXT_RELEASE=${BRANCHNAME}.${PATCH_LEVEL}
 echo "Calculated next release: ${NEXT_RELEASE}"
 
 if checkVersion $BRANCHNAME $POM_FILE; then
-    if [[ $tagexists = "true" ]]
+    if tagExists $POM_FILE; then
     then
       #    echo "new line" >> some-file.txt
 
