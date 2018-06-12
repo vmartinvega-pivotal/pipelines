@@ -16,7 +16,7 @@ echo "Generating symbolic links for caches"
 
 echo "Writing maven settings to [${M2_HOME}/settings.xml]"
 
-touch ${M2_HOME}/settings.xml
+[ -d "$M2_HOME" ] || mkdir "$M2_HOME"
 
 cat > "${M2_HOME}/settings.xml" <<EOF
 
