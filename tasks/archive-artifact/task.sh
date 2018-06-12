@@ -71,19 +71,9 @@ function getPomVersion(){
 # Result string: true / false
 #
 function checkVersion(){
-  POM_VERSION="$(getPomVersion $1)"
+  POM_VERSION="$(getPomVersion $2)"
   PYTHON_FILE="$(getPythonFile check-version.py)"
-  echo $(python ${PYTHON_FILE} "\d+\.\d+\.\d+" $2 ${POM_VERSION})
-}
-
-# Gets the version from a POM version with the regular expression \d+\.\d+\.\d+
-# Arguments:
-# 1 - Pom version
-#
-# Result string: version
-function getVersionFromPomVersion(){
-  PYTHON_FILE="$(getPythonFile regex-match.py)"
-  echo $(python ${PYTHON_FILE} "\d+\.\d+\.\d+" $1 "find" 0)
+  echo $(python ${PYTHON_FILE} "\d+\.\d+\.\d+" $1 ${POM_VERSION})
 }
 
 # Checks there is a tag on git for the current branch that ends with the version extracted from the POM version
