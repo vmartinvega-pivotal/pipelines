@@ -123,16 +123,17 @@ checkversion="$(checkVersion $BRANCHNAME $POM_FILE)"
 echo "CheckVersion result=${checkversion}"
 
 # Check tag exists
-#tagexists="$(tagExists ${POM_FILE})"
-#echo "TagExists result=${tagexists}"
+tagexists="$(tagExists ${POM_FILE})"
+echo "TagExists result=${tagexists}"
 
 # Calculate next release based on tags
 PATCH_LEVEL=$(expr `git tag | grep '${BRANCHNAME}.[0-9][0-9]*\$' | awk -F '.' '{ print $3 }' | sort -n | tail -n 1` + 1 || echo 0)
 NEXT_RELEASE=${BRANCHNAME}.${PATCH_LEVEL}
 echo "Calculated next release: ${NEXT_RELEASE}"
 
-if [ "$(checkVersion $BRANCHNAME $POM_FILE)" ]; then
-    if [ "$(tagExists $POM_FILE)" ]; then    
+if [ $checkversion == true ]; then
+then
+    if [[ $tagexists = "true" ]]   
     then
       #    echo "new line" >> some-file.txt
 
