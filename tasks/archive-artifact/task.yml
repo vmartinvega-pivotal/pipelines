@@ -20,6 +20,5 @@ run:
   path: tools/tasks/archive-artifact/task.sh
 
 params:
-  MAVEN_SETTINGS:
   BUILD_OPTIONS:
   TRUSTSTORE:

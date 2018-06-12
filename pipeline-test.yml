@@ -19,15 +19,6 @@ resources:
     password: ((github-tools-password))
     skip_ssl_verification: true
 
-- name: keyval
-  type: keyval
-
-resource_types:
-  - name: keyval
-    type: docker-image
-    source:
-      repository: swce/keyval-resource
-
 jobs:
 
 - name: archive-artifact
@@ -36,23 +27,17 @@ jobs:
   - aggregate:
     - get: tools
     - get: repo
-    - get: keyval
       trigger: true
   - task: archive-artifact
     privileged: true
     file: tools/tasks/archive-artifact/task.yml
     params:
       BUILD_OPTIONS: ((build-options))
-      MAVEN_SETTINGS: ((maven-settings))
       TRUSTSTORE: ((truststore))
       BRANCHNAME: ((app-branch))
       USERNAME: ((github-username))
       PASSWORD: ((github-password))
       SONAR_BRANCH: ((sonar-branch))
-  - put: keyval
-    params:
-      file: keyvalout/keyval.properties
-
   - put: repo
     params:
       repository: repo-modified

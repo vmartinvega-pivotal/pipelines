@@ -19,6 +19,5 @@ run:
   path: tools/tasks/build/task.sh
 
 params:
-  MAVEN_SETTINGS:
   BUILD_OPTIONS:
   TRUSTSTORE:

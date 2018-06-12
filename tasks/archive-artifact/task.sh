@@ -14,14 +14,15 @@ export TOOLS_RESOURCE=tools
 export OUTPUT_RESOURCE=out
 export KEYVALOUTPUT_RESOURCE=keyvalout
 export TRUSTSTORE_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/settings/${TRUSTSTORE}"
-export MAVEN_SETTINGS_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/settings/${MAVEN_SETTINGS}"
 
 propsDir="${ROOT_FOLDER}/${KEYVALOUTPUT_RESOURCE}"
 propsFile="${propsDir}/keyval.properties"
 
+echo "Generating settings.xml / gradle properties for Maven in local m2"
+# shellcheck source=/dev/null
+#source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/generate-settings.sh
+
 echo "--- Task Params ---"
-echo "MAVEN_SETTINGS: [${MAVEN_SETTINGS}]"
-echo "MAVEN_SETTINGS_FILE: [${MAVEN_SETTINGS_FILE}]"
 echo "BUILD_OPTIONS: [${BUILD_OPTIONS}]"
 echo "SONAR_BRANCH: [${SONAR_BRANCH}]"
 echo "TRUSTSTORE: [${TRUSTSTORE}]"
@@ -40,26 +41,69 @@ fi
 
 echo "--- Archive Artifact ---"
 
-REGEXP="\d+\.\d+\.\d+"
 POM_FILE="pom.xml"
 
-# Extracts the POM version from file
-PYTHON_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/parse-pom.py"
-if [[ $DEBUG_LOCAL = "true" ]]
-then
-  PYTHON_FILE="../../python/parse-pom.py"
-fi
-POM_VERSION=$(python ${PYTHON_FILE} $POM_FILE "version")
-echo "POM_VERSION=${POM_VERSION}"
+function getPythonFile(){
+  if [[ $DEBUG_LOCAL = "true" ]]
+  then
+    echo "../../python/parse-pom.py"
+  else
+    echo "${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/$1"
+  fi
+}
+
+# Gets the version tag from a POM file
+# Arguments:
+# 1 - Pom file
+#
+# Result string: pom version
+#
+function getPomVersion(){
+  PYTHON_FILE="$(getPythonFile parse-pom.py)"
+  echo $(python ${PYTHON_FILE} $1 "version")
+}
+
+# Checks if the branch name starts with the version extracted from the POM version
+# Arguments:
+# 1 - Pom File
+# 2 - Branch name
+#
+# Result string: true / false
+#
+function checkVersion(){
+  POM_VERSION="$(getPomVersion $1)"
+  PYTHON_FILE="$(getPythonFile check-version.py)"
+  echo $(python ${PYTHON_FILE} "\d+\.\d+\.\d+" $2 ${POM_VERSION})
+}
+
+# Gets the version from a POM version with the regular expression \d+\.\d+\.\d+
+# Arguments:
+# 1 - Pom version
+#
+# Result string: version
+function getVersionFromPomVersion(){
+  PYTHON_FILE="$(getPythonFile regex-match.py)"
+  echo $(python ${PYTHON_FILE} "\d+\.\d+\.\d+" $1 "find" 0)
+}
+
+# Checks there is a tag on git for the current branch that ends with the version extracted from the POM version
+# Arguments:
+# 1 - Pom file
+#
+# Result string: true/false
+#
+function tagExists(){
+  POM_VERSION="$(getPomVersion $1)"
+  PYTHON_FILE="$(getPythonFile regex-match.py)"
+  VERSION=$(python ${PYTHON_FILE} "\d+\.\d+\.\d+" ${POM_VERSION} "find" 0)
+  TAG=$(git tag | grep '${VERSION}' || echo 'OK')
+  PYTHON_FILE="$(getPythonFile tag-exists.py)"
+  echo $(python ${PYTHON_FILE} ${TAG} ${VERSION})
+}
 
 # Checks version is ok with branchname
-PYTHON_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/check-version.py"
-if [[ $DEBUG_LOCAL = "true" ]]
-then
-  PYTHON_FILE="../../python/check-version.py"
-fi
-checkversion=$(python ${PYTHON_FILE} $REGEXP $POM_VERSION $BRANCHNAME)
-echo "CheckVersion result=${checkversion}"
+checkversion="$(checkVersion $BRANCHNAME $POM_FILE)"
+echo "CheckVersion=${checkversion}"
 
 # Calculate next release based on tags
 PATCH_LEVEL=$(expr `git tag | grep '${BRANCHNAME}.[0-9][0-9]*\$' | awk -F '.' '{ print $3 }' | sort -n | tail -n 1` + 1 || echo 0)
@@ -67,28 +111,11 @@ NEXT_RELEASE=${BRANCHNAME}.${PATCH_LEVEL}
 echo "Calculated next release: ${NEXT_RELEASE}"
 
 # Check tag exists
-PYTHON_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/regex-match.py"
-if [[ $DEBUG_LOCAL = "true" ]]
-then
-  PYTHON_FILE="../../python/regex-match.py"
-fi
-VERSION=$(python ${PYTHON_FILE} $REGEXP $POM_VERSION "find" 0) 
-echo "VERSION=${VERSION}"
-TAG=$(git tag | grep '${VERSION}' || echo 'OK')
-echo "Tag=${TAG}"
-
-PYTHON_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/tag-exists.py"
-if [[ $DEBUG_LOCAL = "true" ]]
-then
-  PYTHON_FILE="../../python/tag-exists.py"
-fi
-tagexists=$(python ${PYTHON_FILE} ${TAG} ${VERSION})
-echo "TagExists result=${tagexists}"
+tagexists="$(tagExists ${POM_FILE})"
+echo "tagexists=${tagexists}"
 
 if [[ $checkversion = "true" ]]
 then
-    git clone repo repo-modified
-
     if [[ $tagexists = "true" ]]
     then
       
