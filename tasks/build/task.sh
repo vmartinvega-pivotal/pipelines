@@ -18,6 +18,10 @@ echo "Generating settings.xml / gradle properties for Maven in local m2"
 # shellcheck source=/dev/null
 source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/generate-settings.sh
 
+echo "Storing private key in the container to access git"
+source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/store-github-private-key.sh
+
+
 propsDir="${ROOT_FOLDER}/${KEYVALOUTPUT_RESOURCE}"
 propsFile="${propsDir}/keyval.properties"
 touch $propsFile

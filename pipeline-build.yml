@@ -109,6 +109,7 @@ common-params: &common-params
   GIT_NAME: ((git-name))
   CURRENT_BRANCH: ((app-branch))
   TRUSTSTORE: ((truststore))
+  GITHUB_PRIVATE_KEY: ((github-private-key))
   M2_SETTINGS_REPO_ID: ((m2-settings-repo-id))
   M2_SETTINGS_REPO_PASSWORD: ((m2-settings-repo-password))
   M2_SETTINGS_REPO_USERNAME: ((m2-settings-repo-username))
