@@ -21,6 +21,7 @@ source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/generate-settings.sh
 echo "Storing private key in the container to access git"
 source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/store-github-private-key.sh
 
+source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/resource-utils.sh
 
 propsDir="${ROOT_FOLDER}/${KEYVALOUTPUT_RESOURCE}"
 propsFile="${propsDir}/keyval.properties"
@@ -29,7 +30,7 @@ touch $propsFile
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
 echo "--- Building ---"
-#mvn -s ${MAVEN_SETTINGS} -X clean install -DskipTests=true -Djavax.net.ssl.trustStore=${TRUSTSTORE_FILE} ${BUILD_OPTIONS}
+#mvn X clean install -DskipTests=true -Djavax.net.ssl.trustStore=${TRUSTSTORE_FILE} ${BUILD_OPTIONS}
 mvn -X clean install -DskipTests=true ${BUILD_OPTIONS}
 echo "--- Building ---"
 echo ""
