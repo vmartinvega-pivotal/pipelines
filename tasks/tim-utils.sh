@@ -7,15 +7,6 @@ set -o pipefail
 
 export TMPDIR=${TMPDIR:-/tmp}
 
-function getPythonFile(){
-  if [[ $DEBUG_LOCAL = "true" ]]
-  then
-    echo "../../python/parse-pom.py"
-  else
-    echo "${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/$1"
-  fi
-}
-
 # Gets the version tag from a POM file
 # Arguments:
 # 1 - Pom file
@@ -23,21 +14,46 @@ function getPythonFile(){
 # Result string: pom version
 #
 function getPomVersion(){
-  PYTHON_FILE="$(getPythonFile parse-pom.py)"
-  echo $(python ${PYTHON_FILE} $1 "version")
+  echo $(python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/parse-pom.py $1 "version")
+}
+
+# Gets version from pom version based on a regular expression
+# Arguments:
+# 2 - Pom version
+#
+# Result string: version
+#
+function getVersionFromPomVersion(){
+  echo $(python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/regex-match.py "\d+\.\d+\.\d+" $1 "find" 0)
 }
 
 # Checks if the branch name starts with the version extracted from the POM version
 # Arguments:
-# 1 - Pom File
-# 2 - Branch name
+# 1 - Branch name
+# 2 - Pom file
 #
 # Result string: true / false
 #
 function checkVersion(){
-  POM_VERSION="$(getPomVersion $1)"
-  PYTHON_FILE="$(getPythonFile check-version.py)"
-  echo $(python ${PYTHON_FILE} "\d+\.\d+\.\d+" $2 ${POM_VERSION})
+  echo ""
+  echo "-- function checkVersion --"
+  echo "arg1 (Branch Name): $1"
+  echo "arg2 (Pom File): $2"
+  echo ""
+  POM_VERSION="$(getPomVersion $2)"
+  echo "checkVersion step1 - POM_VERSION: ${POM_VERSION}"
+  VERSION="$(getVersionFromPomVersion $POM_VERSION)"
+  echo "checkVersion step2 - VERSION: ${VERSION}"
+  result=$(python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/check-version.py "\d+\.\d+\.\d+" ${VERSION} $1)
+  echo "checkVersion result: ${result}"
+  echo "-- function checkVersion --"
+  echo ""
+  if [[ $result = "true" ]]
+  then
+    true
+  else
+    false
+  fi
 }
 
 # Checks there is a tag on git for the current branch that ends with the version extracted from the POM version
@@ -47,10 +63,23 @@ function checkVersion(){
 # Result string: true/false
 #
 function tagExists(){
+  echo "-- function tagExists --"
+  echo "arg1 (Pom File): $1"
+  echo ""
   POM_VERSION="$(getPomVersion $1)"
-  PYTHON_FILE="$(getPythonFile regex-match.py)"
-  VERSION=$(python ${PYTHON_FILE} "\d+\.\d+\.\d+" ${POM_VERSION} "find" 0)
+  echo "tagExists step1 - POM_VERSION: ${POM_VERSION}"
+  VERSION="$(getVersionFromPomVersion $POM_VERSION)"
+  echo "tagExists step2 - VERSION: ${VERSION}"
   TAG=$(git tag | grep '${VERSION}' || echo 'OK')
-  PYTHON_FILE="$(getPythonFile tag-exists.py)"
-  echo $(python ${PYTHON_FILE} ${TAG} ${VERSION})
+  echo "tagExists step3 - TAG: ${TAG}"
+  result=$(python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/tag-exists.py ${TAG} ${VERSION})
+  echo "tagExists result: ${result}"
+  echo "-- function tagExists --"
+  echo ""
+  if [[ $result = "true" ]]
+  then
+    true
+  else
+    false
+  fi
 }

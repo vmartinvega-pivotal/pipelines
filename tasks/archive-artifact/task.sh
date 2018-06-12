@@ -16,10 +16,12 @@ export TRUSTSTORE_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/settings/${TRUSTSTORE}"
 
 propsDir="${ROOT_FOLDER}/${KEYVALOUTPUT_RESOURCE}"
 propsFile="${propsDir}/keyval.properties"
+touch ${propsFile}
 
 echo "Generating settings.xml / gradle properties for Maven in local m2"
 # shellcheck source=/dev/null
 #source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/generate-settings.sh
+#source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/tim-utils.sh
 
 echo "--- Task Params ---"
 echo "BUILD_OPTIONS: [${BUILD_OPTIONS}]"
@@ -129,8 +131,8 @@ PATCH_LEVEL=$(expr `git tag | grep '${BRANCHNAME}.[0-9][0-9]*\$' | awk -F '.' '{
 NEXT_RELEASE=${BRANCHNAME}.${PATCH_LEVEL}
 echo "Calculated next release: ${NEXT_RELEASE}"
 
-if checkVersion $BRANCHNAME $POM_FILE; then
-    if tagExists $POM_FILE; then
+if [ "$(checkVersion $BRANCHNAME $POM_FILE)" ]; then
+    if [ "$(tagExists $POM_FILE)" ]; then    
     then
       #    echo "new line" >> some-file.txt
 
@@ -157,6 +159,7 @@ if checkVersion $BRANCHNAME $POM_FILE; then
     #mvn -s $MAVEN_SETTINGS --batch-mode release:perform -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUSTSTORE_FILE} -Dsonar.branch=${SONAR_BRANCH}" -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Djavax.net.ssl.trustStore=${TRUSTSTORE_FILE}"
     echo "maven release"
 else
+    POM_VERSION="$(getPomVersion $POM_FILE)"
     echo "ERROR: Pom Version ${POM_VERSION} does not match release name ${BRANCHNAME}"
     exit 1
 fi
