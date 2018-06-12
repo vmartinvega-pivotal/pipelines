@@ -46,6 +46,10 @@ POM_FILE="pom.xml"
 # Result string: pom version
 #
 function getPomVersion(){
+  echo "function getPomVersion"
+  echo ""
+  echo "arg1 (Pom File): $1"
+  echo ""
   echo $(python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/parse-pom.py $1 "version")
 }
 
@@ -57,8 +61,8 @@ function getPomVersion(){
 # Result string: true / false
 #
 function checkVersion(){
-  echo "function checkVersion"
   echo ""
+  echo "-- function checkVersion --"
   echo "arg1 (Branch Name): $1"
   echo "arg2 (Pom File): $2"
   echo ""
@@ -66,7 +70,16 @@ function checkVersion(){
   echo "checkVersion step1 - POM_VERSION: ${POM_VERSION}"
   VERSION="$(getVersionFromPomVersion $POM_VERSION)"
   echo "checkVersion step2 - VERSION: ${VERSION}"
-  echo $(python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/check-version.py "\d+\.\d+\.\d+" $1 ${VERSION})
+  result=$(python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/check-version.py "\d+\.\d+\.\d+" ${VERSION} $1)
+  echo "checkVersion result: ${result}"
+  echo "-- function checkVersion --"
+  echo ""
+  if [[ $result = "true" ]]
+  then
+    true
+  else
+    false
+  fi
 }
 
 # Gets version from pom version based on a regular expression
@@ -76,6 +89,10 @@ function checkVersion(){
 # Result string: version
 #
 function getVersionFromPomVersion(){
+  echo "function getVersionFromPomVersion"
+  echo ""
+  echo "arg1 (Pom Version): $1"
+  echo ""
   echo $(python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/regex-match.py "\d+\.\d+\.\d+" $1 "find" 0)
 }
 
@@ -86,15 +103,22 @@ function getVersionFromPomVersion(){
 # Result string: true/false
 #
 function tagExists(){
+  echo "function tagExists"
+  echo ""
+  echo "arg1 (Pom File): $1"
+  echo ""
   POM_VERSION="$(getPomVersion $1)"
+  echo "tagExists step1 - POM_VERSION: ${POM_VERSION}"
   VERSION="$(getVersionFromPomVersion $POM_VERSION)"
+  echo "tagExists step2 - VERSION: ${VERSION}"
   TAG=$(git tag | grep '${VERSION}' || echo 'OK')
+  echo "tagExists step3 - TAG: ${TAG}"
   result=$(python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/tag-exists.py ${TAG} ${VERSION})
 }
 
 # Checks version is ok with branchname
-checkversion="$(checkVersion $BRANCHNAME $POM_FILE)"
-echo "CheckVersion result=${checkversion}"
+#checkversion="$(checkVersion $BRANCHNAME $POM_FILE)"
+#echo "CheckVersion result=${checkversion}"
 
 # Check tag exists
 tagexists="$(tagExists ${POM_FILE})"
@@ -105,8 +129,7 @@ PATCH_LEVEL=$(expr `git tag | grep '${BRANCHNAME}.[0-9][0-9]*\$' | awk -F '.' '{
 NEXT_RELEASE=${BRANCHNAME}.${PATCH_LEVEL}
 echo "Calculated next release: ${NEXT_RELEASE}"
 
-if [[ $checkversion = "true" ]]
-then
+if checkVersion $BRANCHNAME $POM_FILE; then
     if [[ $tagexists = "true" ]]
     then
       #    echo "new line" >> some-file.txt
@@ -121,12 +144,7 @@ then
       echo "WARN: The software is already tagged with this release"
       NEW_POM_VERSION="${NEXT_RELEASE}-SNAPSHOT"
       NEW_POM_FILE="${POM_FILE}.new"
-      PYTHON_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/modify-version-pom.py"
-      if [[ $DEBUG_LOCAL = "true" ]]
-      then
-        PYTHON_FILE="../../python/modify-version-pom.py"
-      fi
-      $(python ${PYTHON_FILE} ${POM_FILE} ${NEW_POM_FILE} ${NEW_POM_VERSION})
+      python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/modify-version-pom.py ${POM_FILE} ${NEW_POM_FILE} ${NEW_POM_VERSION}
       echo "WARN: Patched pom version with value ${NEW_POM_VERSION}"
       #git commit -a -m "Changed pom version from ${POM_VERSION} to ${NEW_POM_VERSION}"
     fi
