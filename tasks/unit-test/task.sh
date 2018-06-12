@@ -14,18 +14,16 @@ export OUTPUT_RESOURCE=out
 export KEYVALOUTPUT_RESOURCE=keyvalout
 export TRUSTSTORE_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/settings/${TRUSTSTORE}"
 
+# Source all usefull scripts
+source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/source-all.sh
+
 propsDir="${ROOT_FOLDER}/${KEYVALOUTPUT_RESOURCE}"
 propsFile="${propsDir}/keyval.properties"
 touch $propsFile
 
-echo "Generating settings.xml / gradle properties for Maven in local m2"
-# shellcheck source=/dev/null
-#source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/generate-settings.sh
-
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
 echo "--- Testing ---"
-#mvn -s ${MAVEN_SETTINGS} test -Dmaven.test.failure.ignore=true ${BUILD_OPTIONS}
 mvn test -Dmaven.test.failure.ignore=true ${BUILD_OPTIONS}
 echo "--- Testing ---"
 echo ""
@@ -36,4 +34,4 @@ echo "TEST_DATE=${BUILD_DATE}" >> "${propsFile}"
 
 cp -r "${ROOT_FOLDER}/${REPO_RESOURCE}"/. "${ROOT_FOLDER}/${OUTPUT_RESOURCE}/"
 
-echo "Done!!"
+echo "Unit Tests Done!!"
