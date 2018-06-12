@@ -57,8 +57,15 @@ function getPomVersion(){
 # Result string: true / false
 #
 function checkVersion(){
+  echo "function checkVersion"
+  echo ""
+  echo "arg1 (Branch Name): $1"
+  echo "arg2 (Pom File): $2"
+  echo ""
   POM_VERSION="$(getPomVersion $2)"
+  echo "checkVersion step1 - POM_VERSION: ${POM_VERSION}"
   VERSION="$(getVersionFromPomVersion $POM_VERSION)"
+  echo "checkVersion step2 - VERSION: ${VERSION}"
   echo $(python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/check-version.py "\d+\.\d+\.\d+" $1 ${VERSION})
 }
 
@@ -82,7 +89,7 @@ function tagExists(){
   POM_VERSION="$(getPomVersion $1)"
   VERSION="$(getVersionFromPomVersion $POM_VERSION)"
   TAG=$(git tag | grep '${VERSION}' || echo 'OK')
-  echo $(python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/tag-exists.py ${TAG} ${VERSION})
+  result=$(python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/tag-exists.py ${TAG} ${VERSION})
 }
 
 # Checks version is ok with branchname
