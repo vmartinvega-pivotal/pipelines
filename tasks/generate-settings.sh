@@ -9,8 +9,6 @@ M2_CACHE="${ROOT_FOLDER}/maven"
 GRADLE_HOME="${HOME}/.gradle"
 GRADLE_CACHE="${ROOT_FOLDER}/gradle"
 
-echo "M2_SETTINGS_REPO_MIRROR_URL(generate bash): $M2_SETTINGS_REPO_MIRROR_URL"
-
 echo "Generating symbolic links for caches"
 
 [[ -d "${M2_CACHE}" && ! -d "${M2_HOME}" ]] && ln -s "${M2_CACHE}" "${M2_HOME}"
