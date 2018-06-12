@@ -8,7 +8,6 @@ resources:
     branch: ((app-branch))
     username: ((github-username))
     password: ((github-password))
-    private_key: ((private_github_private_key))
     skip_ssl_verification: true
 
 - name: tools
@@ -42,10 +41,7 @@ jobs:
     privileged: true
     file: tools/tasks/archive-artifact/task.yml
     params:
-      BUILD_OPTIONS: ((build-options))
-      MAVEN_SETTINGS: ((maven-settings))
-      TRUSTSTORE: ((truststore))
-      BRANCHNAME: ((app-branch))
+      <<: *common-params
       USERNAME: ((github-username))
       PASSWORD: ((github-password))
       SONAR_BRANCH: ((sonar-branch))
@@ -53,6 +49,20 @@ jobs:
     params:
       file: keyvalout/keyval.properties
 
-  - put: repo
-    params:
-      repository: repo-modified
+common-params: &common-params
+  BUILD_OPTIONS: ((build-options))
+  GIT_EMAIL: ((git-email))
+  GIT_NAME: ((git-name))
+  CURRENT_BRANCH: ((app-branch))
+  TRUSTSTORE: ((truststore))
+  GITHUB_PRIVATE_KEY: ((github-private-key))
+  M2_SETTINGS_REPO_ID: ((m2-settings-repo-id))
+  M2_SETTINGS_REPO_PASSWORD: ((m2-settings-repo-password))
+  M2_SETTINGS_REPO_USERNAME: ((m2-settings-repo-username))
+  M2_SETTINGS_REPO_MIRROR_URL: ((repo-with-binaries))
+  M2_SETTINGS_REPO_SITE_URL: ((repo-with-site))
+  M2_SETTINGS_REPO_RELEASE_URL: ((repo-with-binaries-for-upload))
+  M2_SETTINGS_REPO_SNAPSHOTS_URL: ((repo-with-binaries-snapshots))
+  M2_SETTINGS_REPO_GIT_SERVER_URL: ((gitlab-server-url))
+  M2_SETTINGS_REPO_SONAR_URL: ((sonar-host-url))
+  M2_SETTINGS_REPO_SONAR_TOKEN: ((sonar-login-key))
