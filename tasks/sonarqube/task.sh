@@ -16,14 +16,11 @@ export TRUSTSTORE_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/settings/${TRUSTSTORE}"
 
 propsDir="${ROOT_FOLDER}/${KEYVALOUTPUT_RESOURCE}"
 propsFile="${propsDir}/keyval.properties"
+touch $propsFile
 
-echo "--- Task Params ---"
-echo "BUILD_OPTIONS: [${BUILD_OPTIONS}]"
-echo "SONAR_BRANCH: [${SONAR_BRANCH}]"
-echo "TRUSTSTORE: [${TRUSTSTORE}]"
-echo "TRUSTSTORE_FILE: [${TRUSTSTORE_FILE}]"
-echo "--- Task Params ---"
-echo ""
+echo "Generating settings.xml / gradle properties for Maven in local m2"
+# shellcheck source=/dev/null
+#source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/generate-settings.sh
 
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 

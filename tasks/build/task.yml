@@ -17,7 +17,3 @@ outputs:
 
 run:
   path: tools/tasks/build/task.sh
-
-params:
-  BUILD_OPTIONS:
-  TRUSTSTORE:

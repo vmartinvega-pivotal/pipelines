@@ -17,3 +17,7 @@ outputs:
 
 run:
   path: tools/tasks/unit-test/task.sh
+
+params:
+  BUILD_OPTIONS:
+  TRUSTSTORE:

@@ -39,8 +39,7 @@ jobs:
     privileged: true
     file: tools/tasks/build/task.yml
     params:
-      BUILD_OPTIONS: ((build-options))
-      TRUSTSTORE_FILE: ((truststore))
+      <<: *common-params
   - put: keyval
     params:
       file: keyvalout/keyval.properties
@@ -59,8 +58,7 @@ jobs:
     privileged: true
     file: tools/tasks/unit-test/task.yml
     params:
-      BUILD_OPTIONS: ((build-options))
-      TRUSTSTORE: ((truststore))
+      <<: *common-params
   - put: keyval
     params:
       file: keyvalout/keyval.properties
@@ -79,8 +77,7 @@ jobs:
     privileged: true
     file: tools/tasks/sonarqube/task.yml
     params:
-      BUILD_OPTIONS: ((build-options))
-      TRUSTSTORE: ((truststore))
+      <<: *common-params
       SONAR_BRANCH: ((sonar-branch))
   - put: keyval
     params:
@@ -100,12 +97,25 @@ jobs:
     privileged: true
     file: tools/tasks/archive-artifact/task.yml
     params:
-      BUILD_OPTIONS: ((build-options))
-      TRUSTSTORE: ((truststore))
+      <<: *common-params
       SONAR_BRANCH: ((sonar-branch))
   - put: keyval
     params:
       file: keyvalout/keyval.properties
-  - put: repo
-    params:
-      repository: repo-modified
+
+common-params: &common-params
+  BUILD_OPTIONS: ((build-options))
+  GIT_EMAIL: ((git-email))
+  GIT_NAME: ((git-name))
+  CURRENT_BRANCH: ((app-branch))
+  TRUSTSTORE: ((truststore))
+  M2_SETTINGS_REPO_ID: ((m2-settings-repo-id))
+  M2_SETTINGS_REPO_PASSWORD: ((m2-settings-repo-password))
+  M2_SETTINGS_REPO_USERNAME: ((m2-settings-repo-username))
+  M2_SETTINGS_REPO_MIRROR_URL: ((repo-with-binaries))
+  M2_SETTINGS_REPO_SITE_URL: ((repo-with-site))
+  M2_SETTINGS_REPO_RELEASE_URL: ((repo-with-binaries-for-upload))
+  M2_SETTINGS_REPO_SNAPSHOTS_URL: ((repo-with-binaries-snapshots))
+  M2_SETTINGS_REPO_GIT_SERVER_URL: ((gitlab-server-url))
+  M2_SETTINGS_REPO_SONAR_URL: ((sonar-host-url))
+  M2_SETTINGS_REPO_SONAR_TOKEN: ((sonar-login-key))

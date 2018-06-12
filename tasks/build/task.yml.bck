@@ -16,4 +16,8 @@ outputs:
   - name: keyvalout
 
 run:
-  path: tools/tasks/unit-test/task.sh
+  path: tools/tasks/build/task.sh
+
+params:
+  BUILD_OPTIONS:
+  TRUSTSTORE:

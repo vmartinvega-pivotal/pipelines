@@ -17,8 +17,3 @@ outputs:
 
 run:
   path: tools/tasks/sonarqube/task.sh
-
-params:
-  BUILD_OPTIONS:
-  TRUSTSTORE:
-  SONAR_BRANCH:

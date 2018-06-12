@@ -14,15 +14,15 @@ export OUTPUT_RESOURCE=out
 export KEYVALOUTPUT_RESOURCE=keyvalout
 export TRUSTSTORE_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/settings/${TRUSTSTORE}"
 
-echo "Generating settings.xml / gradle properties for Maven in local m2"
-# shellcheck source=/dev/null
-source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/generate-settings.sh
-
-cat ${M2_HOME}/settings.xml
-
 propsDir="${ROOT_FOLDER}/${KEYVALOUTPUT_RESOURCE}"
 propsFile="${propsDir}/keyval.properties"
-touch $propsFile
+
+echo "--- Task Params ---"
+echo "BUILD_OPTIONS: [${BUILD_OPTIONS}]"
+echo "TRUSTSTORE: [${TRUSTSTORE}]"
+echo "TRUSTSTORE_FILE: [${TRUSTSTORE_FILE}]"
+echo "--- Task Params ---"
+echo ""
 
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 

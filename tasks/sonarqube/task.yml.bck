@@ -16,4 +16,9 @@ outputs:
   - name: keyvalout
 
 run:
-  path: tools/tasks/unit-test/task.sh
+  path: tools/tasks/sonarqube/task.sh
+
+params:
+  BUILD_OPTIONS:
+  TRUSTSTORE:
+  SONAR_BRANCH:

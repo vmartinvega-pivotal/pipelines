@@ -23,6 +23,18 @@ echo "Generating settings.xml / gradle properties for Maven in local m2"
 #source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/generate-settings.sh
 source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/tim-utils.sh
 
+echo "--- Task Params ---"
+echo "BUILD_OPTIONS: [${BUILD_OPTIONS}]"
+echo "SONAR_BRANCH: [${SONAR_BRANCH}]"
+echo "TRUSTSTORE: [${TRUSTSTORE}]"
+echo "TRUSTSTORE_FILE: [${TRUSTSTORE_FILE}]"
+echo "USERNAME: [${USERNAME}]"
+echo "PASSWORD: [...]"
+echo "BRANCHNAME: [${BRANCHNAME}]"
+echo "SONAR_BRANCH: [${SONAR_BRANCH}]"
+echo "--- Task Params ---"
+echo ""
+
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
 echo "--- Archive Artifact ---"
