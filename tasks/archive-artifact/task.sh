@@ -39,10 +39,6 @@ echo "--- Archive Artifact ---"
 
 POM_FILE="pom.xml"
 
-function getPythonFile(){
-  echo "${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/$1"
-}
-
 # Gets the version tag from a POM file
 # Arguments:
 # 1 - Pom file
@@ -50,8 +46,7 @@ function getPythonFile(){
 # Result string: pom version
 #
 function getPomVersion(){
-  PYTHON_FILE="$(getPythonFile parse-pom.py)"
-  echo $(python ${PYTHON_FILE} $1 "version")
+  echo $(python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/parse-pom.py $1 "version")
 }
 
 # Checks if the branch name starts with the version extracted from the POM version
@@ -64,8 +59,7 @@ function getPomVersion(){
 function checkVersion(){
   POM_VERSION="$(getPomVersion $2)"
   VERSION="$(getVersionFromPomVersion $POM_VERSION)"
-  PYTHON_FILE="$(getPythonFile check-version.py)"
-  echo $(python ${PYTHON_FILE} "\d+\.\d+\.\d+" $1 ${VERSION})
+  echo $(python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/check-version.py "\d+\.\d+\.\d+" $1 ${VERSION})
 }
 
 # Gets version from pom version based on a regular expression
@@ -75,8 +69,7 @@ function checkVersion(){
 # Result string: version
 #
 function getVersionFromPomVersion(){
-  PYTHON_FILE="$(getPythonFile regex-match.py)"
-  echo $(python ${PYTHON_FILE} "\d+\.\d+\.\d+" $1 "find" 0)
+  echo $(python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/regex-match.py "\d+\.\d+\.\d+" $1 "find" 0)
 }
 
 # Checks there is a tag on git for the current branch that ends with the version extracted from the POM version
@@ -89,8 +82,7 @@ function tagExists(){
   POM_VERSION="$(getPomVersion $1)"
   VERSION="$(getVersionFromPomVersion $POM_VERSION)"
   TAG=$(git tag | grep '${VERSION}' || echo 'OK')
-  PYTHON_FILE="$(getPythonFile tag-exists.py)"
-  echo $(python ${PYTHON_FILE} ${TAG} ${VERSION})
+  echo $(python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/tag-exists.py ${TAG} ${VERSION})
 }
 
 # Checks version is ok with branchname
@@ -99,7 +91,7 @@ echo "CheckVersion result=${checkversion}"
 
 # Check tag exists
 tagexists="$(tagExists ${POM_FILE})"
-echo "tagexists result=${tagexists}"
+echo "TagExists result=${tagexists}"
 
 # Calculate next release based on tags
 PATCH_LEVEL=$(expr `git tag | grep '${BRANCHNAME}.[0-9][0-9]*\$' | awk -F '.' '{ print $3 }' | sort -n | tail -n 1` + 1 || echo 0)
