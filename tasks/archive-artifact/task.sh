@@ -21,7 +21,7 @@ touch ${propsFile}
 echo "Generating settings.xml / gradle properties for Maven in local m2"
 # shellcheck source=/dev/null
 #source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/generate-settings.sh
-#source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/tim-utils.sh
+source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/tim-utils.sh
 
 echo "--- Task Params ---"
 echo "BUILD_OPTIONS: [${BUILD_OPTIONS}]"
@@ -40,52 +40,6 @@ cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 echo "--- Archive Artifact ---"
 
 POM_FILE="pom.xml"
-
-# Gets the version tag from a POM file
-# Arguments:
-# 1 - Pom file
-#
-# Result string: pom version
-#
-function getPomVersion(){
-  echo $(python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/parse-pom.py $1 "version")
-}
-
-# Gets version from pom version based on a regular expression
-# Arguments:
-# 2 - Pom version
-#
-# Result string: version
-#
-function getVersionFromPomVersion(){
-  echo $(python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/regex-match.py "\d+\.\d+\.\d+" $1 "find" 0)
-}
-
-# Checks if the branch name starts with the version extracted from the POM version
-# Arguments:
-# 1 - Branch name
-# 2 - Pom file
-#
-# Result string: true / false
-#
-function checkVersion(){
-  POM_VERSION="$(getPomVersion $2)"
-  VERSION="$(getVersionFromPomVersion $POM_VERSION)"
-  echo $(python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/check-version.py "\d+\.\d+\.\d+" ${VERSION} $1)
-}
-
-# Checks there is a tag on git for the current branch that ends with the version extracted from the POM version
-# Arguments:
-# 1 - Pom file
-#
-# Result string: true/false
-#
-function tagExists(){
-  POM_VERSION="$(getPomVersion $1)"
-  VERSION="$(getVersionFromPomVersion $POM_VERSION)"
-  TAG=$(git tag | grep '${VERSION}' || echo 'OK')
-  echo $(python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/tag-exists.py ${TAG} ${VERSION})
-}
 
 # Checks version is ok with branchname
 checkversion="$(checkVersion $BRANCHNAME $POM_FILE)"
