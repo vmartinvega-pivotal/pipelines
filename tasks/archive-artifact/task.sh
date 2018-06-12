@@ -6,7 +6,6 @@ set -o errexit
 set -o errtrace
 set -o pipefail
 
-export DEBUG_LOCAL="false"
 export ROOT_FOLDER
 ROOT_FOLDER="$( pwd )"
 export REPO_RESOURCE=repo
@@ -34,22 +33,14 @@ echo "SONAR_BRANCH: [${SONAR_BRANCH}]"
 echo "--- Task Params ---"
 echo ""
 
-if [[ $DEBUG_LOCAL = "false" ]]
-then
-  cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
-fi
+cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
 echo "--- Archive Artifact ---"
 
 POM_FILE="pom.xml"
 
 function getPythonFile(){
-  if [[ $DEBUG_LOCAL = "true" ]]
-  then
-    echo "../../python/parse-pom.py"
-  else
-    echo "${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/$1"
-  fi
+  echo "${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/$1"
 }
 
 # Gets the version tag from a POM file
@@ -65,15 +56,27 @@ function getPomVersion(){
 
 # Checks if the branch name starts with the version extracted from the POM version
 # Arguments:
-# 1 - Pom File
-# 2 - Branch name
+# 1 - Branch name
+# 2 - Pom file
 #
 # Result string: true / false
 #
 function checkVersion(){
   POM_VERSION="$(getPomVersion $2)"
+  VERSION="$(getVersionFromPomVersion $POM_VERSION)"
   PYTHON_FILE="$(getPythonFile check-version.py)"
-  echo $(python ${PYTHON_FILE} "\d+\.\d+\.\d+" $1 ${POM_VERSION})
+  echo $(python ${PYTHON_FILE} "\d+\.\d+\.\d+" $1 ${VERSION})
+}
+
+# Gets version from pom version based on a regular expression
+# Arguments:
+# 2 - Pom version
+#
+# Result string: version
+#
+function getVersionFromPomVersion(){
+  PYTHON_FILE="$(getPythonFile regex-match.py)"
+  echo $(python ${PYTHON_FILE} "\d+\.\d+\.\d+" $1 "find" 0)
 }
 
 # Checks there is a tag on git for the current branch that ends with the version extracted from the POM version
@@ -84,8 +87,7 @@ function checkVersion(){
 #
 function tagExists(){
   POM_VERSION="$(getPomVersion $1)"
-  PYTHON_FILE="$(getPythonFile regex-match.py)"
-  VERSION=$(python ${PYTHON_FILE} "\d+\.\d+\.\d+" ${POM_VERSION} "find" 0)
+  VERSION="$(getVersionFromPomVersion $POM_VERSION)"
   TAG=$(git tag | grep '${VERSION}' || echo 'OK')
   PYTHON_FILE="$(getPythonFile tag-exists.py)"
   echo $(python ${PYTHON_FILE} ${TAG} ${VERSION})
@@ -93,24 +95,21 @@ function tagExists(){
 
 # Checks version is ok with branchname
 checkversion="$(checkVersion $BRANCHNAME $POM_FILE)"
-echo "CheckVersion=${checkversion}"
+echo "CheckVersion result=${checkversion}"
+
+# Check tag exists
+tagexists="$(tagExists ${POM_FILE})"
+echo "tagexists result=${tagexists}"
 
 # Calculate next release based on tags
 PATCH_LEVEL=$(expr `git tag | grep '${BRANCHNAME}.[0-9][0-9]*\$' | awk -F '.' '{ print $3 }' | sort -n | tail -n 1` + 1 || echo 0)
 NEXT_RELEASE=${BRANCHNAME}.${PATCH_LEVEL}
 echo "Calculated next release: ${NEXT_RELEASE}"
 
-# Check tag exists
-tagexists="$(tagExists ${POM_FILE})"
-echo "tagexists=${tagexists}"
-
 if [[ $checkversion = "true" ]]
 then
     if [[ $tagexists = "true" ]]
     then
-      
-
-      cd repo-modified
       #    echo "new line" >> some-file.txt
 
        #   git add .
