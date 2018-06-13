@@ -7,7 +7,7 @@ set -o pipefail
 
 export TMPDIR=${TMPDIR:-/tmp}
 
-function cfTest(){
+function cfLogin(){
   cf api $PWS_API --skip-ssl-validation
 
   cf login -u $PWS_USER -p $PWS_PWD -o "$PWS_ORG" -s "$PWS_SPACE"
