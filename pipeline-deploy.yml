@@ -1,0 +1,71 @@
+---
+resources:
+- name: repo
+  type: git
+  source:
+    uri: ((app-url))
+    branch: ((app-branch))
+    username: ((github-username))
+    password: ((github-password))
+    skip_ssl_verification: true
+
+- name: tools
+  type: git
+  source:
+    uri: ((tools-scripts-url))
+    branch: ((tools-branch))
+    username: ((github-tools-username))
+    password: ((github-tools-password))
+    skip_ssl_verification: true
+
+- name: keyval
+  type: keyval
+
+resource_types:
+  - name: keyval
+    type: docker-image
+    source:
+      repository: swce/keyval-resource
+
+jobs:
+- name: scdf-server-deploy
+  public: true
+  plan:
+  - aggregate:
+    - get: tools
+    - get: repo
+      trigger: true
+  - task: scdf-server-deploy
+    privileged: true
+    file: tools/tasks/scdf-server-deploy/task.yml
+    params:
+      <<: *common-params
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+
+- name: app-register
+  public: true
+  plan:
+  - aggregate:
+    - get: tools
+    - get: repo
+    - get: keyval
+      passed:
+      - scdf-server-deploy
+      trigger: true
+  - task: app-register
+    privileged: true
+    file: tools/tasks/app-register/task.yml
+    params:
+      <<: *common-params
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+
+common-params: &common-params
+  PWS_USER: ((pws-user))
+  PWS_PWD: ((pws-pwd))
+  PWS_ORG: ((pws-org))
+  PWS_SPACE: ((pws-space))
+  PWS_API: ((pws-api))
