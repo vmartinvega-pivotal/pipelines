@@ -42,6 +42,9 @@ echo "Calculated next release: ${NEXT_RELEASE}"
 
 if [[ $checkversion = "true" ]]
 then
+    git config --global user.name "${GIT_NAME}"
+    git config --global user.email "${GIT_EMAIL}"
+    
     if [[ $tagexists = "true" ]]
     then  
       #    echo "new line" >> some-file.txt
@@ -53,9 +56,6 @@ then
       NEW_POM_FILE="${POM_FILE}.new"
       python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/modify-version-pom.py ${POM_FILE} ${NEW_POM_FILE} ${NEW_POM_VERSION}
       mv $NEW_POM_FILE $POM_FILE
-
-      # git config --global user.name "${GIT_NAME}"
-      # git config --global user.email "${GIT_EMAIL}"
       
       echo "WARN: Patched pom version with value ${NEW_POM_VERSION}"
       #git -c http.sslVerify=false -c http.sslKey=${HOME}/.gitprivatekey/privatekey commit -a -m "Changed pom version from ${POM_VERSION} to ${NEW_POM_VERSION}"
@@ -65,11 +65,13 @@ then
     # Maven release prepare
     #mvn --batch-mode release:clean release:prepare -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Djavax.net.ssl.trustStore=${TRUSTSTORE_FILE} -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUSTSTORE_FILE}"
     mvn --batch-mode release:clean release:prepare -Dusername=${USERNAME} -Dpassword=${PASSWORD} ${BUILD_OPTIONS}
-    echo "maven prepare"
+    echo "maven release:clean release:prepare"
 
     # Maven release perform
-    #mvn -s $MAVEN_SETTINGS --batch-mode release:perform -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUSTSTORE_FILE} -Dsonar.branch=${SONAR_BRANCH}" -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Djavax.net.ssl.trustStore=${TRUSTSTORE_FILE}"
-    echo "maven release"
+    #mvn --batch-mode release:perform -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUSTSTORE_FILE} -Dsonar.branch=${SONAR_BRANCH}" -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Djavax.net.ssl.trustStore=${TRUSTSTORE_FILE}"
+
+     mvn --batch-mode release:perform -Dusername=${USERNAME} -Dpassword=${PASSWORD}
+    echo "maven release:perform"
 else
     POM_VERSION="$(getPomVersion $POM_FILE)"
     echo "ERROR: Pom Version ${POM_VERSION} does not match release name ${CURRENT_BRANCH}"
