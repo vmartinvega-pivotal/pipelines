@@ -63,6 +63,25 @@ jobs:
     params:
       file: keyvalout/keyval.properties
 
+- name: stream-create
+  public: true
+  plan:
+  - aggregate:
+    - get: tools
+    - get: repo
+    - get: keyval
+      passed:
+      - app-register
+      trigger: true
+  - task: stream-create
+    privileged: true
+    file: tools/tasks/stream-create/task.yml
+    params:
+      <<: *common-params
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+
 common-params: &common-params
   PWS_USER: ((pws-user))
   PWS_PWD: ((pws-pwd))
