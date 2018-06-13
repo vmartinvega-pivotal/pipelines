@@ -34,5 +34,5 @@ function cfLogin(){
 function cfSCDFDeploy(){
   #TODO: creates a service instance of scdf and waits for it to be created, then gets the the url and put it in PASSED_SCDF_SERVER_URL
 
-  export PASSED_SCDF_SERVER_URL="hppt://192.168.177.141:9393"
+  export PASSED_SCDF_SERVER_URL="http://192.168.177.141:9393"
 }
