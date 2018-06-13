@@ -14,11 +14,11 @@ export OUTPUT_RESOURCE=out
 export KEYVALOUTPUT_RESOURCE=keyvalout
 export TRUSTSTORE_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/settings/${TRUSTSTORE}"
 
-# Add properties as environment variables
-exportKeyValProperties
-
 # Source all usefull scripts
 source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/source-all.sh
+
+# Add properties as environment variables
+exportKeyValProperties
 
 # TODO: This folder will be create in another task, with all libs downloaded from NEXUS
 export ROOT_FOLDER_FOR_LIBS="${ROOT_FOLDER}/${REPO_RESOURCE}/libs"
