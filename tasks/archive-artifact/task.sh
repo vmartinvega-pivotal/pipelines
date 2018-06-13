@@ -64,6 +64,9 @@ then
 
     # Maven release prepare
     #mvn --batch-mode release:clean release:prepare -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Djavax.net.ssl.trustStore=${TRUSTSTORE_FILE} -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUSTSTORE_FILE}"
+
+    git checkout -f ${CURRENT_BRANCH}
+    
     mvn --batch-mode release:clean release:prepare -Dusername=${USERNAME} -Dpassword=${PASSWORD} ${BUILD_OPTIONS}
     echo "maven release:clean release:prepare"
 
