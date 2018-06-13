@@ -82,6 +82,25 @@ jobs:
     params:
       file: keyvalout/keyval.properties
 
+- name: stream-deploy
+  public: true
+  plan:
+  - aggregate:
+    - get: tools
+    - get: repo
+    - get: keyval
+      passed:
+      - stream-create
+      trigger: true
+  - task: stream-deploy
+    privileged: true
+    file: tools/tasks/stream-deploy/task.yml
+    params:
+      <<: *common-params
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+
 common-params: &common-params
   PWS_USER: ((pws-user))
   PWS_PWD: ((pws-pwd))
