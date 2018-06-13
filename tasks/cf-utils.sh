@@ -7,6 +7,24 @@ set -o pipefail
 
 export TMPDIR=${TMPDIR:-/tmp}
 
+# Reads a file.properties as the first argument and add it as a environment variable
+function exportKeyValPropertiesForDeploying() {
+	props=$1
+	echo "Props are in [${props}]"
+	if [ -f "${props}" ]
+	then
+	  echo "Reading passed key values"
+	  while IFS= read -r var
+	  do
+	    if [ ! -z "${var}" ]
+	    then
+	      echo "Adding: ${var}"
+	      export "$var"
+	    fi
+	  done < "${props}"
+	fi
+}
+
 function cfLogin(){
   cf api $PWS_API --skip-ssl-validation
 

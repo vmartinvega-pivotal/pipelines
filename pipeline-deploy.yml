@@ -69,3 +69,4 @@ common-params: &common-params
   PWS_ORG: ((pws-org))
   PWS_SPACE: ((pws-space))
   PWS_API: ((pws-api))
+  TIM_ENVIRONMENT: ((tim-environment))
