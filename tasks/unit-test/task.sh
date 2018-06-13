@@ -24,7 +24,7 @@ touch $propsFile
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
 echo "--- Testing ---"
-mvn test -Dmaven.test.failure.ignore=true ${BUILD_OPTIONS}
+#mvn test -Dmaven.test.failure.ignore=true ${BUILD_OPTIONS}
 echo "--- Testing ---"
 echo ""
 
