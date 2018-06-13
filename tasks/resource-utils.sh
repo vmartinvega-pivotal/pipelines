@@ -29,7 +29,6 @@ function exportKeyValProperties() {
 function passKeyValProperties() {
 	propsDir="${ROOT_FOLDER}/${KEYVALOUTPUT_RESOURCE}"
 	propsFile="${propsDir}/keyval.properties"
-        touch ${propsFile}
 	if [ -d "${propsDir}" ]
 	then
 	  touch "${propsFile}"

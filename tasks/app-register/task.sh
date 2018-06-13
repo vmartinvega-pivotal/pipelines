@@ -23,10 +23,6 @@ source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/source-all.sh
 # TODO: This folder will be create in another task, with all libs downloaded from NEXUS
 export ROOT_FOLDER_FOR_LIBS="${ROOT_FOLDER}/${REPO_RESOURCE}/libs"
 
-propsDir="${ROOT_FOLDER}/${KEYVALOUTPUT_RESOURCE}"
-propsFile="${propsDir}/keyval.properties"
-touch $propsFile
-
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
 echo "-- App register ..."

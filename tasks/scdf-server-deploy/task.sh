@@ -12,14 +12,9 @@ export REPO_RESOURCE=repo
 export TOOLS_RESOURCE=tools
 export OUTPUT_RESOURCE=out
 export KEYVALOUTPUT_RESOURCE=keyvalout
-export TRUSTSTORE_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/settings/${TRUSTSTORE}"
 
 # Source all usefull scripts
 source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/source-all.sh
-
-propsDir="${ROOT_FOLDER}/${KEYVALOUTPUT_RESOURCE}"
-propsFile="${propsDir}/keyval.properties"
-touch $propsFile
 
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
