@@ -35,11 +35,6 @@ echo "CheckVersion result=${checkversion}"
 tagexists="$(tagExists ${POM_FILE})"
 echo "TagExists result=${tagexists}"
 
-# Calculate next release based on tags
-PATCH_LEVEL=$(expr `git tag | grep '${CURRENT_BRANCH}.[0-9][0-9]*\$' | awk -F '.' '{ print $3 }' | sort -n | tail -n 1` + 1 || echo 0)
-NEXT_RELEASE=${CURRENT_BRANCH}.${PATCH_LEVEL}
-echo "Calculated next release: ${NEXT_RELEASE}"
-
 if [[ $checkversion = "true" ]]
 then
     git config --global user.name "${GIT_NAME}"
@@ -47,9 +42,10 @@ then
     
     if [[ $tagexists = "true" ]]
     then  
-      #    echo "new line" >> some-file.txt
-
-       #   git add .
+      # Calculate next release based on tags
+      PATCH_LEVEL=$(expr `git tag | grep '${CURRENT_BRANCH}.[0-9][0-9]*\$' | awk -F '.' '{ print $3 }' | sort -n | tail -n 1` + 1 || echo 0)
+      NEXT_RELEASE=${CURRENT_BRANCH}.${PATCH_LEVEL}
+      echo "Calculated next release: ${NEXT_RELEASE}"
 
       echo "WARN: The software is already tagged with this release"
       NEW_POM_VERSION="${NEXT_RELEASE}-SNAPSHOT"
@@ -65,15 +61,19 @@ then
     # Maven release prepare
     #mvn --batch-mode release:clean release:prepare -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Djavax.net.ssl.trustStore=${TRUSTSTORE_FILE} -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUSTSTORE_FILE}"
 
+    git config http.postBuffer 524288000
+										
+    git config http.sslVerify false
+
     git checkout -f ${CURRENT_BRANCH}
-    
-    mvn --batch-mode release:clean release:prepare -Dusername=${USERNAME} -Dpassword=${PASSWORD} ${BUILD_OPTIONS}
+
+    mvn --batch-mode release:clean release:prepare -Dusername=${USERNAME} -Dpassword=${PASSWORD} -DskipTests=true ${BUILD_OPTIONS}
     echo "maven release:clean release:prepare"
 
     # Maven release perform
     #mvn --batch-mode release:perform -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUSTSTORE_FILE} -Dsonar.branch=${SONAR_BRANCH}" -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Djavax.net.ssl.trustStore=${TRUSTSTORE_FILE}"
 
-     mvn --batch-mode release:perform -Dusername=${USERNAME} -Dpassword=${PASSWORD}
+     mvn --batch-mode release:perform -Dusername=${USERNAME} -Dpassword=${PASSWORD} -DskipTests=true ${BUILD_OPTIONS}
     echo "maven release:perform"
 else
     POM_VERSION="$(getPomVersion $POM_FILE)"
