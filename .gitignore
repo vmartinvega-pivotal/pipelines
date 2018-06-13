@@ -5,3 +5,4 @@ concourse-truststore.jks
 maven-command
 maven-settings.xml
 concourse/keys/
+nexus/

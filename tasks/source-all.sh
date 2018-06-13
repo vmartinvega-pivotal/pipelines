@@ -17,5 +17,8 @@ source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/store-github-private-key.sh
 echo "Sourcing resource utils"
 source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/resource-utils.sh
 
-echo "Archive task tim utils"
+echo "Sourcing Archive tasks tim utils"
 source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/tim-utils.sh
+
+echo "Sourcing Cf Utils"
+source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/cf-utils.sh
