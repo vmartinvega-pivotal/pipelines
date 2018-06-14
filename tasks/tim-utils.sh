@@ -12,18 +12,6 @@ function toLowerCase() {
   echo "$1" | tr '[:upper:]' '[:lower:]'
 }
 
-function checkLasCommit(){
-  RESULT=$(git log -n 1 --pretty=format:"%s")
-  LOWERCASE_LOG_MESSAGE="$(toLowerCase "${RESULT}")"
-
-  if [[ $LOWERCASE_LOG_MESSAGE =~ .*maven-release-plugin.* ]]
-  then
-    echo true
-  else
-    echo false
-  fi
-}
-
 # Gets the version tag from a POM file
 # Arguments:
 # 1 - Pom file

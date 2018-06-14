@@ -53,20 +53,12 @@ then
       mv $NEW_POM_FILE $POM_FILE
       
       echo "WARN: Patched pom version with value ${NEW_POM_VERSION}"
-      #git -c http.sslVerify=false -c http.sslKey=${HOME}/.gitprivatekey/privatekey commit -a -m "Changed pom version from ${POM_VERSION} to ${NEW_POM_VERSION}"
-      #git commit -a -m "Changed pom version from ${POM_VERSION} to ${NEW_POM_VERSION}"
+      git -c http.sslVerify=false -c http.sslKey=${HOME}/.gitprivatekey/privatekey commit -a -m "[ci skip] Changed pom version from ${POM_VERSION} to ${NEW_POM_VERSION}"
+      #git commit -a -m "[ci skip] Changed pom version from ${POM_VERSION} to ${NEW_POM_VERSION}"
     fi
-
-    # Maven release prepare
-    #mvn --batch-mode release:clean release:prepare -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Djavax.net.ssl.trustStore=${TRUSTSTORE_FILE} -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUSTSTORE_FILE}"
-
-    #git config http.postBuffer 524288000
-										
-    #git config http.sslVerify false
 
     git checkout -f ${CURRENT_BRANCH}
 
-    #echo "maven release:clean release:prepare"
     mvn --batch-mode release:clean release:prepare release:perform -Dresume=false -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Dmaven.test.skip=true -DskipITs -DscmCommentPrefix="[ci skip]" ${BUILD_OPTIONS}
     
     # Maven release perform

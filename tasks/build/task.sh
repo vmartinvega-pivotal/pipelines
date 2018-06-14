@@ -17,9 +17,6 @@ export TRUSTSTORE_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/settings/${TRUSTSTORE}"
 # Source all usefull scripts
 source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/source-all.sh
 
-# Checks if last commit is from maven-release-plugin, if so exits
-checkLasCommit
-
 # Add properties as environment variables
 exportKeyValProperties
 
