@@ -66,8 +66,6 @@ then
 
     git checkout -f ${CURRENT_BRANCH}
 
-mvn --batch-mode clean release:prepare release:perform -Dresume=false -DautoVersionSubmodules=true -DdryRun=false -Dmaven.test.skip=true -DskipITs -DscmCommentPrefix="[ci skip]"
-
     #echo "maven release:clean release:prepare"
     mvn --batch-mode release:clean release:prepare release:perform -Dresume=false -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Dmaven.test.skip=true -DskipITs -DscmCommentPrefix="[ci skip]" ${BUILD_OPTIONS}
     
