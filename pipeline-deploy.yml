@@ -48,9 +48,9 @@ jobs:
   public: true
   plan:
   - aggregate:
-    - get: keyval
     - get: tools
     - get: repo
+    - get: keyval
       passed:
       - scdf-server-deploy
       trigger: true

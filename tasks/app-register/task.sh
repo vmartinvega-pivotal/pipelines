@@ -35,6 +35,7 @@ function setFileName(){
 }
 
 echo "-- Executing appregister ..."
+
 setFileName "appRegister.df" "appRegister.properties"
 exportKeyValPropertiesForDeploying ${ROOT_FOLDER_SCDF_SCRIPTS}/${PROPERTIES_FILE}
 
