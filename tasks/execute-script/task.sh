@@ -22,10 +22,11 @@ exportKeyValProperties
 
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
-echo "--- Build ---"
-#mvn X clean install -DskipTests=true -Djavax.net.ssl.trustStore=${TRUSTSTORE_FILE} ${BUILD_OPTIONS}
-mvn -X clean install -DskipTests=true ${BUILD_OPTIONS}
-echo "--- Build ---"
+echo "--- Execute Script ${FILE_PATH_SCRIPT} ---"
+
+${FILE_PATH_SCRIPT}
+
+echo "--- Execute Script ${FILE_PATH_SCRIPT} ---"
 echo ""
 
 # Adding values to the next job

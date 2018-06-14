@@ -64,7 +64,7 @@ jobs:
     params:
       file: keyvalout/keyval.properties
 
-- name: sonarqube
+- name: deploy-microservice
   public: true
   plan:
   - aggregate:
@@ -73,6 +73,54 @@ jobs:
     - get: keyval
       passed:
       - unit-test
+      trigger: true
+  - task: deploy-microservice
+    privileged: true
+    file: tools/tasks/execute-script/task.yml
+    params:
+      PWS_USER: ((pws-user))
+      PWS_PWD: ((pws-pwd))
+      PWS_ORG: ((pws-org))
+      PWS_SPACE: ((pws-space))
+      PWS_API: ((pws-api))
+      FILE_PATH_SCRIPT: ./deploy/deployMicroservice.sh
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+
+- name: undeploy-microservice
+  public: true
+  plan:
+  - aggregate:
+    - get: tools
+    - get: repo
+    - get: keyval
+      passed:
+      - deploy-microservice
+      trigger: true
+  - task: undeploy-microservice
+    privileged: true
+    file: tools/tasks/execute-script/task.yml
+    params:
+      PWS_USER: ((pws-user))
+      PWS_PWD: ((pws-pwd))
+      PWS_ORG: ((pws-org))
+      PWS_SPACE: ((pws-space))
+      PWS_API: ((pws-api))
+      FILE_PATH_SCRIPT: ./undeploy/undeployMicroservice.sh
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+
+- name: sonarqube
+  public: true
+  plan:
+  - aggregate:
+    - get: tools
+    - get: repo
+    - get: keyval
+      passed:
+      - undeploy-microservice
       trigger: true
   - task: sonarqube
     privileged: true
