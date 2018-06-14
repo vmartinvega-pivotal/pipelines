@@ -40,6 +40,7 @@ jobs:
     file: tools/tasks/scdf-server-deploy/task.yml
     params:
       <<: *common-params
+      SCDF_SERVER_URL: ((scdf-server-url))
   - put: keyval
     params:
       file: keyvalout/keyval.properties
@@ -56,9 +57,10 @@ jobs:
       trigger: true
   - task: app-register
     privileged: true
-    file: tools/tasks/app-register/task.yml
+    file: tools/tasks/scdf-deploy-streams/task.yml
     params:
       <<: *common-params
+      STAGE: appregister
   - put: keyval
     params:
       file: keyvalout/keyval.properties
@@ -75,9 +77,10 @@ jobs:
       trigger: true
   - task: stream-create
     privileged: true
-    file: tools/tasks/stream-create/task.yml
+    file: tools/tasks/scdf-deploy-streams/task.yml
     params:
       <<: *common-params
+      STAGE: streamcreate
   - put: keyval
     params:
       file: keyvalout/keyval.properties
@@ -94,9 +97,10 @@ jobs:
       trigger: true
   - task: stream-deploy
     privileged: true
-    file: tools/tasks/stream-deploy/task.yml
+    file: tools/tasks/scdf-deploy-streams/task.yml
     params:
       <<: *common-params
+      STAGE: streamdeploy
   - put: keyval
     params:
       file: keyvalout/keyval.properties

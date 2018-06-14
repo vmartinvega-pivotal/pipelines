@@ -34,30 +34,30 @@ function setFileName(){
   PROPERTIES_FILE=$2
 }
 
-echo "-- Executing appregister ..."
+echo "-- Executing ${STAGE} ..."
 
-setFileName "appRegister.df" "appRegister.properties"
+if [[ $STAGE = "appregister" ]]
+then 
+  setFileName "appRegister.df" "appRegister.properties"
+fi
+
+if [[ $STAGE = "createstream" ]]
+then 
+  setFileName "createStream.df" "createStream.properties"
+fi
+
+if [[ $STAGE = "deploystream" ]]
+then 
+  setFileName "deployStream.df" "deployStream.properties"
+fi
+
 exportKeyValPropertiesForDeploying ${ROOT_FOLDER_SCDF_SCRIPTS}/${PROPERTIES_FILE}
-
-# TODO: This folder and environment variable will be create in another task, with all libs downloaded from NEXUS
-export ROOT_FOLDER_FOR_LIBS="${ROOT_FOLDER}/${REPO_RESOURCE}/libs"
 
 envsubst < ${ROOT_FOLDER}/${REPO_RESOURCE}/pcf-scdf-deploy-${TIM_ENVIRONMENT}/${DF_FILE} >> ${TMPDIR}/${DF_FILE}
 
 java -jar ${ROOT_FOLDER}/${TOOLS_RESOURCE}/scdf/spring-cloud-dataflow-shell-1.5.1.RELEASE.jar --dataflow.uri=${PASSED_SCDF_SERVER_URL}  --spring.shell.commandFile=${TMPDIR}/${DF_FILE}
 
-#echo "-- Executing createstream ..."
-#setFileName "createStream.df" "createStream.properties"
-
-#echo "-- Executing deploystream ..."
-#setFileName "deployStream.df" "deployStream.properties"
-
-# Will replace the environment variables in your file with their corresponding value. 
-# The variable names must consist solely of alphanumeric or underscore ASCII characters, 
-#not start with a digit and be nonempty; otherwise such a variable reference is ignored.
-#envsubst < ${ROOT_FOLDER}/${REPO_RESOURCE}/pcf-scdf-deploy-${TIM_ENVIRONMENT}/${DF_FILE} >> ${TMPDIR}/${DF_FILE}
-
-#java -jar ${ROOT_FOLDER}/${TOOLS_RESOURCE}/scdf/spring-cloud-dataflow-shell-1.5.1.RELEASE.jar --dataflow.uri=${PASSED_SCDF_SERVER_URL}  --spring.shell.commandFile=${TMPDIR}/appRegister.df
+echo "-- Executing ${STAGE} ..."
 
 # Adding values to keyvalout
 passKeyValProperties

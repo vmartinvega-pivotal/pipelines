@@ -32,7 +32,12 @@ function cfLogin(){
 }
 
 function cfSCDFDeploy(){
+  
   #TODO: creates a service instance of scdf and waits for it to be created, then gets the the url and put it in PASSED_SCDF_SERVER_URL
-
-  export PASSED_SCDF_SERVER_URL="http://192.168.177.141:9393"
+  if [ -z "${SCDF_SERVER_URL}" ]; then
+    echo "SCDF_SERVER_URL is unset or set to the empty string, creating a new instance for scdf"
+    export PASSED_SCDF_SERVER_URL="TODO:"
+  else
+    export PASSED_SCDF_SERVER_URL=${SCDF_SERVER_URL}
+  fi
 }
