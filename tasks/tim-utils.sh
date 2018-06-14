@@ -12,7 +12,7 @@ function toLowerCase() {
   echo "$1" | tr '[:upper:]' '[:lower:]'
 }
 
-function checkLastGitCommitFromMavenRelease(){
+function checkLasCommit(){
   RESULT=$(git log -n 1 --pretty=format:"%s")
   LOWERCASE_LOG_MESSAGE="$(toLowerCase "${RESULT}")"
 
@@ -21,15 +21,6 @@ function checkLastGitCommitFromMavenRelease(){
     echo true
   else
     echo false
-  fi
-}
-
-function checkLasCommit(){
-  LAST_COMMIT=$(checkLastGitCommitFromMavenRelease)
-  if [[ $LAST_COMMIT = "true" ]]
-  then
-    echo "Last commit from maven-release-plugin skipping step ..."
-    exit 0
   fi
 }
 

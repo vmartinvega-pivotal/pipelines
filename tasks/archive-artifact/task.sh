@@ -18,7 +18,13 @@ export TRUSTSTORE_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/settings/${TRUSTSTORE}"
 source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/source-all.sh
 
 # Checks if last commit is from maven-release-plugin, if so exits
-checkLasCommit
+
+LAST_COMMIT_FROM_MAVEN_RELEASE="$(checkLasCommit)"
+if [[ $LAST_COMMIT_FROM_MAVEN_RELEASE = "true" ]]
+then
+  echo "Last commit from maven release skipping step"
+  exit 0
+fi
 
 # Add properties as environment variables
 exportKeyValProperties
