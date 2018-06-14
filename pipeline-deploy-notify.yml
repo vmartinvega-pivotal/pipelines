@@ -1,0 +1,134 @@
+---
+resources:
+- name: repo
+  type: git
+  source:
+    uri: ((app-url))
+    branch: ((app-branch))
+    username: ((github-username))
+    password: ((github-password))
+    skip_ssl_verification: true
+
+- name: tools
+  type: git
+  source:
+    uri: ((tools-scripts-url))
+    branch: ((tools-branch))
+    username: ((github-tools-username))
+    password: ((github-tools-password))
+    skip_ssl_verification: true
+
+- name: keyval
+  type: keyval
+
+- name: notify
+  type: slack-notification
+  source:
+    url: ((slack-webhook))
+
+resource_types:
+  - name: keyval
+    type: docker-image
+    source:
+      repository: swce/keyval-resource
+
+resource_types:
+- name: slack-notification
+  type: docker-image
+  source:
+    repository: cfcommunity/slack-notification-resource
+    tag: latest
+
+jobs:
+- name: scdf-server-deploy
+  public: true
+  plan:
+  - aggregate:
+    - get: tools
+    - get: repo
+      trigger: true
+  - task: scdf-server-deploy
+    privileged: true
+    file: tools/tasks/scdf-server-deploy/task.yml
+    on_failure:
+      put: notify
+      params:
+        text: "scdf-server-deploy failed!"
+    on_success:
+      put: notify
+      params:
+        text: "scdf-server-deploy success!"
+    params:
+      <<: *common-params
+      SCDF_SERVER_URL: ((scdf-server-url))
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+
+- name: app-register
+  public: true
+  plan:
+  - aggregate:
+    - get: tools
+    - get: repo
+    - get: keyval
+      passed:
+      - scdf-server-deploy
+      trigger: true
+  - task: app-register
+    privileged: true
+    file: tools/tasks/scdf-streams-deploy/task.yml
+    params:
+      <<: *common-params
+      STAGE: appregister
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+
+- name: stream-create
+  public: true
+  plan:
+  - aggregate:
+    - get: tools
+    - get: repo
+    - get: keyval
+      passed:
+      - app-register
+      trigger: true
+  - task: stream-create
+    privileged: true
+    file: tools/tasks/scdf-streams-deploy/task.yml
+    params:
+      <<: *common-params
+      STAGE: streamcreate
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+
+- name: stream-deploy
+  public: true
+  plan:
+  - aggregate:
+    - get: tools
+    - get: repo
+    - get: keyval
+      passed:
+      - stream-create
+      trigger: true
+  - task: stream-deploy
+    privileged: true
+    file: tools/tasks/scdf-streams-deploy/task.yml
+    params:
+      <<: *common-params
+      STAGE: streamdeploy
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+
+common-params: &common-params
+  PWS_USER: ((pws-user))
+  PWS_PWD: ((pws-pwd))
+  PWS_ORG: ((pws-org))
+  PWS_SPACE: ((pws-space))
+  PWS_API: ((pws-api))
+  TIM_ENVIRONMENT: ((tim-environment))
