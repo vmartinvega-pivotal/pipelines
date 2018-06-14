@@ -17,15 +17,6 @@ export TRUSTSTORE_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/settings/${TRUSTSTORE}"
 # Source all usefull scripts
 source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/source-all.sh
 
-# Checks if last commit is from maven-release-plugin, if so exits
-
-LAST_COMMIT_FROM_MAVEN_RELEASE="$(checkLasCommit)"
-if [[ $LAST_COMMIT_FROM_MAVEN_RELEASE = "true" ]]
-then
-  echo "Last commit from maven release skipping step"
-  exit 0
-fi
-
 # Add properties as environment variables
 exportKeyValProperties
 
@@ -69,21 +60,22 @@ then
     # Maven release prepare
     #mvn --batch-mode release:clean release:prepare -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Djavax.net.ssl.trustStore=${TRUSTSTORE_FILE} -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUSTSTORE_FILE}"
 
-    git config http.postBuffer 524288000
+    #git config http.postBuffer 524288000
 										
-    git config http.sslVerify false
+    #git config http.sslVerify false
 
-    git checkout -f ${CURRENT_BRANCH}
+    #git checkout -f ${CURRENT_BRANCH}
 
-    echo "maven release:clean release:prepare"
-    mvn --batch-mode release:clean release:prepare -Dusername=${USERNAME} -Dpassword=${PASSWORD} -DskipTests=true ${BUILD_OPTIONS}
+mvn --batch-mode clean release:prepare release:perform -Dresume=false -DautoVersionSubmodules=true -DdryRun=false -Dmaven.test.skip=true -DskipITs -DscmCommentPrefix="[ci skip]"
+
+    #echo "maven release:clean release:prepare"
+    mvn --batch-mode release:clean release:prepare release:perform -Dresume=false -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Dmaven.test.skip=true -DskipITs -DscmCommentPrefix="[ci skip]" ${BUILD_OPTIONS}
     
-
     # Maven release perform
     #mvn --batch-mode release:perform -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUSTSTORE_FILE} -Dsonar.branch=${SONAR_BRANCH}" -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Djavax.net.ssl.trustStore=${TRUSTSTORE_FILE}"
 
-    echo "maven release:perform"
-    mvn --batch-mode release:perform -Dusername=${USERNAME} -Dpassword=${PASSWORD} -DskipTests=true ${BUILD_OPTIONS}
+    #echo "maven release:perform"
+    #mvn --batch-mode release:perform -Dusername=${USERNAME} -Dpassword=${PASSWORD} -DskipTests=true ${BUILD_OPTIONS}
     
 else
     POM_VERSION="$(getPomVersion $POM_FILE)"

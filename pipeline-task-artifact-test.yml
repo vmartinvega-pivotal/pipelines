@@ -9,6 +9,7 @@ resources:
     username: ((github-username))
     password: ((github-password))
     skip_ssl_verification: true
+    disable_ci_skip: false
 
 - name: tools
   type: git
