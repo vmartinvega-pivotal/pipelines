@@ -12,7 +12,7 @@ export REPO_RESOURCE=repo
 export TOOLS_RESOURCE=tools
 export OUTPUT_RESOURCE=out
 export KEYVALOUTPUT_RESOURCE=keyvalout
-export TRUSTSTORE_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/settings/${TRUSTSTORE}"
+export KEYVAL_RESOURCE=keyval
 
 # Source all usefull scripts
 source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/source-all.sh

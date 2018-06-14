@@ -12,7 +12,7 @@ export REPO_RESOURCE=repo
 export TOOLS_RESOURCE=tools
 export OUTPUT_RESOURCE=out
 export KEYVALOUTPUT_RESOURCE=keyvalout
-export TRUSTSTORE_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/settings/${TRUSTSTORE}"
+export KEYVAL_RESOURCE=keyval
 
 # Source all usefull scripts
 source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/source-all.sh
@@ -28,6 +28,7 @@ cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
 echo "--- Sonarqube ---"
 #mvn --batch-mode sonar:sonar -Djavax.net.ssl.trustStore=${TRUSTSTORE_FILE} -Dsonar.branch=${SONAR_BRANCH}
+#mvn --batch-mode sonar:sonar -Dsonar.branch=${SONAR_BRANCH}
 echo "--- Sonarqube ---"
 echo ""
 

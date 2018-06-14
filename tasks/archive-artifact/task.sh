@@ -12,6 +12,8 @@ export REPO_RESOURCE=repo
 export TOOLS_RESOURCE=tools
 export OUTPUT_RESOURCE=out
 export KEYVALOUTPUT_RESOURCE=keyvalout
+export KEYVAL_RESOURCE=keyval
+
 export TRUSTSTORE_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/settings/${TRUSTSTORE}"
 
 # Source all usefull scripts

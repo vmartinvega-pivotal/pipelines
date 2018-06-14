@@ -23,6 +23,7 @@ exportKeyValProperties
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
 echo "--- Build ---"
+#mvn X clean install -DskipTests=true -Djavax.net.ssl.trustStore=${TRUSTSTORE_FILE} ${BUILD_OPTIONS}
 mvn -X clean install -DskipTests=true ${BUILD_OPTIONS}
 echo "--- Build ---"
 echo ""
