@@ -23,9 +23,20 @@ exportKeyValProperties
 DF_FILE=""
 PROPERTIES_FILE=""
 
+function setFileName(){
+  DF_FILE=$1
+
+  if [ ! -f ${ROOT_FOLDER}/${REPO_RESOURCE}/pcf-scdf-deploy-${TIM_ENVIRONMENT}/$2 ]; then
+    touch ${ROOT_FOLDER}/${REPO_RESOURCE}/pcf-scdf-deploy-${TIM_ENVIRONMENT}/$2
+  fi
+
+  PROPERTIES_FILE=$2
+}
+
 if [[ $TASK_COMMAND = "appregister" ]]
 then
-  DF_FILE="appRegister.df"
+  echo "-- Executing appregister ..."
+  setFileName "appRegister.df" "appRegister.properties"
 
   # TODO: This folder and environment variable will be create in another task, with all libs downloaded from NEXUS
   export ROOT_FOLDER_FOR_LIBS="${ROOT_FOLDER}/${REPO_RESOURCE}/libs"
@@ -33,20 +44,24 @@ fi
 
 if [[ $TASK_COMMAND = "createstream" ]]
 then
-  DF_FILE="appRegister.df"
+  echo "-- Executing createstream ..."
+  setFileName "createStream.df" "createStream.properties"
 fi
 
-# TODO: This folder and environment variable will be create in another task, with all libs downloaded from NEXUS
-export ROOT_FOLDER_FOR_LIBS="${ROOT_FOLDER}/${REPO_RESOURCE}/libs"
+if [[ $TASK_COMMAND = "deploystream" ]]
+then
+  echo "-- Executing deploystream ..."
+  setFileName "deployStream.df" "deployStream.properties"
+fi
 
-echo "-- Executing shell script ..."
+exportKeyValPropertiesForDeploying ${ROOT_FOLDER}/${REPO_RESOURCE}/pcf-scdf-deploy-${TIM_ENVIRONMENT}/${PROPERTIES_FILE}
 
-#will replace the environment variables in your file with their corresponding value. The variable names must consist solely of alphanumeric #or underscore ASCII characters, not start with a digit and be nonempty; otherwise such a variable reference is ignored.
-envsubst < ${ROOT_FOLDER}/${REPO_RESOURCE}/pcf-scdf-deploy-${TIM_ENVIRONMENT}/appRegister.df >> ${TMPDIR}/appRegister.df
+# Will replace the environment variables in your file with their corresponding value. 
+# The variable names must consist solely of alphanumeric or underscore ASCII characters, 
+#not start with a digit and be nonempty; otherwise such a variable reference is ignored.
+envsubst < ${ROOT_FOLDER}/${REPO_RESOURCE}/pcf-scdf-deploy-${TIM_ENVIRONMENT}/${DF_FILE} >> ${TMPDIR}/${DF_FILE}
 
 java -jar ${ROOT_FOLDER}/${TOOLS_RESOURCE}/scdf/spring-cloud-dataflow-shell-1.5.1.RELEASE.jar --dataflow.uri=${PASSED_SCDF_SERVER_URL}  --spring.shell.commandFile=${TMPDIR}/appRegister.df
-
-echo "-- Executing shell script ..."
 
 # Adding values to keyvalout
 passKeyValProperties
