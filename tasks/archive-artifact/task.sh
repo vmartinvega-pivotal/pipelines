@@ -64,7 +64,7 @@ then
 										
     #git config http.sslVerify false
 
-    #git checkout -f ${CURRENT_BRANCH}
+    git checkout -f ${CURRENT_BRANCH}
 
 mvn --batch-mode clean release:prepare release:perform -Dresume=false -DautoVersionSubmodules=true -DdryRun=false -Dmaven.test.skip=true -DskipITs -DscmCommentPrefix="[ci skip]"
 
