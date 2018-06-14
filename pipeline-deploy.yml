@@ -21,11 +21,23 @@ resources:
 - name: keyval
   type: keyval
 
+- name: slack-alert
+  type: slack-notification
+  source:
+    url: https://hooks.slack.com/services/XXXX
+
 resource_types:
   - name: keyval
     type: docker-image
     source:
       repository: swce/keyval-resource
+
+resource_types:
+- name: slack-notification
+  type: docker-image
+  source:
+    repository: cfcommunity/slack-notification-resource
+    tag: latest
 
 jobs:
 - name: scdf-server-deploy
