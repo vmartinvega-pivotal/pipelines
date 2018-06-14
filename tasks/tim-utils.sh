@@ -7,6 +7,32 @@ set -o pipefail
 
 export TMPDIR=${TMPDIR:-/tmp}
 
+# Converts a string to lower case
+function toLowerCase() {
+  echo "$1" | tr '[:upper:]' '[:lower:]'
+}
+
+function checkLastGitCommitFromMavenRelease(){
+  RESULT=$(git log -n 1 --pretty=format:"%s")
+  LOWERCASE_LOG_MESSAGE="$(toLowerCase "${RESULT}")"
+
+  if [[ $LOWERCASE_LOG_MESSAGE =~ .*maven-release-plugin.* ]]
+  then
+    echo true
+  else
+    echo false
+  fi
+}
+
+function checkLasCommit(){
+  LAST_COMMIT=$(checkLastGitCommitFromMavenRelease)
+  if [[ $LAST_COMMIT = "true" ]]
+  then
+    echo "Last commit from maven-release-plugin skipping step ..."
+    exit 0
+  fi
+}
+
 # Gets the version tag from a POM file
 # Arguments:
 # 1 - Pom file

@@ -99,6 +99,8 @@ jobs:
     params:
       <<: *common-params
       SONAR_BRANCH: ((sonar-branch))
+      USERNAME: ((github-username))
+      PASSWORD: ((github-password))
   - put: keyval
     params:
       file: keyvalout/keyval.properties

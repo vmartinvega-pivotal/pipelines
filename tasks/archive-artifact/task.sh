@@ -17,9 +17,11 @@ export TRUSTSTORE_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/settings/${TRUSTSTORE}"
 # Source all usefull scripts
 source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/source-all.sh
 
-propsDir="${ROOT_FOLDER}/${KEYVALOUTPUT_RESOURCE}"
-propsFile="${propsDir}/keyval.properties"
-touch ${propsFile}
+# Checks if last commit is from maven-release-plugin, if so exits
+checkLasCommit
+
+# Add properties as environment variables
+exportKeyValProperties
 
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
@@ -67,14 +69,16 @@ then
 
     git checkout -f ${CURRENT_BRANCH}
 
-    mvn --batch-mode release:clean release:prepare -Dusername=${USERNAME} -Dpassword=${PASSWORD} -DskipTests=true ${BUILD_OPTIONS}
     echo "maven release:clean release:prepare"
+    mvn --batch-mode release:clean release:prepare -Dusername=${USERNAME} -Dpassword=${PASSWORD} -DskipTests=true ${BUILD_OPTIONS}
+    
 
     # Maven release perform
     #mvn --batch-mode release:perform -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUSTSTORE_FILE} -Dsonar.branch=${SONAR_BRANCH}" -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Djavax.net.ssl.trustStore=${TRUSTSTORE_FILE}"
 
-     mvn --batch-mode release:perform -Dusername=${USERNAME} -Dpassword=${PASSWORD} -DskipTests=true ${BUILD_OPTIONS}
     echo "maven release:perform"
+    mvn --batch-mode release:perform -Dusername=${USERNAME} -Dpassword=${PASSWORD} -DskipTests=true ${BUILD_OPTIONS}
+    
 else
     POM_VERSION="$(getPomVersion $POM_FILE)"
     echo "ERROR: Pom Version ${POM_VERSION} does not match release name ${CURRENT_BRANCH}"
@@ -84,9 +88,8 @@ fi
 echo "--- Archive Artifact ---"
 echo ""
 
-# Adding values to keyvalout
-BUILD_DATE=`date`
-echo "ARCHIVE_DATE=${BUILD_DATE}" >> "${propsFile}"
+# Adding values to the next job
+passKeyValProperties
 
 cp -r "${ROOT_FOLDER}/${REPO_RESOURCE}"/. "${ROOT_FOLDER}/${OUTPUT_RESOURCE}/"
 

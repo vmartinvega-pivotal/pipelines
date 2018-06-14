@@ -1,1 +1,1 @@
-docker build -t cf-tools-tim .
+docker build -t concourse-tools-tim .

@@ -17,22 +17,23 @@ export TRUSTSTORE_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/settings/${TRUSTSTORE}"
 # Source all usefull scripts
 source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/source-all.sh
 
-propsDir="${ROOT_FOLDER}/${KEYVALOUTPUT_RESOURCE}"
-propsFile="${propsDir}/keyval.properties"
-touch $propsFile
+# Checks if last commit is from maven-release-plugin, if so exits
+checkLasCommit
+
+# Add properties as environment variables
+exportKeyValProperties
 
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
-echo "--- Building ---"
+echo "--- Build ---"
 #mvn X clean install -DskipTests=true -Djavax.net.ssl.trustStore=${TRUSTSTORE_FILE} ${BUILD_OPTIONS}
 mvn -X clean install -DskipTests=true ${BUILD_OPTIONS}
-echo "--- Building ---"
+echo "--- Build ---"
 echo ""
 
-# Adding values to keyvalout
-BUILD_DATE=`date`
-echo "BUILD_DATE=${BUILD_DATE}" >> "${propsFile}"
+# Adding values to the next job
+passKeyValProperties
 
 cp -r "${ROOT_FOLDER}/${REPO_RESOURCE}"/. "${ROOT_FOLDER}/${OUTPUT_RESOURCE}/"
 
-echo "Build Done!!"
+echo "Done!!"
