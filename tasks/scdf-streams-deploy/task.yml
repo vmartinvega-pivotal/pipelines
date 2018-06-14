@@ -17,4 +17,4 @@ outputs:
   - name: keyvalout
 
 run:
-  path: tools/tasks/scdf-deploy-streams/task.sh
+  path: tools/tasks/scdf-streams-deploy/task.sh

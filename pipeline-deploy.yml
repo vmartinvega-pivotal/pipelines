@@ -57,7 +57,7 @@ jobs:
       trigger: true
   - task: app-register
     privileged: true
-    file: tools/tasks/scdf-deploy-streams/task.yml
+    file: tools/tasks/scdf-streams-deploy/task.yml
     params:
       <<: *common-params
       STAGE: appregister
@@ -77,7 +77,7 @@ jobs:
       trigger: true
   - task: stream-create
     privileged: true
-    file: tools/tasks/scdf-deploy-streams/task.yml
+    file: tools/tasks/scdf-streams-deploy/task.yml
     params:
       <<: *common-params
       STAGE: streamcreate
@@ -97,7 +97,7 @@ jobs:
       trigger: true
   - task: stream-deploy
     privileged: true
-    file: tools/tasks/scdf-deploy-streams/task.yml
+    file: tools/tasks/scdf-streams-deploy/task.yml
     params:
       <<: *common-params
       STAGE: streamdeploy
