@@ -37,8 +37,8 @@ if [ -z "${PASSED_APPS_URL}" ]; then
 fi
 
 # Find the jar to be deployed
-ARTIFACT_ID="unzip-sink"
-ARTIFACT_VERSION="1.0.0-SNAPSHOT"
+ARTIFACT_ID=$(getArtifactId "pom.xml")
+ARTIFACT_VERSION=$(getPomVersion "pom.xml")
 JAR_FILE=$(find ../ -name "${ARTIFACT_ID}-${ARTIFACT_VERSION}.jar")
 
 # Creates a random name to deploy the app

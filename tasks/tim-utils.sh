@@ -12,6 +12,16 @@ function toLowerCase() {
   echo "$1" | tr '[:upper:]' '[:lower:]'
 }
 
+# Gets the artifactid tag from a POM file
+# Arguments:
+# 1 - Pom file
+#
+# Result string: artifactid
+#
+function getArtifactId(){
+  echo $(python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/parse-pom.py $1 "artifactId")
+}
+
 # Gets the version tag from a POM file
 # Arguments:
 # 1 - Pom file
