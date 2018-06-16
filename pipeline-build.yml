@@ -76,14 +76,13 @@ jobs:
       trigger: true
   - task: deploy-microservice
     privileged: true
-    file: tools/tasks/execute-script/task.yml
+    file: tools/tasks/deploy-springboot-app/task.yml
     params:
       PWS_USER: ((pws-user))
       PWS_PWD: ((pws-pwd))
       PWS_ORG: ((pws-org))
       PWS_SPACE: ((pws-space))
       PWS_API: ((pws-api))
-      FILE_PATH_SCRIPT: ./deploy/deployMicroservice.sh
   - put: keyval
     params:
       file: keyvalout/keyval.properties
@@ -100,14 +99,13 @@ jobs:
       trigger: true
   - task: undeploy-microservice
     privileged: true
-    file: tools/tasks/execute-script/task.yml
+    file: tools/tasks/undeploy-app/task.yml
     params:
       PWS_USER: ((pws-user))
       PWS_PWD: ((pws-pwd))
       PWS_ORG: ((pws-org))
       PWS_SPACE: ((pws-space))
       PWS_API: ((pws-api))
-      FILE_PATH_SCRIPT: ./undeploy/undeployMicroservice.sh
   - put: keyval
     params:
       file: keyvalout/keyval.properties
