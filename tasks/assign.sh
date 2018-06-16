@@ -22,16 +22,14 @@ ORGANIZATION_NAME=$1
 SPACE_NAME=$2
 APP_NAME_BASE=$3
 SERVICE_NAME=$4
-USERNAME=$5
-PASSWORD=$6
-PWS_API=$7
+PWS_API=$5
+USERNAME=$6
+PASSWORD=$7
 
 echo "Logging to PWS ${PWS_API} with user ${USERNAME}, organization {ORGANIZATION_NAME} and space {SPACE_NAME}"
 cf login -a ${PWS_API} --skip-ssl-validation -u ${USERNAME} -p ${PASSWORD} -o ${ORGANIZATION_NAME} -s ${SPACE_NAME}
 
 ORGANIZATIONS=$(cf curl /v2/organizations | jq '.resources[] | select(.entity.status == "active" ) | select(.entity.name == "'${ORGANIZATION_NAME}'" ) | .entity.spaces_url' | wc -l)
-
-echo "orga: ${ORGANIZATIONS}"
 
 if [[ $ORGANIZATIONS -gt "1" ]]
 then
@@ -39,17 +37,17 @@ then
   exit 1
 fi
 
-SPACES=$(cf curl /v2/organizations | jq '.resources[] | select(.entity.status == "active" ) | select(.entity.name == "collaudo" ) | .entity.spaces_url' | wc -l)
+SPACES_URL=$(cf curl /v2/organizations | jq '.resources[] | select(.entity.status == "active" ) | select(.entity.name == "'${ORGANIZATION_NAME}'" ) | .entity.spaces_url' | sed -e 's/^"//' -e 's/"$//')
+
+echo "DEBUG: Spaces Url: ${SPACES_URL} for organization ${ORGANIZATION_NAME}"
+
+SPACES=$(cf curl ${SPACES_URL} | jq '.resources[] | select(.entity.status == "active" ) | select(.entity.name == "'${SPACE_NAME}'" ) | .entity.apps_url' | wc -l)
 
 if [[ $SPACES -gt "1" ]]
 then
   echo "ERROR: Found more than 1 space with name ${SPACE_NAME} in the organization ${ORGANIZATION_NAME}!!!!"
   exit 1
 fi
-
-SPACES_URL=$(cf curl /v2/organizations | jq '.resources[] | select(.entity.status == "active" ) | select(.entity.name == "collaudo" ) | .entity.spaces_url' | sed -e 's/^"//' -e 's/"$//')
-
-echo "DEBUG: Spaces Url: ${SPACES_URL} for organization ${ORGANIZATION_NAME}"
 
 APPS_URL=$(cf curl ${SPACES_URL} | jq '.resources[] | select(.entity.name == "'${SPACE_NAME}'") | .entity.apps_url' | sed -e 's/^"//' -e 's/"$//')
 
