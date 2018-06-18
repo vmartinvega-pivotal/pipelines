@@ -1,7 +1,6 @@
 credentials-build.yml
 credentials-build-tim.yml
 github-private-key
-concourse-truststore.jks
 maven-command
 maven-settings.xml
 concourse/keys/

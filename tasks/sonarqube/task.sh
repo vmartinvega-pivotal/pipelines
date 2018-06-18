@@ -14,6 +14,8 @@ export OUTPUT_RESOURCE=out
 export KEYVALOUTPUT_RESOURCE=keyvalout
 export KEYVAL_RESOURCE=keyval
 
+export TRUSTSTORE_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/truststore/concourse-truststore.jks"
+
 # Source all usefull scripts
 source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/source-all.sh
 

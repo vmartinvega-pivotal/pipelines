@@ -14,7 +14,7 @@ export OUTPUT_RESOURCE=out
 export KEYVALOUTPUT_RESOURCE=keyvalout
 export KEYVAL_RESOURCE=keyval
 
-export TRUSTSTORE_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/settings/${TRUSTSTORE}"
+export TRUSTSTORE_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/truststore/concourse-truststore.jks"
 
 # Source all usefull scripts
 source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/source-all.sh
@@ -23,6 +23,8 @@ source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/source-all.sh
 exportKeyValProperties
 
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
+
+TRUSTSTORE_FILE
 
 echo "--- Archive Artifact ---"
 
@@ -61,7 +63,7 @@ then
 
     git checkout -f ${CURRENT_BRANCH}
 
-    mvn --batch-mode release:clean release:prepare release:perform -Dresume=false -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Dmaven.test.skip=true -DskipITs -DscmCommentPrefix="[ci skip]" ${BUILD_OPTIONS}
+    mvn --batch-mode release:clean release:prepare release:perform -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUSTSTORE_FILE} -Dsonar.branch=${SONAR_BRANCH}" -Dresume=false -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Dmaven.test.skip=true -DskipITs -Djavax.net.ssl.trustStore=${TRUSTSTORE_FILE} -DscmCommentPrefix="[ci skip]" ${BUILD_OPTIONS}
     
     # Maven release perform
     #mvn --batch-mode release:perform -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUSTSTORE_FILE} -Dsonar.branch=${SONAR_BRANCH}" -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Djavax.net.ssl.trustStore=${TRUSTSTORE_FILE}"
