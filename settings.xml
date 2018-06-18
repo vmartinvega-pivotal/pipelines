@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings>
+    <pluginGroups>
+      <pluginGroup>org.sonarsource.scanner.maven</pluginGroup>
+    </pluginGroups>
+    <mirrors>
+      <mirror>
+        <id>nexus</id>
+        <mirrorOf>*</mirrorOf>
+	    <url>https://10.0.69.85/nexus/repository/maven-public</url>
+      </mirror>
+    </mirrors>
+    <servers>
+      <server>
+        <id>nexus</id>
+        <username>devops-sdp</username>
+        <password>zxcdsa01!</password>
+      </server>
+    </servers>
+    <profiles>
+       <profile>
+         <id>devops-sdp</id>
+         <activation>
+           <activeByDefault>true</activeByDefault>
+         </activation>
+         <properties>
+           <mySiteUrl>dav:https://10.0.69.85/nexus/repository/site</mySiteUrl>
+           <releasesRepositoryUrl>https://10.0.69.85/nexus/repository/maven-releases</releasesRepositoryUrl>
+           <snapshotsRepositoryUrl>https://10.0.69.85/nexus/repository/maven-snapshots</snapshotsRepositoryUrl>
+           <gitServerUrl>https://10.0.69.84</gitServerUrl>
+           <sonar.host.url>https://sonar-sdp.telecomitalia.local</sonar.host.url>
+           <sonar.login>bec3c460e64966e99fa007c3388f9993015e13f8</sonar.login>
+         </properties>
+       </profile>
+    </profiles>
+</settings>

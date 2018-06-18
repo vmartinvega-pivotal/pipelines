@@ -130,7 +130,7 @@ jobs:
     params:
       file: keyvalout/keyval.properties
 
-- name: archive-artifact
+- name: archive-snapshoot
   public: true
   plan:
   - aggregate:
@@ -140,9 +140,9 @@ jobs:
       passed:
       - sonarqube
       trigger: true
-  - task: archive-artifact
+  - task: archive-snapshoot
     privileged: true
-    file: tools/tasks/snapshoot-deploy/task.yml
+    file: tools/tasks/snapshoot-build/task.yml
     params:
       <<: *common-params
       USERNAME: ((github-username))
