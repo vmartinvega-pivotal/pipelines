@@ -14,6 +14,8 @@ export OUTPUT_RESOURCE=out
 export KEYVALOUTPUT_RESOURCE=keyvalout
 export KEYVAL_RESOURCE=keyval
 
+export TRUST_STORE_FILE=${ROOT_FOLDER}/${TOOLS_RESOURCE}/truststore/${TRUSTSTORE}
+
 # Source all usefull scripts
 source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/source-all.sh
 
@@ -36,7 +38,7 @@ echo "TagExists result=${tagexists}"
 
 if [[ $checkversion = "true" ]]
 then
-    cp ${ROOT_FOLDER}/${TOOLS_RESOURCE}/truststore/${TRUSTSTORE} .
+    chmod 777 ${TRUST_STORE_FILE}
  
     git config --global http.sslKey "${HOME}/.gitprivatekey/privatekey"
     git config --global http.sslVerify false
@@ -62,7 +64,7 @@ then
 
     git checkout -f ${CURRENT_BRANCH}
 
-    mvn --batch-mode release:clean release:prepare release:perform -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUSTSTORE} -Dsonar.branch=${SONAR_BRANCH}" -Dresume=false -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Djavax.net.ssl.trustStore=${TRUSTSTORE} -DscmCommentPrefix="[ci skip]"
+    mvn --batch-mode release:clean release:prepare release:perform -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUST_STORE_FILE} -Dsonar.branch=${SONAR_BRANCH}" -Dresume=false -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE} -DscmCommentPrefix="[ci skip]"
 
     #mvn --batch-mode release:clean release:prepare release:perform -Drelease.arguments="-Dmaven.wagon.http.ssl.ignore.validity.dates=true -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true -Djavax.net.ssl.trustStore=${TRUSTSTORE} -Dsonar.branch=${SONAR_BRANCH}" -Dresume=false -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Djavax.net.ssl.trustStore=${TRUSTSTORE} -DscmCommentPrefix="[ci skip]" -Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true -Dmaven.wagon.http.ssl.ignore.validity.dates=true
 
