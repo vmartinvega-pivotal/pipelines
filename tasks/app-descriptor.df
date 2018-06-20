@@ -1,0 +1,2 @@
+source.rabbit=maven://org.springframework.cloud.stream.app:rabbit-source-rabbit:1.3.3.RELEASE
+source.sdp-dispositiva-source=maven://it.sdp:dispositiva-source:0.0.18

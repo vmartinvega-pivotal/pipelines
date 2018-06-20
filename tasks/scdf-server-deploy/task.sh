@@ -24,8 +24,10 @@ cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
 echo "-- Deploying scdf server to PCF ..."
 
-#cfLogin
-cfSCDFDeploy
+cfLogin $PWS_API $PWS_USER $PWS_PWD $PWS_ORG $PWS_SPACE
+getPCFUrls $PWS_ORG $PWS_SPACE
+cfSCDFDeploy "p-dataflow" "standard"
+scdfChangeEnvironment "p-dataflow" ${PASSED_SCDF_SERVER_GUID} $PWS_ORG $PWS_SPACE ${NEXUS_USERNAME} ${NEXUS_PASSWORD} ${NEXUS_URL}
 
 echo "-- Deploying scdf server to PCF ..."
 

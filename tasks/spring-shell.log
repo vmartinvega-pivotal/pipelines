@@ -1,0 +1,12 @@
+// dataflow 1.2.0.RELEASE log opened at 2018-06-20 02:22:06
+// null 1.2.0.RELEASE log opened at 2018-06-20 02:28:12
+app import --force --uri file:/home/vicente/development/pipelines/tasks/app-descriptor.df
+// null 1.2.0.RELEASE log opened at 2018-06-20 02:31:09
+app import --force --uri file:/home/vicente/development/pipelines/tasks/app-descriptor.df
+// dataflow 1.2.0.RELEASE log opened at 2018-06-20 02:33:19
+// null 1.2.0.RELEASE log opened at 2018-06-20 02:47:37
+// [failed] app register --name sdp-dispositiva-source --type source --uri maven://it.sdp:dispositiva-source:0.0.18
+// null 1.2.0.RELEASE log opened at 2018-06-20 04:21:43
+app import --force --uri file:/home/vicente/development/pipelines/tasks/app-descriptor.df
+// null 1.2.0.RELEASE log opened at 2018-06-20 04:23:30
+// [failed] app register --name sdp-dispositiva-source --type source --uri maven://it.sdp:dispositiva-source:0.0.18

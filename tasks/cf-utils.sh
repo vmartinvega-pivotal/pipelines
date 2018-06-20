@@ -36,7 +36,7 @@ function cfLogin(){
 }
 
 # This function export a variable PASSED_APPS_URL with the URL to access all applications for an organization and space inside PCF
-function getAppsUrl(){
+function getPCFUrls(){
   ORGANIZATION_NAME=$1
   SPACE_NAME=$2
 
@@ -64,16 +64,216 @@ function getAppsUrl(){
 
   echo "DEBUG: Apps Url: ${APPS_URL}"
 
-  export PASSED_APPS_URL=${APPS_URL}
+  SERVICE_INSTANCES_URL=$(cf curl ${SPACES_URL} | jq '.resources[] | select(.entity.name == "'${SPACE_NAME}'") | .entity.service_instances_url' | sed -e 's/^"//' -e 's/"$//')
+
+  echo "DEBUG: Service Instances Url: ${SERVICE_INSTANCES_URL}"
+
+  export PASSED_PCF_APPS_URL=${APPS_URL}
+
+  export PASSED_PCF_SPACES_URL=${SPACES_URL}
+
+  export PASSED_PCF_SERVICES_INSTANCES_URL=${SERVICE_INSTANCES_URL}
 }
 
+
+# This function assumes the cfLogin was called previously
+# Arguments:
+# 1 - service-name
+# 2 - service-plan
+#
+function pcfSetupRabbitService(){
+  SERVICE_NAME=$1
+  SERVICE_PLAN=$2
+
+  RANDOM_SERVICE_NAME=$(python random.py)
+
+  # Creates a rabbitMQ service
+  cf create-service ${SERVICE_NAME} ${SERVICE_PLAN} ${SERVICE_NAME}
+
+  # TODDO: waits for it to be created
+
+  # Creates the service-key for the service
+  RANDOM_SERVICE_NAME_KEY=$(python random.py)
+
+  cf create-service-key ${RANDOM_SERVICE_NAME} ${RANDOM_SERVICE_NAME_KEY}
+
+  #TODO: Add the code craeted by the guy from US to extract all infro from the service-key
+
+  export PASSED_RABBIT_SERVICE_NAME_KEY=${RANDOM_SERVICE_NAME_KEY}
+
+  export PASSED_RABBIT_SERVICE_NAME=${RANDOM_SERVICE_NAME}
+}
+
+# This function destroys a service 
+#
+# 1 . Service name
+#
+function cfSCDFDestroy(){
+  SERVICE_NAME=$1
+
+  cf delete-service ${SERVICE_NAME} -f
+}
+
+# This function assumes the cfLogin was called previously
+# Arguments:
+# 1 - service-name
+# 2 - service-plan
+#
 function cfSCDFDeploy(){
   
-  #TODO: creates a service instance of scdf and waits for it to be created, then gets the the url and put it in PASSED_SCDF_SERVER_URL
-  if [ -z "${SCDF_SERVER_URL}" ]; then
-    echo "SCDF_SERVER_URL is unset or set to the empty string, creating a new instance for scdf"
-    export PASSED_SCDF_SERVER_URL="TODO:"
-  else
-    export PASSED_SCDF_SERVER_URL=${SCDF_SERVER_URL}
-  fi
+  SERVICE_NAME=$1
+  SERVICE_PLAN=$2
+    
+  RANDOM_SERVICE_NAME=$(python random.py)
+
+  # Creates the service instance
+  cf create-service ${SERVICE_NAME} ${SERVICE_PLAN} ${RANDOM_SERVICE_NAME}
+
+  # waits for it to be created
+  while true; do
+    SERVICE_STATE=$(getServiceState $PASSED_PCF_SERVICES_INSTANCES_URL $RANDOM_SERVICE_NAME)
+
+    if [[ $SERVICE_STATE = "succeeded" ]]
+    then
+      break;
+    else
+      echo "DEBUG: Waiting for the service ${RANDOM_SERVICE_NAME} to be craeted"
+      sleep 5
+    fi
+  done
+
+  export PASSED_SCDF_SERVER_NAME=${RANDOM_SERVICE_NAME}
+
+  echo "DEBUG: Random service name created: ${RANDOM_SERVICE_NAME}"
+
+  GUID=$(getServiceGuid $PASSED_PCF_SERVICES_INSTANCES_URL $RANDOM_SERVICE_NAME)
+
+  echo "DEBUG: SCDF server GUID: ${GUID}"
+
+  export PASSED_SCDF_SERVER_GUID=${GUID}
+
+  DASHBOARD=$(getSCDFServiceDashboard $PASSED_PCF_SERVICES_INSTANCES_URL $RANDOM_SERVICE_NAME)
+
+  SERVER_URL=$(echo ${DASHBOARD%/*})
+  echo "DEBUG: SCDF server Url: ${SERVER_URL}"
+
+  export PASSED_SCDF_SERVER_URL=${SERVER_URL}
 }
+
+# This function gets the state creation for a service
+#
+# 1 . Services URL (Extracted from getPCFUrls function) and stored in the environment variable PASSED_PCF_SERVICES_INSTANCES_URL
+# 2 . Service name
+#
+function getServiceState(){
+  SERVICES_URL=$1
+  SERVICE_NAME=$2
+
+  RESULT=$(cf curl ${SERVICES_URL} | jq '.resources[] | select(.entity.name == "'${SERVICE_NAME}'") | .entity.last_operation.state' | sed -e 's/^"//' -e 's/"$//')
+ 
+  echo $RESULT
+}
+
+
+# This function gets the guid for a service
+#
+# 1 . Services URL (Extracted from getPCFUrls function) and stored in the environment variable PASSED_PCF_SERVICES_INSTANCES_URL
+# 2 . Service name
+#
+function getServiceGuid(){
+  SERVICES_URL=$1
+  SERVICE_NAME=$2
+
+  RESULT=$(cf curl ${SERVICES_URL} | jq '.resources[] | select(.entity.name == "'${SERVICE_NAME}'") | .metadata.guid' | sed -e 's/^"//' -e 's/"$//')
+ 
+  echo $RESULT
+}
+
+# This function gets the dashboard URL for a service
+#
+# 1 . Services URL (Extracted from getPCFUrls function) and stored in the environment variable PASSED_PCF_SERVICES_INSTANCES_URL
+# 2 . Service name
+#
+function getSCDFServiceDashboard(){
+  SERVICES_URL=$1
+  SERVICE_NAME=$2
+
+  RESULT=$(cf curl ${SERVICES_URL} | jq '.resources[] | select(.entity.name == "'${SERVICE_NAME}'") | .entity.dashboard_url' | sed -e 's/^"//' -e 's/"$//')
+ 
+  echo $RESULT
+}
+
+scdf_shell() {
+  echo "Running SCDF shell command: $(cat $1)"
+  java \
+  -jar /home/vicente/development/pipelines/scdf/spring-cloud-dataflow-shell-1.5.1.RELEASE.jar \
+  --dataflow.uri="$2" \
+  --dataflow.credentials-provider-command="cf oauth-token" \
+  --dataflow.skip-ssl-validation=true \
+  --dataflow.mode=skipper \
+  --spring.shell.commandFile=$1
+}
+
+# This function change the environment for the skipper and dataflow app 
+#
+function scdfChangeEnvironment(){
+
+  SCDF_ORG=$1
+  SCDF_SPACE=$2
+
+  ORG_NAME=$3
+  ORG_SPACE=$4
+
+  USERNAME=$5
+  PASSWORD=$6
+  REPO_URL=$7
+
+  cf target -o ${SCDF_ORG} -s ${SCDF_SPACE}
+
+  # dataflow
+  cf set-env dataflow SPRING_CLOUD_DEPLOYER_CLOUDFOUNDRY_STREAM_BUILDPACK java_buildpack_offline
+  cf set-env dataflow SPRING_CLOUD_DEPLOYER_CLOUDFOUNDRY_TASK_BUILDPACK java_buildpack_offline
+  cf set-env dataflow SPRING_APPLICATION_JSON '{
+	"spring.cloud.dataflow.applicationProperties.stream.spring.cloud.stream.bindings.applicationMetrics.destination":"metrics",
+	"spring.cloud.dataflow.version-info.dependency-fetch.enabled": "false",
+	"maven.remote-repositories.telecom.url": "'${REPO_URL}'",
+	"maven.remote-repositories.telecom.auth.username": "'${USERNAME}'",
+        "maven.remote-repositories.telecom.auth.password": "'${PASSWORD}'"
+  }'
+
+  # skipper
+  cf set-env skipper SPRING_CLOUD_SKIPPER_SERVER_VERSION_INFO_DEPENDENCY_FETCH_ENABLED false
+  cf set-env skipper SPRING_CLOUD_SKIPPER_SERVER_PLATFORM_CLOUDFOUNDRY_ACCOUNTS\[default\]_DEPLOYMENT_BUILDPACK java_buildpack_offline
+  cf set-env skipper SPRING_APPLICATION_JSON '{
+	"spring.cloud.dataflow.applicationProperties.stream.spring.cloud.stream.bindings.applicationMetrics.destination":"metrics",
+	"spring.cloud.dataflow.version-info.dependency-fetch.enabled": "false",
+	"maven.remote-repositories.telecom.url": "'${REPO_URL}'",
+	"maven.remote-repositories.telecom.auth.username": "'${USERNAME}'",
+        "maven.remote-repositories.telecom.auth.password": "'${PASSWORD}'"
+  }'
+
+  # restage
+  cf restage dataflow && cf restage skipper
+
+  # change space
+  cf target -o ${ORG_NAME} -s ${ORG_SPACE}
+}
+
+PWS_API="https://api.system.sdpcollaudo.telecomitalia.local"
+PWS_USER="admin"
+PWS_PWD="XWMhEBXV8Zn7LxT1HqiulUQ7aSYGq4b_"
+PWS_ORG="vicente-test"
+PWS_SPACE="development"
+NEXUS_USERNAME="sgramegna"
+NEXUS_PASSWORD="sgramegna"
+NEXUS_URL="https://nexus-sdp.telecomitalia.local/nexus/repository/maven-public"
+
+#cfLogin $PWS_API $PWS_USER $PWS_PWD $PWS_ORG $PWS_SPACE
+#getPCFUrls $PWS_ORG $PWS_SPACE
+#cfSCDFDeploy "p-dataflow" "standard"
+#changeEnvironment "p-dataflow" ${PASSED_SCDF_SERVER_GUID} $PWS_ORG $PWS_SPACE ${NEXUS_USERNAME} ${NEXUS_PASSWORD} ${NEXUS_URL}
+#changeEnvironment "p-dataflow" "05e5f7bd-f37a-4d24-b186-c43fb8cf61dc" ${PWS_ORG} ${PWS_SPACE} ${NEXUS_USERNAME} ${NEXUS_PASSWORD} ${NEXUS_URL}
+#cfSCDFDestroy $PASSED_SCDF_SERVER_NAME
+
+#scdf_shell "test.df" ${PASSED_PCF_SERVICES_INSTANCES_URL} 
+scdf_shell "test.df" "https://p-dataflow.apps.sdpcollaudo.telecomitalia.local/instances/320a6afb-284d-4c92-80d9-55f2bcbed8c6" 

@@ -1,0 +1,6 @@
+java \
+  -jar /home/vicente/development/pipelines/scdf/spring-cloud-dataflow-shell-1.5.1.RELEASE.jar \
+  --dataflow.uri="https://dataflow-d62e064a-77c5-445a-a26a-c20254d6ffbb.apps.sdpcollaudo.telecomitalia.local" \
+  --dataflow.credentials-provider-command="cf oauth-token" \
+  --dataflow.skip-ssl-validation=true \
+  --dataflow.mode=skipper \
