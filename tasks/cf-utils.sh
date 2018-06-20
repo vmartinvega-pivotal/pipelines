@@ -25,6 +25,7 @@ function exportKeyValPropertiesForDeploying() {
 	fi
 }
 
+# This function logins against PCF
 function cfLogin(){
   PWS_API=$1
   PWS_USER=$2
@@ -80,26 +81,45 @@ function getPCFUrls(){
 # Arguments:
 # 1 - service-name
 # 2 - service-plan
+# 3 - Environñemtn to deploy
+# 4 - Logical Microservice tag version to deploy
 #
 function pcfSetupRabbitService(){
   SERVICE_NAME=$1
   SERVICE_PLAN=$2
+  ENVIRONMENT_TO_DEPLOY=$3
+  LOGICAL_MICROSERVICE_TAG_VERSION=$4
 
-  RANDOM_SERVICE_NAME=$(python random.py)
+  RANDOM_VALUE=$(python random.py)
+
+  RANDOM_SERVICE_NAME="RABBIT-"${ENVIRONMENT_TO_DEPLOY}"-"${LOGICAL_MICROSERVICE_TAG_VERSION}"-"${RANDOM_VALUE}
 
   # Creates a rabbitMQ service
-  cf create-service ${SERVICE_NAME} ${SERVICE_PLAN} ${SERVICE_NAME}
+  cf create-service ${SERVICE_NAME} ${SERVICE_PLAN} ${RANDOM_SERVICE_NAME}
 
-  # TODDO: waits for it to be created
+  # waits for it to be created
+  while true; do
+    SERVICE_STATE=$(getServiceState $PASSED_PCF_SERVICES_INSTANCES_URL $RANDOM_SERVICE_NAME)
+
+    if [[ $SERVICE_STATE = "succeeded" ]]
+    then
+      break;
+    else
+      echo "DEBUG: Waiting for the service ${RANDOM_SERVICE_NAME} to be craeted"
+      sleep 5
+    fi
+  done
 
   # Creates the service-key for the service
-  RANDOM_SERVICE_NAME_KEY=$(python random.py)
+  RANDOM_VALUE=$(python random.py)
 
-  cf create-service-key ${RANDOM_SERVICE_NAME} ${RANDOM_SERVICE_NAME_KEY}
+  RANDOM_SERVICE_KEY_NAME="SERVCIE-KEY-RABBIT-"${RANDOM_VALUE}
+
+  cf create-service-key ${RANDOM_SERVICE_NAME} ${RANDOM_SERVICE_KEY_NAME}
 
   #TODO: Add the code craeted by the guy from US to extract all infro from the service-key
 
-  export PASSED_RABBIT_SERVICE_NAME_KEY=${RANDOM_SERVICE_NAME_KEY}
+  export PASSED_RABBIT_SERVICE_KEY_NAME=${RANDOM_SERVICE_KEY_NAME}
 
   export PASSED_RABBIT_SERVICE_NAME=${RANDOM_SERVICE_NAME}
 }
@@ -123,8 +143,12 @@ function cfSCDFDeploy(){
   
   SERVICE_NAME=$1
   SERVICE_PLAN=$2
+  ENVIRONMENT_TO_DEPLOY=$3
+  LOGICAL_MICROSERVICE_TAG_VERSION=$4
     
-  RANDOM_SERVICE_NAME=$(python random.py)
+  RANDOM_VALUE=$(python random.py)
+
+  RANDOM_SERVICE_NAME="SCDF-"${ENVIRONMENT_TO_DEPLOY}"-"${LOGICAL_MICROSERVICE_TAG_VERSION}"-"${RANDOM_VALUE}
 
   # Creates the service instance
   cf create-service ${SERVICE_NAME} ${SERVICE_PLAN} ${RANDOM_SERVICE_NAME}
@@ -203,6 +227,17 @@ function getSCDFServiceDashboard(){
   echo $RESULT
 }
 
+function pcfDeleteRabbitService(){
+  SERVICE_NAME=$1
+  SERVICE_KEY_NAME=$2
+
+  # Deletes de service key created
+  cf delete-service-key ${SERVICE_NAME} ${SERVICE_KEY_NAME} -f
+
+  # Deletes de service instance
+  cf delete-service ${SERVICE_NAME} -f
+}
+
 scdf_shell() {
   echo "Running SCDF shell command: $(cat $1)"
   java \
@@ -268,12 +303,9 @@ NEXUS_USERNAME="sgramegna"
 NEXUS_PASSWORD="sgramegna"
 NEXUS_URL="https://nexus-sdp.telecomitalia.local/nexus/repository/maven-public"
 
-#cfLogin $PWS_API $PWS_USER $PWS_PWD $PWS_ORG $PWS_SPACE
-#getPCFUrls $PWS_ORG $PWS_SPACE
-#cfSCDFDeploy "p-dataflow" "standard"
-#changeEnvironment "p-dataflow" ${PASSED_SCDF_SERVER_GUID} $PWS_ORG $PWS_SPACE ${NEXUS_USERNAME} ${NEXUS_PASSWORD} ${NEXUS_URL}
-#changeEnvironment "p-dataflow" "05e5f7bd-f37a-4d24-b186-c43fb8cf61dc" ${PWS_ORG} ${PWS_SPACE} ${NEXUS_USERNAME} ${NEXUS_PASSWORD} ${NEXUS_URL}
-#cfSCDFDestroy $PASSED_SCDF_SERVER_NAME
-
-#scdf_shell "test.df" ${PASSED_PCF_SERVICES_INSTANCES_URL} 
-scdf_shell "app-register.df"
+cfLogin $PWS_API $PWS_USER $PWS_PWD $PWS_ORG $PWS_SPACE
+getPCFUrls $PWS_ORG $PWS_SPACE
+#cfSCDFDeploy "p-dataflow" "standard" "systemtest" "v1.0.2"
+#scdfChangeEnvironment "p-dataflow" ${PASSED_SCDF_SERVER_GUID} $PWS_ORG $PWS_SPACE ${NEXUS_USERNAME} ${NEXUS_PASSWORD} ${NEXUS_URL}
+pcfSetupRabbitService "p.rabbitmq" "single-node-deprecated" "systemtest" "v1.0.2"
+pcfDeleteRabbitService ${PASSED_RABBIT_SERVICE_NAME} ${PASSED_RABBIT_SERVICE_KEY_NAME}

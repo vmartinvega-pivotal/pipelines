@@ -22,7 +22,7 @@ exportKeyValProperties
 
 DF_FILE=""
 PROPERTIES_FILE=""
-ROOT_FOLDER_SCDF_SCRIPTS="${ROOT_FOLDER}/${REPO_RESOURCE}/pcf-scdf-deploy-${TIM_ENVIRONMENT}"
+ROOT_FOLDER_SCDF_SCRIPTS="${ROOT_FOLDER}/${REPO_RESOURCE}/pcf-scdf-deploy-${ENVIRONMENT_DEPLOYING}"
 
 function setFileName(){
   DF_FILE=$1
@@ -53,7 +53,7 @@ fi
 
 exportKeyValPropertiesForDeploying ${ROOT_FOLDER_SCDF_SCRIPTS}/${PROPERTIES_FILE}
 
-envsubst < ${ROOT_FOLDER}/${REPO_RESOURCE}/pcf-scdf-deploy-${TIM_ENVIRONMENT}/${DF_FILE} >> ${TMPDIR}/${DF_FILE}
+envsubst < ${ROOT_FOLDER}/${REPO_RESOURCE}/pcf-scdf-deploy-${ENVIRONMENT_DEPLOYING}/${DF_FILE} >> ${TMPDIR}/${DF_FILE}
 
 java -jar ${ROOT_FOLDER}/${TOOLS_RESOURCE}/scdf/spring-cloud-dataflow-shell-1.5.1.RELEASE.jar --dataflow.uri=${PASSED_SCDF_SERVER_URL}  --spring.shell.commandFile=${TMPDIR}/${DF_FILE}
 
