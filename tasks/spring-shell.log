@@ -10,3 +10,15 @@ app import --force --uri file:/home/vicente/development/pipelines/tasks/app-desc
 app import --force --uri file:/home/vicente/development/pipelines/tasks/app-descriptor.df
 // null 1.2.0.RELEASE log opened at 2018-06-20 04:23:30
 // [failed] app register --name sdp-dispositiva-source --type source --uri maven://it.sdp:dispositiva-source:0.0.18
+// null 1.2.0.RELEASE log opened at 2018-06-20 04:26:53
+// [failed] app register --name sdp-dispositiva-source --type source --uri maven://it.sdp:dispositiva-source:0.0.18
+// null 1.2.0.RELEASE log opened at 2018-06-20 04:27:28
+app import --force --uri file:/home/vicente/development/pipelines/tasks/app-descriptor.df
+// null 1.2.0.RELEASE log opened at 2018-06-20 04:52:03
+app import --uri file:/home/vicente/development/pipelines/tasks/app-descriptor.df
+// null 1.2.0.RELEASE log opened at 2018-06-20 04:52:27
+app import --uri file:/home/vicente/development/pipelines/tasks/app-descriptor.df
+// null 1.2.0.RELEASE log opened at 2018-06-20 04:56:06
+app import --uri file:/home/vicente/development/pipelines/tasks/app-descriptor.df
+// null 1.2.0.RELEASE log opened at 2018-06-20 05:03:59
+app import --uri file:/home/vicente/development/pipelines/tasks/app-descriptor.df

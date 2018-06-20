@@ -1,5 +1,5 @@
 #
 # SDP apps
 #
-app import --force --uri file:/home/vicente/development/pipelines/tasks/app-descriptor.df
+app import --uri file:/home/vicente/development/pipelines/tasks/app-descriptor.df
 

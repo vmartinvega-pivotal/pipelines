@@ -48,6 +48,8 @@ jobs:
     params:
       <<: *common-params
       SCDF_SERVER_URL: ((scdf-server-url))
+      NEXUS_USERNAME_FOR_SCDF: ((nexus-username-for-scdf))
+      NEXUS_USERNAME_FOR_SCDF: ((nexus-username-for-scdf))
   - put: keyval
     params:
       file: keyvalout/keyval.properties

@@ -207,7 +207,7 @@ scdf_shell() {
   echo "Running SCDF shell command: $(cat $1)"
   java \
   -jar /home/vicente/development/pipelines/scdf/spring-cloud-dataflow-shell-1.5.1.RELEASE.jar \
-  --dataflow.uri="$2" \
+  --dataflow.uri="https://dataflow-320a6afb-284d-4c92-80d9-55f2bcbed8c6.apps.sdpcollaudo.telecomitalia.local" \
   --dataflow.credentials-provider-command="cf oauth-token" \
   --dataflow.skip-ssl-validation=true \
   --dataflow.mode=skipper \
@@ -276,4 +276,4 @@ NEXUS_URL="https://nexus-sdp.telecomitalia.local/nexus/repository/maven-public"
 #cfSCDFDestroy $PASSED_SCDF_SERVER_NAME
 
 #scdf_shell "test.df" ${PASSED_PCF_SERVICES_INSTANCES_URL} 
-scdf_shell "test.df" "https://p-dataflow.apps.sdpcollaudo.telecomitalia.local/instances/320a6afb-284d-4c92-80d9-55f2bcbed8c6" 
+scdf_shell "app-register.df"
