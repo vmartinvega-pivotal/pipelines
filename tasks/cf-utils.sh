@@ -90,9 +90,9 @@ function pcfSetupRabbitService(){
   ENVIRONMENT_TO_DEPLOY=$3
   LOGICAL_MICROSERVICE_TAG_VERSION=$4
 
-  RANDOM_VALUE=$(python random.py)
-
-  RANDOM_SERVICE_NAME="RABBIT-"${ENVIRONMENT_TO_DEPLOY}"-"${LOGICAL_MICROSERVICE_TAG_VERSION}"-"${RANDOM_VALUE}
+  #RANDOM_VALUE=$(python random.py)
+  #RANDOM_SERVICE_NAME="RABBIT-"${ENVIRONMENT_TO_DEPLOY}"-"${LOGICAL_MICROSERVICE_TAG_VERSION}"-"${RANDOM_VALUE}
+  RANDOM_SERVICE_NAME="RABBIT-"${ENVIRONMENT_TO_DEPLOY}"-"${LOGICAL_MICROSERVICE_TAG_VERSION}"-Inst-1"
 
   # Creates a rabbitMQ service
   cf create-service ${SERVICE_NAME} ${SERVICE_PLAN} ${RANDOM_SERVICE_NAME}
@@ -111,9 +111,7 @@ function pcfSetupRabbitService(){
   done
 
   # Creates the service-key for the service
-  RANDOM_VALUE=$(python random.py)
-
-  RANDOM_SERVICE_KEY_NAME="SERVCIE-KEY-RABBIT-"${RANDOM_VALUE}
+  RANDOM_SERVICE_KEY_NAME="SERVICE-KEY-${RANDOM_SERVICE_NAME}"
 
   cf create-service-key ${RANDOM_SERVICE_NAME} ${RANDOM_SERVICE_KEY_NAME}
 
@@ -146,9 +144,9 @@ function cfSCDFDeploy(){
   ENVIRONMENT_TO_DEPLOY=$3
   LOGICAL_MICROSERVICE_TAG_VERSION=$4
     
-  RANDOM_VALUE=$(python random.py)
-
-  RANDOM_SERVICE_NAME="SCDF-"${ENVIRONMENT_TO_DEPLOY}"-"${LOGICAL_MICROSERVICE_TAG_VERSION}"-"${RANDOM_VALUE}
+  #RANDOM_VALUE=$(python random.py)
+  #RANDOM_SERVICE_NAME="SCDF-"${ENVIRONMENT_TO_DEPLOY}"-"${LOGICAL_MICROSERVICE_TAG_VERSION}"-"${RANDOM_VALUE}
+  RANDOM_SERVICE_NAME="SCDF-"${ENVIRONMENT_TO_DEPLOY}"-"${LOGICAL_MICROSERVICE_TAG_VERSION}"-Inst-1"
 
   # Creates the service instance
   cf create-service ${SERVICE_NAME} ${SERVICE_PLAN} ${RANDOM_SERVICE_NAME}
@@ -210,7 +208,7 @@ function getServiceGuid(){
 
   RESULT=$(cf curl ${SERVICES_URL} | jq '.resources[] | select(.entity.name == "'${SERVICE_NAME}'") | .metadata.guid' | sed -e 's/^"//' -e 's/"$//')
  
-  echo $RESULT
+  echo ${RESULT}
 }
 
 # This function gets the dashboard URL for a service
@@ -224,7 +222,7 @@ function getSCDFServiceDashboard(){
 
   RESULT=$(cf curl ${SERVICES_URL} | jq '.resources[] | select(.entity.name == "'${SERVICE_NAME}'") | .entity.dashboard_url' | sed -e 's/^"//' -e 's/"$//')
  
-  echo $RESULT
+  echo ${RESULT}
 }
 
 function pcfDeleteRabbitService(){
@@ -294,18 +292,18 @@ function scdfChangeEnvironment(){
   cf target -o ${ORG_NAME} -s ${ORG_SPACE}
 }
 
-#PWS_API="https://api.system.sdpcollaudo.telecomitalia.local"
-#PWS_USER="admin"
-#PWS_PWD="XWMhEBXV8Zn7LxT1HqiulUQ7aSYGq4b_"
-#PWS_ORG="vicente-test"
-#PWS_SPACE="development"
-#NEXUS_USERNAME="sgramegna"
-#NEXUS_PASSWORD="sgramegna"
-#NEXUS_URL="https://nexus-sdp.telecomitalia.local/nexus/repository/maven-public"
+PWS_API="https://api.system.sdpcollaudo.telecomitalia.local"
+PWS_USER="admin"
+PWS_PWD="XWMhEBXV8Zn7LxT1HqiulUQ7aSYGq4b_"
+PWS_ORG="vicente-test"
+PWS_SPACE="development"
+NEXUS_USERNAME="sgramegna"
+NEXUS_PASSWORD="sgramegna"
+NEXUS_URL="https://nexus-sdp.telecomitalia.local/nexus/repository/maven-public"
 
-#cfLogin $PWS_API $PWS_USER $PWS_PWD $PWS_ORG $PWS_SPACE
-#getPCFUrls $PWS_ORG $PWS_SPACE
-#cfSCDFDeploy "p-dataflow" "standard" "systemtest" "v1.0.2"
+cfLogin $PWS_API $PWS_USER $PWS_PWD $PWS_ORG $PWS_SPACE
+getPCFUrls $PWS_ORG $PWS_SPACE
+cfSCDFDeploy "p-dataflow" "standard" "systemtest" "v1.0.2"
 #scdfChangeEnvironment "p-dataflow" ${PASSED_SCDF_SERVER_GUID} $PWS_ORG $PWS_SPACE ${NEXUS_USERNAME} ${NEXUS_PASSWORD} ${NEXUS_URL}
 #pcfSetupRabbitService "p.rabbitmq" "single-node-deprecated" "systemtest" "v1.0.2"
 #pcfDeleteRabbitService ${PASSED_RABBIT_SERVICE_NAME} ${PASSED_RABBIT_SERVICE_KEY_NAME}
