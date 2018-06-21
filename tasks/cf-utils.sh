@@ -294,18 +294,18 @@ function scdfChangeEnvironment(){
   cf target -o ${ORG_NAME} -s ${ORG_SPACE}
 }
 
-PWS_API="https://api.system.sdpcollaudo.telecomitalia.local"
-PWS_USER="admin"
-PWS_PWD="XWMhEBXV8Zn7LxT1HqiulUQ7aSYGq4b_"
-PWS_ORG="vicente-test"
-PWS_SPACE="development"
-NEXUS_USERNAME="sgramegna"
-NEXUS_PASSWORD="sgramegna"
-NEXUS_URL="https://nexus-sdp.telecomitalia.local/nexus/repository/maven-public"
+#PWS_API="https://api.system.sdpcollaudo.telecomitalia.local"
+#PWS_USER="admin"
+#PWS_PWD="XWMhEBXV8Zn7LxT1HqiulUQ7aSYGq4b_"
+#PWS_ORG="vicente-test"
+#PWS_SPACE="development"
+#NEXUS_USERNAME="sgramegna"
+#NEXUS_PASSWORD="sgramegna"
+#NEXUS_URL="https://nexus-sdp.telecomitalia.local/nexus/repository/maven-public"
 
-cfLogin $PWS_API $PWS_USER $PWS_PWD $PWS_ORG $PWS_SPACE
-getPCFUrls $PWS_ORG $PWS_SPACE
+#cfLogin $PWS_API $PWS_USER $PWS_PWD $PWS_ORG $PWS_SPACE
+#getPCFUrls $PWS_ORG $PWS_SPACE
 #cfSCDFDeploy "p-dataflow" "standard" "systemtest" "v1.0.2"
 #scdfChangeEnvironment "p-dataflow" ${PASSED_SCDF_SERVER_GUID} $PWS_ORG $PWS_SPACE ${NEXUS_USERNAME} ${NEXUS_PASSWORD} ${NEXUS_URL}
-pcfSetupRabbitService "p.rabbitmq" "single-node-deprecated" "systemtest" "v1.0.2"
+#pcfSetupRabbitService "p.rabbitmq" "single-node-deprecated" "systemtest" "v1.0.2"
 #pcfDeleteRabbitService ${PASSED_RABBIT_SERVICE_NAME} ${PASSED_RABBIT_SERVICE_KEY_NAME}

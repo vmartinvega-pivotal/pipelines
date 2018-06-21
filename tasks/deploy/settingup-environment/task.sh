@@ -27,12 +27,15 @@ export PASSED_TAG_VERSION_DEPLOYING="V1.0.2"
 
 echo "-- Setting up Environment for version ${PASSED_TAG_VERSION_DEPLOYING} and environment to deploy ${ENVIRONMENT_DEPLOYING}..."
 
-# Login PCF
-cfLogin ${PWS_API} ${PWS_USER} ${PWS_PWD} ${PWS_ORG} ${PWS_SPACE}
+# If it is neccesary to access PCF does the login and gets all pcf urls 
+if [[ ${DEPLOY_SCDF_SERVICE_INSTANCE} = "true" ]] || [[ ${DEPLOY_RABBITMQ_SERVICE_INSTANCE} = "true" ]]
+then
+  # Login PCF
+  cfLogin ${PWS_API} ${PWS_USER} ${PWS_PWD} ${PWS_ORG} ${PWS_SPACE}
 
-# Get the urls for the PCF and stores them in environment variables
-getPCFUrls ${PWS_ORG} ${PWS_SPACE}
-
+  # Get the urls for the PCF and stores them in environment variables
+  getPCFUrls ${PWS_ORG} ${PWS_SPACE}
+fi
 
 # Checks if is needed to deploy scdf server
 if [[ ${DEPLOY_SCDF_SERVICE_INSTANCE} = "true" ]]
@@ -51,7 +54,6 @@ else
 
   export PASSED_SCDF_SERVER_URL=${SCDF_SERVER_URL}
 fi
-
 
 # Checks if is needed to rabbitmq instance
 if [[ ${DEPLOY_RABBITMQ_SERVICE_INSTANCE} = "true" ]]

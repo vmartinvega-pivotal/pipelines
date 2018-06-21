@@ -22,27 +22,48 @@ exportKeyValProperties
 
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
-echo "--- Undeploy App ---"
+# TODO: Can be the latest version in the git repository or configured!!
+export PASSED_TAG_VERSION_DEPLOYING="V1.0.2"
 
-# Login into PCF
-cfLogin ${PWS_API} ${PWS_USER} ${PWS_PWD} ${PWS_ORG} ${PWS_SPACE}
+echo "-- Undeploy Environment for version ${PASSED_TAG_VERSION_DEPLOYING} and environment to deploy ${ENVIRONMENT_DEPLOYING}..."
 
-# TODO: Run all scripts to undeploy
-#  01..
-#  02..
+# TODO: Run all scripts for undeploy all
 
-# TODO: undeploy all apps from scdf
+# TODO: Removes streams from SCDF server
 
-# TODO: delete all services created
-pcfDeleteRabbitService ${PASSED_RABBIT_SERVICE_NAME} ${PASSED_RABBIT_SERVICE_KEY_NAME}
+# TODO: Removes apps from SCDF server
 
-# TODO: delete SCDF service
-cfSCDFDestroy ${PASSED_SCDF_SERVER_NAME}
+# If it is neccesary to access PCF does the login and gets all pcf urls 
+if [[ ${DEPLOY_SCDF_SERVICE_INSTANCE} = "true" ]] || [[ ${DEPLOY_RABBITMQ_SERVICE_INSTANCE} = "true" ]]
+then
+  # Login PCF
+  cfLogin ${PWS_API} ${PWS_USER} ${PWS_PWD} ${PWS_ORG} ${PWS_SPACE}
 
-echo "--- Undeploy App ---"
-echo ""
+  # Get the urls for the PCF and stores them in environment variables
+  getPCFUrls ${PWS_ORG} ${PWS_SPACE}
+fi
 
-# Adding values to the next job
+# Checks if is needed to rabbitmq instance
+if [[ ${DEPLOY_RABBITMQ_SERVICE_INSTANCE} = "true" ]]
+then
+  echo "DEBUG: Removing RabbitMQ ..."
+
+  # Removes the rabbitmq created previously  
+  pcfDeleteRabbitService ${PASSED_RABBIT_SERVICE_NAME} ${PASSED_RABBIT_SERVICE_KEY_NAME}
+fi
+
+# Checks if is needed to deploy scdf server
+if [[ ${DEPLOY_SCDF_SERVICE_INSTANCE} = "true" ]]
+then
+  echo "DEBUG: Removing SCDF ..."
+
+  # Destroys the scdf server created previously
+  cfSCDFDestroy ${PASSED_SCDF_SERVER_NAME}
+fi
+
+echo "-- Undeploy Environment for version ${PASSED_TAG_VERSION_DEPLOYING} and environment to deploy ${ENVIRONMENT_DEPLOYING}..."
+
+# Adding values to keyvalout
 passKeyValProperties
 
 cp -r "${ROOT_FOLDER}/${REPO_RESOURCE}"/. "${ROOT_FOLDER}/${OUTPUT_RESOURCE}/"
