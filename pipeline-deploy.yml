@@ -35,16 +35,16 @@ resource_types:
     tag: latest
 
 jobs:
-- name: scdf-server-deploy
+- name: setting-up-environment
   public: true
   plan:
   - aggregate:
     - get: tools
     - get: repo
       trigger: true
-  - task: scdf-server-deploy
+  - task: setting-up-environment
     privileged: true
-    file: tools/tasks/deploy/scdf-server-deploy/task.yml
+    file: tools/tasks/deploy/settingup-environment/task.yml
     params:
       <<: *common-params
       NEXUS_USERNAME_FOR_SCDF: ((nexus-username-for-scdf))
@@ -56,7 +56,6 @@ jobs:
       SCDF_ORG_FOR_SKIPPER_AND_DATAFLOW: ((scdf-org-for-skipper-and-dataflow))
       DEPLOY_SCDF_SERVICE_INSTANCE: ((deploy-scdf-service-instance))
       SCDF_SERVER_URL: ((scdf-server-url))
-
       DEPLOY_RABBITMQ_SERVICE_INSTANCE: ((deploy-rabbitmq-service-instance))
       RABBITMQ_SERVICE_NAME: ((rabbitmq-service-name))
       RABBITMQ_SERVICE_PLAN: ((rabbitmq-service-plan))
@@ -72,7 +71,7 @@ jobs:
     - get: repo
     - get: keyval
       passed:
-      - scdf-server-deploy
+      - setting-up-environment
       trigger: true
   - task: streams-deploy
     privileged: true
