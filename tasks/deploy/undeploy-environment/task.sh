@@ -27,11 +27,27 @@ export PASSED_TAG_VERSION_DEPLOYING="V1.0.2"
 
 echo "-- Undeploy Environment for version ${PASSED_TAG_VERSION_DEPLOYING} and environment to deploy ${ENVIRONMENT_DEPLOYING}..."
 
-# TODO: Run all scripts for undeploy all
+# Destroy all streams created
+ROOT_FOLDER_SCDF_SCRIPTS="${ROOT_FOLDER}/${REPO_RESOURCE}/ci/pcf-scdf-streams"
 
-# TODO: Removes streams from SCDF server
+cd "${ROOT_FOLDER_SCDF_SCRIPTS}" || exit
 
-# TODO: Removes apps from SCDF server
+# Run all scripts in order
+for file in `ls *.sh | sort -V`; do 
+
+  echo "Sourcing file: ${file}"
+
+  source ${file}
+
+done
+
+# Undeploying the streams
+echo "DEBUG: Undeploying the streams in the scdf server ${PASSED_SCDF_SERVER_URL}"
+scdf_shell ${PASSED_SCDF_SERVER_URL} "${ROOT_FOLDER_SCDF_SCRIPTS}/undeploy.df"
+
+# Destroying the streams
+echo "DEBUG: Destroying the streams in the scdf server ${PASSED_SCDF_SERVER_URL}"
+scdf_shell ${PASSED_SCDF_SERVER_URL} "${ROOT_FOLDER_SCDF_SCRIPTS}/destroy.df"
 
 # If it is neccesary to access PCF does the login and gets all pcf urls 
 if [[ ${DEPLOY_SCDF_SERVICE_INSTANCE} = "true" ]] || [[ ${DEPLOY_RABBITMQ_SERVICE_INSTANCE} = "true" ]]

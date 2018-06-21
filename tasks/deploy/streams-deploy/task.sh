@@ -22,7 +22,7 @@ exportKeyValProperties
 
 echo "-- Deploying streams ..."
 
-ROOT_FOLDER_SCDF_SCRIPTS="${ROOT_FOLDER}/${REPO_RESOURCE}/pcf-scdf-deploy"
+ROOT_FOLDER_SCDF_SCRIPTS="${ROOT_FOLDER}/${REPO_RESOURCE}/ci/pcf-scdf-streams"
 
 # Creates the app-register file
 echo "app import --uri file:${ROOT_FOLDER_SCDF_SCRIPTS}/app-descriptor.df" >> ${TMPDIR}/app-register.df
@@ -30,7 +30,7 @@ echo "app import --uri file:${ROOT_FOLDER_SCDF_SCRIPTS}/app-descriptor.df" >> ${
 # Register all microservices
 scdf_shell ${PASSED_SCDF_SERVER_URL} "${TMPDIR}/app-register.df"
 
-cd "${ROOT_FOLDER_SCDF_SCRIPTS}/scripts-deploy" || exit
+cd "${ROOT_FOLDER_SCDF_SCRIPTS}" || exit
 
 # Run all scripts in order
 for file in `ls *.sh | sort -V`; do 
