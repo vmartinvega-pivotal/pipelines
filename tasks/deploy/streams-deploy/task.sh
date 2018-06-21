@@ -20,44 +20,17 @@ source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/source-all.sh
 # Add properties as environment variables
 exportKeyValProperties
 
-DF_FILE=""
-PROPERTIES_FILE=""
+echo "-- Deploying streams ..."
+
 ROOT_FOLDER_SCDF_SCRIPTS="${ROOT_FOLDER}/${REPO_RESOURCE}/pcf-scdf-deploy-${ENVIRONMENT_DEPLOYING}"
 
-function setFileName(){
-  DF_FILE=$1
+# Creates the app-register file
+echo "app import --uri file:${ROOT_FOLDER_SCDF_SCRIPTS}/app-descriptor.df" >> ${TMPDIR}/app-register.df
 
-  if [ ! -f "${ROOT_FOLDER_SCDF_SCRIPTS}/$2" ]; then
-    touch ${ROOT_FOLDER_SCDF_SCRIPTS}/$2
-  fi
+# Register all microservices
+scdf_shell ${PASSED_SCDF_SERVER_URL} "${TMPDIR}/app-register.df"
 
-  PROPERTIES_FILE=$2
-}
-
-echo "-- Executing ${STAGE} ..."
-
-if [[ $STAGE = "appregister" ]]
-then 
-  setFileName "appRegister.df" "appRegister.properties"
-fi
-
-if [[ $STAGE = "createstream" ]]
-then 
-  setFileName "createStream.df" "createStream.properties"
-fi
-
-if [[ $STAGE = "deploystream" ]]
-then 
-  setFileName "deployStream.df" "deployStream.properties"
-fi
-
-exportKeyValPropertiesForDeploying ${ROOT_FOLDER_SCDF_SCRIPTS}/${PROPERTIES_FILE}
-
-envsubst < ${ROOT_FOLDER}/${REPO_RESOURCE}/pcf-scdf-deploy-${ENVIRONMENT_DEPLOYING}/${DF_FILE} >> ${TMPDIR}/${DF_FILE}
-
-java -jar ${ROOT_FOLDER}/${TOOLS_RESOURCE}/scdf/spring-cloud-dataflow-shell-1.5.1.RELEASE.jar --dataflow.uri=${PASSED_SCDF_SERVER_URL}  --spring.shell.commandFile=${TMPDIR}/${DF_FILE}
-
-echo "-- Executing ${STAGE} ..."
+echo "-- Deploying streams ..."
 
 # Adding values to keyvalout
 passKeyValProperties

@@ -242,11 +242,11 @@ scdf_shell() {
   echo "Running SCDF shell command: $(cat $1)"
   java \
   -jar /home/vicente/development/pipelines/scdf/spring-cloud-dataflow-shell-1.5.1.RELEASE.jar \
-  --dataflow.uri="https://dataflow-320a6afb-284d-4c92-80d9-55f2bcbed8c6.apps.sdpcollaudo.telecomitalia.local" \
+  --dataflow.uri=$1 \
   --dataflow.credentials-provider-command="cf oauth-token" \
   --dataflow.skip-ssl-validation=true \
   --dataflow.mode=skipper \
-  --spring.shell.commandFile=$1
+  --spring.shell.commandFile=$2
 }
 
 # This function change the environment for the skipper and dataflow app 
