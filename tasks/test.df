@@ -1,1 +1,0 @@
-app register --name sdp-dispositiva-source --type source --uri maven://it.sdp:dispositiva-source:0.0.18

@@ -30,6 +30,18 @@ echo "app import --uri file:${ROOT_FOLDER_SCDF_SCRIPTS}/app-descriptor.df" >> ${
 # Register all microservices
 scdf_shell ${PASSED_SCDF_SERVER_URL} "${TMPDIR}/app-register.df"
 
+
+cd "${ROOT_FOLDER_SCDF_SCRIPTS}/scripts-deploy" || exit
+
+# Run all scripts in order
+for file in `ls *.sh | sort -V`; do 
+
+  echo "Sourcing file: ${file}"
+
+  source ${file}
+
+done
+
 echo "-- Deploying streams ..."
 
 # Adding values to keyvalout
