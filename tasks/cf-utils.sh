@@ -308,4 +308,4 @@ getPCFUrls $PWS_ORG $PWS_SPACE
 #cfSCDFDeploy "p-dataflow" "standard" "systemtest" "v1.0.2"
 #scdfChangeEnvironment "p-dataflow" ${PASSED_SCDF_SERVER_GUID} $PWS_ORG $PWS_SPACE ${NEXUS_USERNAME} ${NEXUS_PASSWORD} ${NEXUS_URL}
 pcfSetupRabbitService "p.rabbitmq" "single-node-deprecated" "systemtest" "v1.0.2"
-pcfDeleteRabbitService ${PASSED_RABBIT_SERVICE_NAME} ${PASSED_RABBIT_SERVICE_KEY_NAME}
+#pcfDeleteRabbitService ${PASSED_RABBIT_SERVICE_NAME} ${PASSED_RABBIT_SERVICE_KEY_NAME}
