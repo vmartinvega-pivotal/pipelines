@@ -25,6 +25,9 @@ if __name__ == "__main__":
     if p.find("{%s}version" % ns) is not None:
       version = p.find("{%s}version" % ns).text
 
+    if p.find("{%s}artifactId" % ns) is not None:
+      artifact = p.find("{%s}artifactId" % ns).text
+
   if tree.getroot().find("{%s}groupId" % ns) is not None:
     group = tree.getroot().find("{%s}groupId" % ns).text
 

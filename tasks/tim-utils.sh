@@ -19,7 +19,7 @@ function toLowerCase() {
 # Result string: artifactid
 #
 function getArtifactId(){
-  echo $(python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/parse-pom.py $1 "artifactId")
+  echo $(python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/parse-pom.py $1 "artifact")
 }
 
 function randomName(){
