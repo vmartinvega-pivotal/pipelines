@@ -28,7 +28,7 @@ echo "--- Undeploy SpringBoot app ---"
 cfLogin ${PWS_API} ${PWS_USER} ${PWS_PWD} ${PWS_ORG} ${PWS_SPACE}
 
 # Gets APPs URL
-getAppsUrl ${PWS_ORG} ${PWS_SPACE}
+getPCFUrls ${PWS_ORG} ${PWS_SPACE}
 
 # Push the app to PCF
 cf delete app ${PASSED_SPRING_BOOT_APP_NAME} -f -r

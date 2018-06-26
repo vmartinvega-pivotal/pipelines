@@ -28,7 +28,7 @@ echo "--- Deploy SpringBoot app ---"
 cfLogin ${PWS_API} ${PWS_USER} ${PWS_PWD} ${PWS_ORG} ${PWS_SPACE}
 
 # Gets APPs URL
-getAppsUrl ${PWS_ORG} ${PWS_SPACE}
+getPCFUrls ${PWS_ORG} ${PWS_SPACE}
 
 # Check if found the url
 if [ -z "${PASSED_APPS_URL}" ]; then
