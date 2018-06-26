@@ -1,8 +1,7 @@
 #!/bin/bash
 
 PIPELINE_NAME="$1"
-#ALIAS="tim"
-ALIAS="local"
+ALIAS="tim"
 CREDENTIALS="$2"
 PIPELINE_YML="$3"
 
