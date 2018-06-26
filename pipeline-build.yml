@@ -100,7 +100,7 @@ jobs:
       trigger: true
   - task: undeploy-microservice
     privileged: true
-    file: tools/tasks/undeploy-app/task.yml
+    file: tools/tasks/undeploy-springboot-app/task.yml
     params:
       <<: *common-params
       PWS_USER: ((pws-user))
