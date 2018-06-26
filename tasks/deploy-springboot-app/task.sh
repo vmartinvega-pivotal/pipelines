@@ -48,7 +48,7 @@ APP_NAME="${ARTIFACT_ID}-${ARTIFACT_VERSION}-${RANDOM_HOST}"
 echo "DEBUG: Deploying app with name: ${APP_NAME}"
 
 # Push the app to PCF
-cf push ${APP_NAME} -p ${JAR_FILE}
+cf push ${APP_NAME} -p ${JAR_FILE} -m 2G
 
 # Checks the state of the application
 APP_STATE=$(cf curl ${PASSED_PCF_APPS_URL} | jq '.resources[].entity | select(.name == "'${APP_NAME}'" ) | .state' | sed -e 's/^"//' -e 's/"$//')
@@ -60,6 +60,7 @@ then
   export PASSED_SPRING_BOOT_APP_NAME=${APP_NAME}
 else
   echo "ERROR: The application ${APP_NAME} has a state of ${APP_STATE} that is not started, existing..."
+  cf logs ${APP_NAME} --recent
   cf delete ${APP_NAME} -r -f
   exit 1
 fi

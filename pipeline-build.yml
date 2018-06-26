@@ -78,6 +78,7 @@ jobs:
     privileged: true
     file: tools/tasks/deploy-springboot-app/task.yml
     params:
+      <<: *common-params
       PWS_USER: ((pws-user))
       PWS_PWD: ((pws-pwd))
       PWS_ORG: ((pws-org))
@@ -101,6 +102,7 @@ jobs:
     privileged: true
     file: tools/tasks/undeploy-app/task.yml
     params:
+      <<: *common-params
       PWS_USER: ((pws-user))
       PWS_PWD: ((pws-pwd))
       PWS_ORG: ((pws-org))
