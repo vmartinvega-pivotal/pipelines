@@ -38,30 +38,25 @@ ARTIFACT_ID=$(getArtifactId "pom.xml")
 echo "DEBUG: Artifact Id: ${ARTIFACT_ID}"
 ARTIFACT_VERSION=$(getPomVersion "pom.xml")
 echo "DEBUG: Artifact Version: ${ARTIFACT_VERSION}"
-JAR_FILE=$(find ../ -name "${ARTIFACT_ID}-${ARTIFACT_VERSION}.jar")
-echo "DEBUG: Jar File: ${JAR_FILE}"
+export PASSED_JAR_FILE=$(find ../ -name "${ARTIFACT_ID}-${ARTIFACT_VERSION}.jar")
+echo "DEBUG: Jar File: ${PASSED_JAR_FILE}"
 
 # Creates a random name to deploy the app
 RANDOM_HOST="$(randomName)"
-APP_NAME="${ARTIFACT_ID}-${ARTIFACT_VERSION}-${RANDOM_HOST}"
-
-echo "DEBUG: Deploying app with name: ${APP_NAME}"
+export PASSED_SPRING_BOOT_APP_NAME="${ARTIFACT_ID}-${ARTIFACT_VERSION}-${RANDOM_HOST}"
 
 # Push the app to PCF
-cf push ${APP_NAME} -p ${JAR_FILE} -m 2G
+cf push ${PASSED_SPRING_BOOT_APP_NAME} -p ${PASSED_JAR_FILE} -m ${APP_MEMORY_LIMIT} -K ${APP_DISK_LIMIT} -i ${APP_INSTANCES}
 
 # Checks the state of the application
-APP_STATE=$(cf curl ${PASSED_PCF_APPS_URL} | jq '.resources[].entity | select(.name == "'${APP_NAME}'" ) | .state' | sed -e 's/^"//' -e 's/"$//')
+APP_STATE=$(cf curl ${PASSED_PCF_APPS_URL} | jq '.resources[].entity | select(.name == "'${PASSED_SPRING_BOOT_APP_NAME}'" ) | .state' | sed -e 's/^"//' -e 's/"$//')
 
 # Checks the state of the application
 if [[ ${APP_STATE} = "STARTED" ]]
 then
-  echo "DEBUG: Started app with name ${APP_NAME} in the organization ${PWS_ORG} and space ${PWS_SPACE}"
-  export PASSED_SPRING_BOOT_APP_NAME=${APP_NAME}
+  echo "DEBUG: Started app with name ${PASSED_SPRING_BOOT_APP_NAME} in the organization ${PWS_ORG} and space ${PWS_SPACE}"
 else
-  echo "ERROR: The application ${APP_NAME} has a state of ${APP_STATE} that is not started, existing..."
-  cf logs ${APP_NAME} --recent
-  cf delete ${APP_NAME} -r -f
+  echo "ERROR: The application ${PASSED_SPRING_BOOT_APP_NAME} has a state of ${APP_STATE} that is not started, existing..."
   exit 1
 fi
 
