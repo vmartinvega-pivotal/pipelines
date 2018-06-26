@@ -24,17 +24,11 @@ cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
 echo "--- Deploy SpringBoot app ---"
 
-# Login into PCF
+# Login PCF
 cfLogin ${PWS_API} ${PWS_USER} ${PWS_PWD} ${PWS_ORG} ${PWS_SPACE}
 
-# Gets APPs URL
+# Get the urls for the PCF and stores them in environment variables
 getPCFUrls ${PWS_ORG} ${PWS_SPACE}
-
-# Check if found the url
-if [ -z "${PASSED_APPS_URL}" ]; then
-    echo "Not found Apps Url, exiting..."
-    exit 1
-fi
 
 # Find the jar to be deployed
 ARTIFACT_ID=$(getArtifactId "pom.xml")
@@ -45,11 +39,7 @@ JAR_FILE=$(find ../ -name "${ARTIFACT_ID}-${ARTIFACT_VERSION}.jar")
 RANDOM_HOST="$(randomName)"
 APP_NAME="${ARTIFACT_ID}-${RANDOM_HOST}"
 
-# Login PCF
-cfLogin ${PWS_API} ${PWS_USER} ${PWS_PWD} ${PWS_ORG} ${PWS_SPACE}
-
-# Get the urls for the PCF and stores them in environment variables
-getPCFUrls ${PWS_ORG} ${PWS_SPACE}
+echo "Deploying app with name: ${APP_NAME}"
 
 # Push the app to PCF
 cf push ${APP_NAME} -p ${JAR_FILE}
