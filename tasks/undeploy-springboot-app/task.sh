@@ -30,7 +30,7 @@ cfLogin ${PWS_API} ${PWS_USER} ${PWS_PWD} ${PWS_ORG} ${PWS_SPACE}
 # Gets APPs URL
 getPCFUrls ${PWS_ORG} ${PWS_SPACE}
 
-echo "Deleting app with name: ${PASSED_SPRING_BOOT_APP_NAME}"
+echo "DEBUG: Deleting app with name: ${PASSED_SPRING_BOOT_APP_NAME}"
 
 # Push the app to PCF
 cf delete app ${PASSED_SPRING_BOOT_APP_NAME} -f -r

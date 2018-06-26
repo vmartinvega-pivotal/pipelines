@@ -32,14 +32,17 @@ getPCFUrls ${PWS_ORG} ${PWS_SPACE}
 
 # Find the jar to be deployed
 ARTIFACT_ID=$(getArtifactId "pom.xml")
+echo "DEBUG: Artifact Id: ${ARTIFACT_ID}"
 ARTIFACT_VERSION=$(getPomVersion "pom.xml")
+echo "DEBUG: Artifact Version: ${ARTIFACT_VERSION}"
 JAR_FILE=$(find ../ -name "${ARTIFACT_ID}-${ARTIFACT_VERSION}.jar")
+echo "DEBUG: Jar File: ${JAR_FILE}"
 
 # Creates a random name to deploy the app
 RANDOM_HOST="$(randomName)"
-APP_NAME="${ARTIFACT_ID}-${RANDOM_HOST}"
+APP_NAME="${ARTIFACT_ID}-${ARTIFACT_VERSION}-${RANDOM_HOST}"
 
-echo "Deploying app with name: ${APP_NAME}"
+echo "DEBUG: Deploying app with name: ${APP_NAME}"
 
 # Push the app to PCF
 cf push ${APP_NAME} -p ${JAR_FILE}
