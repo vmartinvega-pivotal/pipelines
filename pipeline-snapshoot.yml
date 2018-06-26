@@ -78,11 +78,15 @@ jobs:
     privileged: true
     file: tools/tasks/deploy-springboot-app/task.yml
     params:
+      <<: *common-params
       PWS_USER: ((pws-user))
       PWS_PWD: ((pws-pwd))
       PWS_ORG: ((pws-org))
       PWS_SPACE: ((pws-space))
       PWS_API: ((pws-api))
+      APP_MEMORY_LIMIT: 2GB
+      APP_DISK_LIMIT: 1GB
+      APP_INSTANCES: 1
   - put: keyval
     params:
       file: keyvalout/keyval.properties
@@ -99,8 +103,9 @@ jobs:
       trigger: true
   - task: undeploy-microservice
     privileged: true
-    file: tools/tasks/undeploy-app/task.yml
+    file: tools/tasks/undeploy-springboot-app/task.yml
     params:
+      <<: *common-params
       PWS_USER: ((pws-user))
       PWS_PWD: ((pws-pwd))
       PWS_ORG: ((pws-org))
