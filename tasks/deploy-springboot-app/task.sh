@@ -24,6 +24,9 @@ cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
 echo "--- Deploy SpringBoot app ---"
 
+# Building the application
+mvn -X clean install -DskipTests=true ${BUILD_OPTIONS}
+
 # Login PCF
 cfLogin ${PWS_API} ${PWS_USER} ${PWS_PWD} ${PWS_ORG} ${PWS_SPACE}
 
