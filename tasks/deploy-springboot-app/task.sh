@@ -42,19 +42,26 @@ ARTIFACT_VERSION=$(getPomVersion "pom.xml")
 JAR_FILE=$(find ../ -name "${ARTIFACT_ID}-${ARTIFACT_VERSION}.jar")
 
 # Creates a random name to deploy the app
-RANDOM_HOST=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)
+RANDOM_HOST="$(randomName)"
 APP_NAME="${ARTIFACT_ID}-${RANDOM_HOST}"
+
+# Login PCF
+cfLogin ${PWS_API} ${PWS_USER} ${PWS_PWD} ${PWS_ORG} ${PWS_SPACE}
+
+# Get the urls for the PCF and stores them in environment variables
+getPCFUrls ${PWS_ORG} ${PWS_SPACE}
 
 # Push the app to PCF
 cf push ${APP_NAME} -p ${JAR_FILE}
 
-APP_STATE=$(cf curl ${PASSED_APPS_URL} | jq '.resources[].entity | select(.name == "'${APP_NAME}'" ) | .state' | sed -e 's/^"//' -e 's/"$//')
+# Checks the state of the application
+APP_STATE=$(cf curl ${PASSED_PCF_APPS_URL} | jq '.resources[].entity | select(.name == "'${APP_NAME}'" ) | .state' | sed -e 's/^"//' -e 's/"$//')
 
 # Checks the state of the application
 if [[ ${APP_STATE} = "STARTED" ]]
 then
   echo "DEBUG: Started app with name ${APP_NAME} in the organization ${PWS_ORG} and space ${PWS_SPACE}"
-  export PASSED_APPLICATION_NAME=${APP_NAME}
+  export PASSED_SPRING_BOOT_APP_NAME=${APP_NAME}
 else
   echo "ERROR: The application ${APP_NAME} has a state of ${APP_STATE} that is not started, existing..."
   cf delete ${APP_NAME} -r -f

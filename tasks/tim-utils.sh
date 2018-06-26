@@ -22,6 +22,10 @@ function getArtifactId(){
   echo $(python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/parse-pom.py $1 "artifactId")
 }
 
+function randomName(){
+  echo $(python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/random.py)
+}
+
 # Gets the version tag from a POM file
 # Arguments:
 # 1 - Pom file

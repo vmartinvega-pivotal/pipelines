@@ -1,0 +1,19 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: vmartinvega/concourse-tools-tim
+    tag: "latest"
+
+inputs:
+  - name: tools
+  - name: repo
+
+outputs:
+  - name: out
+  - name: keyvalout
+
+run:
+  path: tools/tasks/undeploy-springboot-app/task.sh
