@@ -78,7 +78,6 @@ jobs:
     file: tools/tasks/deploy/streams-deploy/task.yml
     params:
       <<: *common-params
-      STAGE: appregister
   - put: keyval
     params:
       file: keyvalout/keyval.properties
@@ -120,6 +119,7 @@ jobs:
   - put: keyval
     params:
       file: keyvalout/keyval.properties
+
 
 common-params: &common-params
   PWS_USER: ((pws-user))

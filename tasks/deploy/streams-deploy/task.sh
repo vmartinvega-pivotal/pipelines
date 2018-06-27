@@ -22,7 +22,7 @@ exportKeyValProperties
 
 echo "-- Deploying streams ..."
 
-ROOT_FOLDER_SCDF_SCRIPTS="${ROOT_FOLDER}/${REPO_RESOURCE}/ci/pcf-scdf-streams"
+ROOT_FOLDER_SCDF_SCRIPTS="${ROOT_FOLDER}/${REPO_RESOURCE}/ci/pcf-scdf-streams-${ENVIRONMENT_DEPLOYING}"
 
 # Creates the app-register file
 echo "app import --uri file:${ROOT_FOLDER_SCDF_SCRIPTS}/app-descriptor.df" >> ${TMPDIR}/app-register.df
