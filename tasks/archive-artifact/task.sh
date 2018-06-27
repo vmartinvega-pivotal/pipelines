@@ -61,8 +61,6 @@ then
       echo "WARN: Patched pom version with value ${NEW_POM_VERSION}"
       git commit -a -m "[ci skip] Changed pom version from ${POM_VERSION} to ${NEW_POM_VERSION}"
     fi
-   
-    cat pom.xml
 
     git checkout -f ${CURRENT_BRANCH}
 
