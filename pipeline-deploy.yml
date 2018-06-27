@@ -114,6 +114,9 @@ jobs:
     file: tools/tasks/deploy/undeploy-environment/task.yml
     params:
       <<: *common-params
+      DEPLOY_SCDF_SERVICE_INSTANCE: ((deploy-scdf-service-instance))
+      DEPLOY_NFS_SERVICE_INSTANCE: ((deploy-nfs-service-instance))
+      DEPLOY_RABBITMQ_SERVICE_INSTANCE: ((deploy-rabbitmq-service-instance))
   - put: keyval
     params:
       file: keyvalout/keyval.properties
