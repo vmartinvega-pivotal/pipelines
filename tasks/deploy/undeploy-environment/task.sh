@@ -22,9 +22,6 @@ exportKeyValProperties
 
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
-# TODO: Can be the latest version in the git repository or configured!!
-export PASSED_TAG_VERSION_DEPLOYING="V1.0.2"
-
 echo "-- Undeploy Environment for version ${PASSED_TAG_VERSION_DEPLOYING} and environment to deploy ${ENVIRONMENT_DEPLOYING}..."
 
 # Destroy all streams created

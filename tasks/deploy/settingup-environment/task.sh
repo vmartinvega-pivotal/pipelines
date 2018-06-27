@@ -22,8 +22,15 @@ exportKeyValProperties
 
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
+ARTIFACT_ID=$(getArtifactId "pom.xml")
+echo "DEBUG: Artifact Id: ${ARTIFACT_ID}"
+ARTIFACT_VERSION=$(getPomVersion "pom.xml")
+echo "DEBUG: Artifact Version: ${ARTIFACT_VERSION}"
+
 # TODO: Can be the latest version in the git repository or configured!!
-export PASSED_TAG_VERSION_DEPLOYING="V1.0.2"
+export PASSED_TAG_VERSION_DEPLOYING=${ARTIFACT_VERSION}
+
+export PASSED_ARTIFACT_ID_DEPLOYING=${ARTIFACT_ID}
 
 echo "-- Setting up Environment for version ${PASSED_TAG_VERSION_DEPLOYING} and environment to deploy ${ENVIRONMENT_DEPLOYING}..."
 
@@ -43,7 +50,7 @@ then
   echo "DEBUG: Deploying SCDF ..."
 
   # Deploys scdf server with a specific service name and service plan in the configured organization and space
-  cfSCDFDeploy ${SCDF_SERVICE_NAME} ${SCDF_SERVICE_PLAN} ${ENVIRONMENT_DEPLOYING} ${PASSED_TAG_VERSION_DEPLOYING}
+  cfSCDFDeploy ${SCDF_SERVICE_NAME} ${SCDF_SERVICE_PLAN} ${ENVIRONMENT_DEPLOYING} ${PASSED_TAG_VERSION_DEPLOYING} ${PASSED_ARTIFACT_ID_DEPLOYING}
 
   # Modifies the environment configuration for the scdf server created to have the right nexus url, user and password
   scdfChangeEnvironment ${SCDF_ORG_FOR_SKIPPER_AND_DATAFLOW} ${PASSED_SCDF_SERVER_GUID} ${PWS_ORG} ${PWS_SPACE} ${NEXUS_USERNAME} ${NEXUS_PASSWORD} ${NEXUS_URL}
@@ -61,7 +68,7 @@ then
   echo "DEBUG: Deploying RabbitMQ ..."
   
   # Deploying rabbitmq instance
-  pcfSetupRabbitService ${RABBITMQ_SERVICE_NAME} ${RABBITMQ_SERVICE_PLAN} ${ENVIRONMENT_DEPLOYING} ${PASSED_TAG_VERSION_DEPLOYING}
+  pcfSetupRabbitService ${RABBITMQ_SERVICE_NAME} ${RABBITMQ_SERVICE_PLAN} ${ENVIRONMENT_DEPLOYING} ${PASSED_TAG_VERSION_DEPLOYING} ${PASSED_ARTIFACT_ID_DEPLOYING}
 
   # TODO: Create the exchange, queue and routing key
 fi
