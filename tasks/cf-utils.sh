@@ -115,7 +115,15 @@ function pcfSetupRabbitService(){
 
   cf create-service-key ${RANDOM_SERVICE_NAME} ${RANDOM_SERVICE_KEY_NAME}
 
-  #TODO: Add the code craeted by the guy from US to extract all infro from the service-key
+  export PASSED_RABBIT_HOST=$(getRabbitMqHost ${RANDOM_SERVICE_NAME} ${RANDOM_SERVICE_KEY_NAME})
+
+  export PASSED_RABBIT_PORT=$(getRabbitMqPort ${RANDOM_SERVICE_NAME} ${RANDOM_SERVICE_KEY_NAME})
+
+  export PASSED_RABBIT_VHOST=$(getRabbitMqVhost ${RANDOM_SERVICE_NAME} ${RANDOM_SERVICE_KEY_NAME})
+
+  export PASSED_RABBIT_USERNAME=$(getRabbitMqUsername ${RANDOM_SERVICE_NAME} ${RANDOM_SERVICE_KEY_NAME})
+
+  export PASSED_RABBIT_PASSWORD=$(getRabbitMqPassword ${RANDOM_SERVICE_NAME} ${RANDOM_SERVICE_KEY_NAME})
 
   export PASSED_RABBIT_SERVICE_KEY_NAME=${RANDOM_SERVICE_KEY_NAME}
 
@@ -145,7 +153,6 @@ function cfSCDFDeploy(){
   LOGICAL_MICROSERVICE_TAG_VERSION=$4
     
   #RANDOM_VALUE=$(python random.py)
-  #RANDOM_SERVICE_NAME="SCDF-"${ENVIRONMENT_TO_DEPLOY}"-"${LOGICAL_MICROSERVICE_TAG_VERSION}"-"${RANDOM_VALUE}
   RANDOM_SERVICE_NAME="SCDF-"${ENVIRONMENT_TO_DEPLOY}"-"${LOGICAL_MICROSERVICE_TAG_VERSION}"-Inst-1"
 
   # Creates the service instance
@@ -180,6 +187,51 @@ function cfSCDFDeploy(){
   echo "DEBUG: SCDF server Url: ${SERVER_URL}"
 
   export PASSED_SCDF_SERVER_URL=${SERVER_URL}
+}
+
+function getRabbitMqPort(){
+  SERVICE_INSTANCE=$1
+  SERVICE_INSTANCE_KEY=$2
+
+  RESULT=$(cf service-key ${SERVICE_INSTANCE} ${SERVICE_INSTANCE_KEY} | tail -n +2 | jq '.protocols[].port')
+
+  echo ${RESULT}  
+}
+
+function getRabbitMqPassword(){
+  SERVICE_INSTANCE=$1
+  SERVICE_INSTANCE_KEY=$2
+
+  RESULT=$(cf service-key ${SERVICE_INSTANCE} ${SERVICE_INSTANCE_KEY} | tail -n +2 | jq '.protocols[].password' | sed -e 's/^"//' -e 's/"$//')
+
+  echo ${RESULT}  
+}
+
+function getRabbitMqUsername(){
+  SERVICE_INSTANCE=$1
+  SERVICE_INSTANCE_KEY=$2
+
+  RESULT=$(cf service-key ${SERVICE_INSTANCE} ${SERVICE_INSTANCE_KEY} | tail -n +2 | jq '.protocols[].username' | sed -e 's/^"//' -e 's/"$//')
+
+  echo ${RESULT}  
+}
+
+function getRabbitMqVhost(){
+  SERVICE_INSTANCE=$1
+  SERVICE_INSTANCE_KEY=$2
+
+  RESULT=$(cf service-key ${SERVICE_INSTANCE} ${SERVICE_INSTANCE_KEY} | tail -n +2 | jq '.protocols[].vhost' | sed -e 's/^"//' -e 's/"$//')
+
+  echo ${RESULT}  
+}
+
+function getRabbitMqHost(){
+  SERVICE_INSTANCE=$1
+  SERVICE_INSTANCE_KEY=$2
+
+  RESULT=$(cf service-key ${SERVICE_INSTANCE} ${SERVICE_INSTANCE_KEY} | tail -n +2 | jq '.protocols[].host' | sed -e 's/^"//' -e 's/"$//')
+
+  echo ${RESULT}  
 }
 
 # This function gets the state creation for a service

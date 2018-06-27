@@ -43,7 +43,7 @@ then
   echo "DEBUG: Deploying SCDF ..."
 
   # Deploys scdf server with a specific service name and service plan in the configured organization and space
-  cfSCDFDeploy ${SCDF_SERVICE_NAME} ${SCDF_SERVICE_PLAN} ${ENVIRONMENT_DEPLOYING} ${TAG_VERSION_DEPLOYING}
+  cfSCDFDeploy ${SCDF_SERVICE_NAME} ${SCDF_SERVICE_PLAN} ${ENVIRONMENT_DEPLOYING} ${PASSED_TAG_VERSION_DEPLOYING}
 
   # Modifies the environment configuration for the scdf server created to have the right nexus url, user and password
   scdfChangeEnvironment ${SCDF_ORG_FOR_SKIPPER_AND_DATAFLOW} ${PASSED_SCDF_SERVER_GUID} ${PWS_ORG} ${PWS_SPACE} ${NEXUS_USERNAME} ${NEXUS_PASSWORD} ${NEXUS_URL}
@@ -62,6 +62,8 @@ then
   
   # Deploying rabbitmq instance
   pcfSetupRabbitService ${RABBITMQ_SERVICE_NAME} ${RABBITMQ_SERVICE_PLAN} ${ENVIRONMENT_DEPLOYING} ${TAG_VERSION_DEPLOYING}
+
+  # TODO: Create the exchange, queue and routing key
 fi
 
 echo "-- Setting up Environment for version ${PASSED_TAG_VERSION_DEPLOYING} and environment to deploy ${ENVIRONMENT_DEPLOYING}..."
