@@ -36,7 +36,7 @@ jobs:
     - get: tools
     - get: repo
       trigger: true
-  - task: build
+  - task: test
     privileged: true
     file: tools/tasks/logical/task.yml
     params:
