@@ -42,6 +42,7 @@ DEPENDENCIES_FILE=${TMPDIR}/dependencies.list
 MD5=$(md5sum pom.xml)
 echo "MD5: ${MD5}"
 
+
 # Resolve ranges for the dependencies
 #mvn versions:resolve-ranges -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
 
