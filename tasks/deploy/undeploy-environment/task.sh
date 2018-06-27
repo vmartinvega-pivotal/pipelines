@@ -28,7 +28,7 @@ export PASSED_TAG_VERSION_DEPLOYING="V1.0.2"
 echo "-- Undeploy Environment for version ${PASSED_TAG_VERSION_DEPLOYING} and environment to deploy ${ENVIRONMENT_DEPLOYING}..."
 
 # Destroy all streams created
-ROOT_FOLDER_SCDF_SCRIPTS="${ROOT_FOLDER}/${REPO_RESOURCE}/ci/pcf-scdf-streams"
+ROOT_FOLDER_SCDF_SCRIPTS="${ROOT_FOLDER}/${REPO_RESOURCE}/ci/pcf-scdf-streams-${ENVIRONMENT_DEPLOYING}"
 
 cd "${ROOT_FOLDER_SCDF_SCRIPTS}" || exit
 
