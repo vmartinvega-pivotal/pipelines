@@ -61,7 +61,7 @@ then
   echo "DEBUG: Deploying RabbitMQ ..."
   
   # Deploying rabbitmq instance
-  pcfSetupRabbitService ${RABBITMQ_SERVICE_NAME} ${RABBITMQ_SERVICE_PLAN} ${ENVIRONMENT_DEPLOYING} ${TAG_VERSION_DEPLOYING}
+  pcfSetupRabbitService ${RABBITMQ_SERVICE_NAME} ${RABBITMQ_SERVICE_PLAN} ${ENVIRONMENT_DEPLOYING} ${PASSED_TAG_VERSION_DEPLOYING}
 
   # TODO: Create the exchange, queue and routing key
 fi
