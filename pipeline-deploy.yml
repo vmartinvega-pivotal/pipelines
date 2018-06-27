@@ -51,6 +51,12 @@ jobs:
       DEPLOY_RABBITMQ_SERVICE_INSTANCE: ((deploy-rabbitmq-service-instance))
       RABBITMQ_SERVICE_NAME: ((rabbitmq-service-name))
       RABBITMQ_SERVICE_PLAN: ((rabbitmq-service-plan))
+      DEPLOY_NFS_SERVICE_INSTANCE: ((deploy-nfs-service-instance))
+      NFS_SERVICE_NAME: ((nfs-service-name))
+      NFS_SERVICE_PLAN: ((nfs-service-plan))
+      NFS_SHARE: ((nfs-share))
+      NFS_USERNAME: ((nfs-username))
+      NFS_PASSWORD: ((nfs-password))
   - put: keyval
     params:
       file: keyvalout/keyval.properties

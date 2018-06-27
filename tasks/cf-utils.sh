@@ -255,6 +255,30 @@ function getServiceState(){
   echo $RESULT
 }
 
+function pcfNFSDestroy(){
+  SERVICE_NAME=$1
+
+  cf delete-service ${SERVICE_NAME} -f
+}
+
+function pcfSetupNfsService(){
+
+  SERVICE_NAME=$1
+  SERVICE_PLAN=$2
+  ENVIRONMENT_TO_DEPLOY=$3
+  LOGICAL_MICROSERVICE_TAG_VERSION=$4
+  ARTIFACT_ID_DEPLOYING=$5
+  NFS_SHARE=$6
+  NFS_USERNAME=$7
+  NFS_PASSWORD=$8
+
+  #RANDOM_VALUE=$(python random.py)
+  RANDOM_SERVICE_NAME="NFS-"${ENVIRONMENT_TO_DEPLOY}"-"${ARTIFACT_ID_DEPLOYING}"-"${LOGICAL_MICROSERVICE_TAG_VERSION}
+
+  cf create-service ${SERVICE_NAME} ${SERVICE_PLAN} ${RANDOM_SERVICE_NAME} -c '{ "share":"'${NFS_SHARE}'", "username": "'${NFS_USERNAME}'", "password": "'${NFS_PASSWORD}'" }' 
+
+  export PASSED_NFS_INSTANCE_NAME=${RANDOM_SERVICE_NAME}
+}
 
 # This function gets the guid for a service
 #

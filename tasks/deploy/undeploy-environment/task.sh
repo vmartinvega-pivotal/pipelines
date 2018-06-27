@@ -56,7 +56,7 @@ then
   getPCFUrls ${PWS_ORG} ${PWS_SPACE}
 fi
 
-# Checks if is needed to rabbitmq instance
+# Checks if is needed to remove rabbitmq instance
 if [[ ${DEPLOY_RABBITMQ_SERVICE_INSTANCE} = "true" ]]
 then
   echo "DEBUG: Removing RabbitMQ ..."
@@ -65,13 +65,22 @@ then
   pcfDeleteRabbitService ${PASSED_RABBIT_SERVICE_NAME} ${PASSED_RABBIT_SERVICE_KEY_NAME}
 fi
 
-# Checks if is needed to deploy scdf server
+# Checks if is needed to remove scdf server
 if [[ ${DEPLOY_SCDF_SERVICE_INSTANCE} = "true" ]]
 then
   echo "DEBUG: Removing SCDF ..."
 
   # Destroys the scdf server created previously
   cfSCDFDestroy ${PASSED_SCDF_SERVER_NAME}
+fi
+
+# Checks if is needed to remove scdf server
+if [[ ${DEPLOY_SCDF_SERVICE_INSTANCE} = "true" ]]
+then
+  echo "DEBUG: Removing NFS instance ..."
+
+  # Destroys the NFS instance created previously
+  pcfNFSDestroy ${PASSED_NFS_INSTANCE_NAME}
 fi
 
 echo "-- Undeploy Environment for version ${PASSED_TAG_VERSION_DEPLOYING} and environment to deploy ${ENVIRONMENT_DEPLOYING}..."

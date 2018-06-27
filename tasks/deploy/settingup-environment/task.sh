@@ -73,6 +73,15 @@ then
   # TODO: Create the exchange, queue and routing key
 fi
 
+# Checks if is needed to create a nfs instance
+if [[ ${DEPLOY_NFS_SERVICE_INSTANCE} = "true" ]]
+then
+  echo "DEBUG: Deploying Nfs ..."
+  
+  # Deploying nfs instance
+  pcfSetupNfsService ${NFS_SERVICE_NAME} ${NFS_SERVICE_PLAN} ${ENVIRONMENT_DEPLOYING} ${PASSED_TAG_VERSION_DEPLOYING} ${PASSED_ARTIFACT_ID_DEPLOYING} ${NFS_SHARE} ${NFS_USERNAME} ${NFS_PASSWORD}
+fi
+
 echo "-- Setting up Environment for version ${PASSED_TAG_VERSION_DEPLOYING} and environment to deploy ${ENVIRONMENT_DEPLOYING}..."
 
 # Adding values to keyvalout
