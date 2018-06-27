@@ -16,4 +16,4 @@ outputs:
   - name: keyvalout
 
 run:
-  path: tools/tasks/scdf-server-deploy/task.sh
+  path: tools/tasks/deploy/soapui-tests/task.sh
