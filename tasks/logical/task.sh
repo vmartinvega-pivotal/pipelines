@@ -40,9 +40,14 @@ git checkout -f ${CURRENT_BRANCH}
 DEPENDENCIES_FILE=${TMPDIR}/dependencies.list
 
 MD5=$(md5sum pom.xml)
-echo "MD5: ${MD5}"
+#echo "MD5: ${MD5}"
+
+echo ${GIT_NAME}
+echo ${GIT_EMAIL}
 
 touch borrar.xml
+
+cat ${HOME}/.gitprivatekey/privatekey
 
 git add --all
 
