@@ -27,13 +27,6 @@ resource_types:
     source:
       repository: swce/keyval-resource
 
-resource_types:
-- name: slack-notification
-  type: docker-image
-  source:
-    repository: cfcommunity/slack-notification-resource
-    tag: latest
-
 jobs:
 - name: setting-up-environment
   public: true

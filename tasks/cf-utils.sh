@@ -116,18 +116,25 @@ function pcfSetupRabbitService(){
   cf create-service-key ${RANDOM_SERVICE_NAME} ${RANDOM_SERVICE_KEY_NAME}
 
   export PASSED_RABBIT_HOST=$(getRabbitMqHost ${RANDOM_SERVICE_NAME} ${RANDOM_SERVICE_KEY_NAME})
+  echo "DEBUG: PASSED_RABBIT_HOST: ${PASSED_RABBIT_HOST}"
 
   export PASSED_RABBIT_PORT=$(getRabbitMqPort ${RANDOM_SERVICE_NAME} ${RANDOM_SERVICE_KEY_NAME})
+  echo "DEBUG: PASSED_RABBIT_PORT: ${PASSED_RABBIT_PORT}"
 
   export PASSED_RABBIT_VHOST=$(getRabbitMqVhost ${RANDOM_SERVICE_NAME} ${RANDOM_SERVICE_KEY_NAME})
+  echo "DEBUG: PASSED_RABBIT_VHOST: ${PASSED_RABBIT_VHOST}"
 
   export PASSED_RABBIT_USERNAME=$(getRabbitMqUsername ${RANDOM_SERVICE_NAME} ${RANDOM_SERVICE_KEY_NAME})
+  echo "DEBUG: PASSED_RABBIT_USERNAME: ${PASSED_RABBIT_USERNAME}"
 
   export PASSED_RABBIT_PASSWORD=$(getRabbitMqPassword ${RANDOM_SERVICE_NAME} ${RANDOM_SERVICE_KEY_NAME})
+  echo "DEBUG: PASSED_RABBIT_PASSWORD: ${PASSED_RABBIT_PASSWORD}"
 
   export PASSED_RABBIT_SERVICE_KEY_NAME=${RANDOM_SERVICE_KEY_NAME}
+  echo "DEBUG: PASSED_RABBIT_SERVICE_KEY_NAME: ${PASSED_RABBIT_SERVICE_KEY_NAME}"
 
   export PASSED_RABBIT_SERVICE_NAME=${RANDOM_SERVICE_NAME}
+  echo "DEBUG: PASSED_RABBIT_SERVICE_NAME: ${PASSED_RABBIT_SERVICE_NAME}"
 }
 
 # This function destroys a service 
@@ -291,7 +298,7 @@ function pcfDeleteRabbitService(){
 scdf_shell() {
   echo "Running SCDF shell command: $(cat $1)"
   java \
-  -jar /home/vicente/development/pipelines/scdf/spring-cloud-dataflow-shell-1.5.1.RELEASE.jar \
+  -jar ${ROOT_FOLDER}/${TOOLS_RESOURCE}/scdf/spring-cloud-dataflow-shell-1.5.1.RELEASE.jar \
   --dataflow.uri=$1 \
   --dataflow.credentials-provider-command="cf oauth-token" \
   --dataflow.skip-ssl-validation=true \
