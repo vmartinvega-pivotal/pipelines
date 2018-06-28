@@ -58,6 +58,8 @@ python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/file_process.py ./dependencies.
 
 # If does not exist app-descriptor.df put it in place and push
 if [ ! -f ${ROOT_FOLDER}/${REPO_RESOURCE}/app-descriptor.df ]; then
+  echo "DEBUG: app-descriptor did not exist in the repo, adding it ..."
+
   cp ${TMPDIR}/${REPO_RESOURCE}/app-descriptor.df ${ROOT_FOLDER}/${REPO_RESOURCE}
   
   cd "${ROOT_FOLDER}/${REPO_RESOURCE}"
@@ -68,20 +70,21 @@ if [ ! -f ${ROOT_FOLDER}/${REPO_RESOURCE}/app-descriptor.df ]; then
   git push https://${USERNAME}:${PASSWORD}@gitlab-sdp.telecomitalia.local/demodevops/logical-microservice
 
   # Maven release
-  echo "Creating maven release!!"
+  echo "DEBUG: Creating maven release ..."
   #mvn --batch-mode release:clean release:prepare release:perform -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}" -Dresume=false -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE} -DscmCommentPrefix="[ci skip]"
 else
   # Check if there are differencies
-  echo "DEBUG: Checking for differencies..."
+  echo "DEBUG: Checking it there are new versions for the microservices ..."
+  
   MD51=$(md5sum app-descriptor.df | awk '{ print $1 }')
   MD52=$(md5sum ${ROOT_FOLDER}/${REPO_RESOURCE}/app-descriptor.df | awk '{ print $1 }')
   echo "DEBUG: MD51: ${MD51}"
   echo "DEBUG: MD52: ${MD52}"
 
   if [ "'${MD51}'" == "'${MD52}'" ]; then
-    echo "DEBUG: There are not differencies with the old app-descriptor and the new one, skipping..."
+    echo "DEBUG: There are not new versions, skipping..."
   else
-    echo "DEBUG: There are differencies with the old app-descriptor and the new one, creating a new release"
+    echo "DEBUG: There are new versions, modifiying the app-descriptor.df"
 
     mv ${TMPDIR}/${REPO_RESOURCE}/app-descriptor.df ${ROOT_FOLDER}/${REPO_RESOURCE}
   
@@ -89,11 +92,12 @@ else
 
     git checkout -f ${CURRENT_BRANCH}
     git add --all
-    git commit -a -m "[ci skip] Replacing app-descriptor.df for environment ${DEPLOYING_ENVIRONMENT}, for a new version"
+    git commit -a -m "[ci skip] Replacing app-descriptor.df because there are new version for microservices"
     git push https://${USERNAME}:${PASSWORD}@gitlab-sdp.telecomitalia.local/demodevops/logical-microservice
 
     # Maven release
-    echo "Creating maven release!!"
+    echo "DEBUG: Creating maven release ..."
+
     #mvn --batch-mode release:clean release:prepare release:perform -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}" -Dresume=false -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE} -DscmCommentPrefix="[ci skip]"
   fi
 fi
@@ -104,8 +108,6 @@ fi
 #mvn dependency:get -Dartifact=com.tim.sdp:sdp-demo-clienti:jar:1.0.137:sources -Djavax.net.ssl.trustStore=../sdp-demo-clienti/truststore.jks -Dtransitive=false
 
 #mvn -s ../sdp-demo-clienti/settings.xml dependency:copy-dependencies -Dclassifier=sources -Djavax.net.ssl.trustStore=../sdp-demo-clienti/truststore.jks
-
-#mvn --batch-mode release:clean release:prepare release:perform -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}" -Dresume=false -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE} -DscmCommentPrefix="[ci skip]"
 
 echo "--- Logical Test ---"
 echo ""
