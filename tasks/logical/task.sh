@@ -28,12 +28,12 @@ echo "--- Logical Test ---"
 
 POM_FILE="pom.xml"
 
-chmod 777 ${TRUST_STORE_FILE}
+#chmod 777 ${TRUST_STORE_FILE}
 
-git config --global http.sslKey "${HOME}/.gitprivatekey/privatekey"
-git config --global http.sslVerify false
-git config --global user.name "${GIT_NAME}"
-git config --global user.email "${GIT_EMAIL}"
+#git config --global http.sslKey "${HOME}/.gitprivatekey/privatekey"
+#git config --global http.sslVerify false
+#git config --global user.name "${GIT_NAME}"
+#git config --global user.email "${GIT_EMAIL}"
 
 # For insecure connections
 # echo insecure >> ~/.curlrc
@@ -56,8 +56,6 @@ python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/file_process.py ./dependencies.
 # TODO: if contains #VERSION abort!! Not all dependencies were resolved!!
 #cat app-descriptor.df | grep '#VERSION' | wc -l
 
-ls ${ROOT_FOLDER}/${REPO_RESOURCE}
-
 # If does not exist app-descriptor.df put it in place and push
 if [ ! -f ${ROOT_FOLDER}/${REPO_RESOURCE}/app-descriptor.df ]; then
   echo "DEBUG: app-descriptor did not exist in the repo, adding it ..."
@@ -66,10 +64,12 @@ if [ ! -f ${ROOT_FOLDER}/${REPO_RESOURCE}/app-descriptor.df ]; then
   
   cd "${ROOT_FOLDER}/${REPO_RESOURCE}"
 
-  git checkout -f ${CURRENT_BRANCH}
+  #git checkout -f ${CURRENT_BRANCH}
   git add --all
+  
   git commit -a -m "[ci skip] Adding app-descriptor.df"
-  git push https://${USERNAME}:${PASSWORD}@gitlab-sdp.telecomitalia.local/demodevops/logical-microservice
+  
+  #git push https://${USERNAME}:${PASSWORD}@gitlab-sdp.telecomitalia.local/demodevops/logical-microservice
 
   # Maven release
   echo "DEBUG: Creating maven release ..."
@@ -95,10 +95,11 @@ else
     git checkout -f ${CURRENT_BRANCH}
     git add --all
     git commit -a -m "[ci skip] Replacing app-descriptor.df because there are new version for microservices"
-    git push https://${USERNAME}:${PASSWORD}@gitlab-sdp.telecomitalia.local/demodevops/logical-microservice
+
+    ##git push https://${USERNAME}:${PASSWORD}@gitlab-sdp.telecomitalia.local/demodevops/logical-microservice
 
     # Maven release
-    echo "DEBUG: Creating maven release ..."
+    #echo "DEBUG: Creating maven release ..."
 
     #mvn --batch-mode release:clean release:prepare release:perform -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}" -Dresume=false -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE} -DscmCommentPrefix="[ci skip]"
   fi
