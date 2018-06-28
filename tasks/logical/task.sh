@@ -62,7 +62,7 @@ mvn dependency:list -DexcludeTransitive=true -DoutputFile=${DEPENDENCIES_FILE} -
 python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/file_process.py ./${DEPENDENCIES_FILE} ./ci/pcf-scdf-streams-${DEPLOYING_ENVIRONMENT}/app-descriptor-template.df app-descriptor.df dependencies.json
 
 # TODO: if contains #VERSION abort!! Not all dependencies were resolved!!
-cat app-descriptor.df | grep '#VERSION' | wc -l
+#cat app-descriptor.df | grep '#VERSION' | wc -l
 
 # If does not exist app-descriptor.df put it in place and push
 if [ ! -f ${TMPDIR}/${REPO_RESOURCE}/ci/pcf-scdf-streams-${DEPLOYING_ENVIRONMENT}/app-descriptor.df ]; then
