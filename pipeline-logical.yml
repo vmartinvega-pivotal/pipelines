@@ -29,16 +29,35 @@ resource_types:
       repository: swce/keyval-resource
 
 jobs:
-- name: test
+- name: check-new-release
   public: true
   plan:
   - aggregate:
     - get: tools
     - get: repo
       trigger: true
-  - task: test
+  - task: check-new-release
     privileged: true
     file: tools/tasks/logical/task.yml
+    params:
+      <<: *common-params
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+  - put: repo
+    params:
+      repository: out
+
+- name: create-release
+  public: true
+  plan:
+  - aggregate:
+    - get: tools
+    - get: repo
+      trigger: true
+  - task: create-release
+    privileged: true
+    file: tools/tasks/logical-release/task.yml
     params:
       <<: *common-params
       USERNAME: ((github-username))
@@ -46,9 +65,6 @@ jobs:
   - put: keyval
     params:
       file: keyvalout/keyval.properties
-  - put: repo
-    params:
-      repository: out
 
 common-params: &common-params
   BUILD_OPTIONS: ((build-options))
