@@ -80,30 +80,33 @@ if [ ! -f ${TMPDIR}/${REPO_RESOURCE}/ci/pcf-scdf-streams-${DEPLOYING_ENVIRONMENT
   #mvn --batch-mode release:clean release:prepare release:perform -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}" -Dresume=false -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE} -DscmCommentPrefix="[ci skip]"
 else
   # Check if there are differencies
-  echo "DEBUG Checking for differencies..."
+  echo "DEBUG: Checking for differencies..."
   MD51=$(md5sum app-descriptor.df)
   MD52=$(md5sum ${ROOT_FOLDER}/${REPO_RESOURCE}/ci/pcf-scdf-streams-${DEPLOYING_ENVIRONMENT}/app-descriptor.df)
-  echo "DEBUG MD51: ${MD51}"
-  echo "DEBUG MD52: ${MD52}"
+  echo "DEBUG: MD51: ${MD51}"
+  echo "DEBUG: MD52: ${MD52}"
+
+  if [ "${MD51}" == "${MD52}" ]; then
+    echo "DEBUG: There are not differencies with the old app-descriptor and the new one, skipping..."
+  else
+    echo "DEBUG: There are differencies with the old app-descriptor and the new one, creating a new release"
+
+    mv app-descriptor.df ${ROOT_FOLDER}/${REPO_RESOURCE}/ci/pcf-scdf-streams-${DEPLOYING_ENVIRONMENT}
+  
+    cd "${ROOT_FOLDER}/${REPO_RESOURCE}"
+
+    git checkout -f ${CURRENT_BRANCH}
+    git add --all
+    git commit -a -m "[ci skip] Replacing app-descriptor.df for environment ${DEPLOYING_ENVIRONMENT}, for a new version"
+    git push https://${USERNAME}:${PASSWORD}@gitlab-sdp.telecomitalia.local/demodevops/logical-microservice
+
+    # Maven release
+    echo "Creating maven release!!"
+    #mvn --batch-mode release:clean release:prepare release:perform -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}" -Dresume=false -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE} -DscmCommentPrefix="[ci skip]"
+  fi
 fi
 
-#git checkout -f ${CURRENT_BRANCH}
-
-#git add --all
-
-#git commit -a -m "test"
-
-#git push https://${USERNAME}:${PASSWORD}@gitlab-sdp.telecomitalia.local/demodevops/logical-microservice
-
-# Resolve ranges for the dependencies
-#mvn versions:resolve-ranges -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
-
-# Generate de dependencies list
-#mvn dependency:list -DexcludeTransitive=true -DoutputFile=${DEPENDENCIES_FILE} -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
-
 #mvn versions:revert -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
-
-#git commit -a -m "[ci skip] Dependencies have changed"
 
 # 
 #mvn dependency:get -Dartifact=com.tim.sdp:sdp-demo-clienti:jar:1.0.137:sources -Djavax.net.ssl.trustStore=../sdp-demo-clienti/truststore.jks -Dtransitive=false
