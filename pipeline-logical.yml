@@ -41,6 +41,8 @@ jobs:
     file: tools/tasks/logical/task.yml
     params:
       <<: *common-params
+      USERNAME: ((github-username))
+      PASSWORD: ((github-password))
   - put: keyval
     params:
       file: keyvalout/keyval.properties

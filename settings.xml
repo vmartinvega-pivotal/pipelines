@@ -7,14 +7,14 @@
       <mirror>
         <id>nexus</id>
         <mirrorOf>*</mirrorOf>
-	    <url>https://10.0.69.85/nexus/repository/maven-public</url>
+	    <url>https://nexus-sdp.telecomitalia.local/nexus/repository/maven-public</url>
       </mirror>
     </mirrors>
     <servers>
       <server>
         <id>nexus</id>
         <username>devops-sdp</username>
-        <password>zxcdsa01!</password>
+        <password>zxcdsa011</password>
       </server>
     </servers>
     <profiles>
@@ -24,10 +24,10 @@
            <activeByDefault>true</activeByDefault>
          </activation>
          <properties>
-           <mySiteUrl>dav:https://10.0.69.85/nexus/repository/site</mySiteUrl>
-           <releasesRepositoryUrl>https://10.0.69.85/nexus/repository/maven-releases</releasesRepositoryUrl>
-           <snapshotsRepositoryUrl>https://10.0.69.85/nexus/repository/maven-snapshots</snapshotsRepositoryUrl>
-           <gitServerUrl>https://10.0.69.84</gitServerUrl>
+           <mySiteUrl>dav:https://nexus-sdp.telecomitalia.local/nexus/repository/site</mySiteUrl>
+           <releasesRepositoryUrl>https://nexus-sdp.telecomitalia.local/nexus/repository/maven-releases</releasesRepositoryUrl>
+           <snapshotsRepositoryUrl>https://nexus-sdp.telecomitalia.local/nexus/repository/maven-snapshots</snapshotsRepositoryUrl>
+           <gitServerUrl>https://gitlab-sdp.telecomitalia.local</gitServerUrl>
            <sonar.host.url>https://sonar-sdp.telecomitalia.local</sonar.host.url>
            <sonar.login>bec3c460e64966e99fa007c3388f9993015e13f8</sonar.login>
          </properties>
