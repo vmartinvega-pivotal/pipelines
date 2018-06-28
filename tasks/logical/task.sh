@@ -37,24 +37,57 @@ git config --global user.email "${GIT_EMAIL}"
 
 git checkout -f ${CURRENT_BRANCH}
 
-DEPENDENCIES_FILE=${TMPDIR}/dependencies.list
-
+DEPENDENCIES_FILE=dependencies.list
 
 # For insecure connections
-echo insecure >> ~/.curlrc
+# echo insecure >> ~/.curlrc
 
 #MD5=$(md5sum pom.xml)
 #echo "MD5: ${MD5}"
 
-git checkout -f ${CURRENT_BRANCH}
+DEPLOYING_ENVIRONMENT="systemtest"
 
-touch borrar.xml
+# Copy all contents to a new location
+cp -r ${ROOT_FOLDER}/${REPO_RESOURCE} ${TMPDIR}
 
-git add --all
+# Change location
+cd ${TMPDIR}/${REPO_RESOURCE}
 
-git commit -a -m "test"
+# Resolve ranges for the dependencies
+mvn versions:resolve-ranges -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
 
-git push https://${USERNAME}:${PASSWORD}@gitlab-sdp.telecomitalia.local/demodevops/logical-microservice
+# Get the dependencies for the logical microservice
+mvn dependency:list -DexcludeTransitive=true -DoutputFile=${DEPENDENCIES_FILE} -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
+
+python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/file_process.py ./${DEPENDENCIES_FILE} ./ci/pcf-scdf-streams-${DEPLOYING_ENVIRONMENT}/app-descriptor-template.df app-descriptor.df dependencies.json
+
+# TODO: if contains #VERSION abort!! Not all dependencies were resolved!!
+cat app-descriptor.df | grep '#VERSION' | wc -l
+
+# If does not exist app-descriptor.df put it in place and push
+if [ ! -f ${TMPDIR}/${REPO_RESOURCE}/ci/pcf-scdf-streams-${DEPLOYING_ENVIRONMENT}/app-descriptor.df ]; then
+  cp app-descriptor.df ${ROOT_FOLDER}/${REPO_RESOURCE}/ci/pcf-scdf-streams-${DEPLOYING_ENVIRONMENT}
+  
+  git checkout -f ${CURRENT_BRANCH}
+  git add --all
+  git commit -a -m "[ci skip] Adding app-descriptor.df for environment ${DEPLOYING_ENVIRONMENT}"
+  git push https://${USERNAME}:${PASSWORD}@gitlab-sdp.telecomitalia.local/demodevops/logical-microservice
+
+  # Maven release
+  echo "Creating maven release!!"
+  #mvn --batch-mode release:clean release:prepare release:perform -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}" -Dresume=false -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE} -DscmCommentPrefix="[ci skip]"
+else
+  # Check if there are differencies
+  echo "Checking for differencies"
+fi
+
+#git checkout -f ${CURRENT_BRANCH}
+
+#git add --all
+
+#git commit -a -m "test"
+
+#git push https://${USERNAME}:${PASSWORD}@gitlab-sdp.telecomitalia.local/demodevops/logical-microservice
 
 # Resolve ranges for the dependencies
 #mvn versions:resolve-ranges -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
@@ -71,7 +104,7 @@ git push https://${USERNAME}:${PASSWORD}@gitlab-sdp.telecomitalia.local/demodevo
 
 #mvn -s ../sdp-demo-clienti/settings.xml dependency:copy-dependencies -Dclassifier=sources -Djavax.net.ssl.trustStore=../sdp-demo-clienti/truststore.jks
 
-#mvn --batch-mode release:clean release:prepare release:perform -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUST_STORE_FILE} -Dsonar.branch=${SONAR_BRANCH}" -Dresume=false -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE} -DscmCommentPrefix="[ci skip]"
+#mvn --batch-mode release:clean release:prepare release:perform -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}" -Dresume=false -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE} -DscmCommentPrefix="[ci skip]"
 
 echo "--- Logical Test ---"
 echo ""
