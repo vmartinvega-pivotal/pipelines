@@ -55,8 +55,8 @@ jobs:
     - get: tools
     - get: repo
     - get: keyval
-    - passed:
-      - check-new-release
+      passed:
+        - check-new-release
       trigger: true
   - task: create-release
     privileged: true
