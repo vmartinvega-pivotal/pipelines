@@ -56,6 +56,8 @@ python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/file_process.py ./dependencies.
 # TODO: if contains #VERSION abort!! Not all dependencies were resolved!!
 #cat app-descriptor.df | grep '#VERSION' | wc -l
 
+ls ${ROOT_FOLDER}/${REPO_RESOURCE}
+
 # If does not exist app-descriptor.df put it in place and push
 if [ ! -f ${ROOT_FOLDER}/${REPO_RESOURCE}/app-descriptor.df ]; then
   echo "DEBUG: app-descriptor did not exist in the repo, adding it ..."
@@ -66,7 +68,7 @@ if [ ! -f ${ROOT_FOLDER}/${REPO_RESOURCE}/app-descriptor.df ]; then
 
   git checkout -f ${CURRENT_BRANCH}
   git add --all
-  git commit -a -m "[ci skip] Adding app-descriptor.df for environment ${DEPLOYING_ENVIRONMENT}"
+  git commit -a -m "[ci skip] Adding app-descriptor.df"
   git push https://${USERNAME}:${PASSWORD}@gitlab-sdp.telecomitalia.local/demodevops/logical-microservice
 
   # Maven release
