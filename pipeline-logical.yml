@@ -54,6 +54,9 @@ jobs:
   - aggregate:
     - get: tools
     - get: repo
+    - get: keyval
+    passed:
+      - check-new-release
       trigger: true
   - task: create-release
     privileged: true
