@@ -26,14 +26,12 @@ cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
 echo "--- Logical Test ---"
 
-POM_FILE="pom.xml"
+chmod 777 ${TRUST_STORE_FILE}
 
-#chmod 777 ${TRUST_STORE_FILE}
-
-#git config --global http.sslKey "${HOME}/.gitprivatekey/privatekey"
-#git config --global http.sslVerify false
-#git config --global user.name "${GIT_NAME}"
-#git config --global user.email "${GIT_EMAIL}"
+git config --global http.sslKey "${HOME}/.gitprivatekey/privatekey"
+git config --global http.sslVerify false
+git config --global user.name "${GIT_NAME}"
+git config --global user.email "${GIT_EMAIL}"
 
 # For insecure connections
 # echo insecure >> ~/.curlrc
