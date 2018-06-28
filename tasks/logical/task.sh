@@ -86,7 +86,7 @@ else
   echo "DEBUG: MD51: ${MD51}"
   echo "DEBUG: MD52: ${MD52}"
 
-  if [ "${MD51}" == "${MD52}" ]; then
+  if [ "'${MD51}'" == "'${MD52}'" ]; then
     echo "DEBUG: There are not differencies with the old app-descriptor and the new one, skipping..."
   else
     echo "DEBUG: There are differencies with the old app-descriptor and the new one, creating a new release"
