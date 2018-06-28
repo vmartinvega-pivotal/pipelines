@@ -66,17 +66,19 @@ if __name__ == "__main__":
                                       output = template_line + ":" + version
                                       print("Output for this line: " + output)
                                       with open(resultfile, 'a') as outputfile:
-                                          outputfile.write(init_line+"://"+output+'\n')
+                                          outputfile.write(init_line + "://" + output + '\n')
                                           founded_version = True
                          # If not found the version for this line, write to the output file with special tag #VERSION#
                          if not founded_version:
                              print("Version for this line not found: " + template_line)
                              with open(resultfile, 'a') as outputfile:
-                                 outputfile.write(template_line + ":#VERSION#" + '\n')
-
+                                 outputfile.write(init_line + "://" + template_line + ":#VERSION#" + '\n')
                          # Close files
                          if not lf.closed:
                              lf.close()
+               else:
+                   with open(resultfile, 'a') as outputfile:
+                       outputfile.write( line)
 
       # Get JSON file from the output file
       with open(resultfile) as output_plain:
