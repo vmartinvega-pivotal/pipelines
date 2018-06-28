@@ -68,6 +68,8 @@ python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/file_process.py ./${DEPENDENCIE
 if [ ! -f ${TMPDIR}/${REPO_RESOURCE}/ci/pcf-scdf-streams-${DEPLOYING_ENVIRONMENT}/app-descriptor.df ]; then
   cp app-descriptor.df ${ROOT_FOLDER}/${REPO_RESOURCE}/ci/pcf-scdf-streams-${DEPLOYING_ENVIRONMENT}
   
+  cd "${ROOT_FOLDER}/${REPO_RESOURCE}"
+
   git checkout -f ${CURRENT_BRANCH}
   git add --all
   git commit -a -m "[ci skip] Adding app-descriptor.df for environment ${DEPLOYING_ENVIRONMENT}"
@@ -78,7 +80,11 @@ if [ ! -f ${TMPDIR}/${REPO_RESOURCE}/ci/pcf-scdf-streams-${DEPLOYING_ENVIRONMENT
   #mvn --batch-mode release:clean release:prepare release:perform -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}" -Dresume=false -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE} -DscmCommentPrefix="[ci skip]"
 else
   # Check if there are differencies
-  echo "Checking for differencies"
+  echo "DEBUG Checking for differencies..."
+  MD51=$(md5sum app-descriptor.df)
+  MD52=$(md5sum ${ROOT_FOLDER}/${REPO_RESOURCE}/ci/pcf-scdf-streams-${DEPLOYING_ENVIRONMENT}/app-descriptor.df)
+  echo "DEBUG MD51: ${MD51}"
+  echo "DEBUG MD52: ${MD52}"
 fi
 
 #git checkout -f ${CURRENT_BRANCH}
