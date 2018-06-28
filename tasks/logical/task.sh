@@ -57,8 +57,8 @@ python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/file_process.py ./dependencies.
 #cat app-descriptor.df | grep '#VERSION' | wc -l
 
 # If does not exist app-descriptor.df put it in place and push
-if [ ! -f ${TMPDIR}/${REPO_RESOURCE}/app-descriptor.df ]; then
-  cp app-descriptor.df ${ROOT_FOLDER}/${REPO_RESOURCE}
+if [ ! -f ${ROOT_FOLDER}/${REPO_RESOURCE}/app-descriptor.df ]; then
+  cp ${TMPDIR}/${REPO_RESOURCE}/app-descriptor.df ${ROOT_FOLDER}/${REPO_RESOURCE}
   
   cd "${ROOT_FOLDER}/${REPO_RESOURCE}"
 
@@ -83,7 +83,7 @@ else
   else
     echo "DEBUG: There are differencies with the old app-descriptor and the new one, creating a new release"
 
-    mv app-descriptor.df ${ROOT_FOLDER}/${REPO_RESOURCE}
+    mv ${TMPDIR}/${REPO_RESOURCE}/app-descriptor.df ${ROOT_FOLDER}/${REPO_RESOURCE}
   
     cd "${ROOT_FOLDER}/${REPO_RESOURCE}"
 
