@@ -35,19 +35,10 @@ git config --global http.sslVerify false
 git config --global user.name "${GIT_NAME}"
 git config --global user.email "${GIT_EMAIL}"
 
-git checkout -f ${CURRENT_BRANCH}
-
-DEPENDENCIES_FILE=dependencies.list
-
 # For insecure connections
 # echo insecure >> ~/.curlrc
 
-#MD5=$(md5sum pom.xml)
-#echo "MD5: ${MD5}"
-
-DEPLOYING_ENVIRONMENT="systemtest"
-
-# Copy all contents to a new location
+# Copy all contents for the repo to a new location
 cp -r ${ROOT_FOLDER}/${REPO_RESOURCE} ${TMPDIR}
 
 # Change location
@@ -57,16 +48,17 @@ cd ${TMPDIR}/${REPO_RESOURCE}
 mvn versions:resolve-ranges -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
 
 # Get the dependencies for the logical microservice
-mvn dependency:list -DexcludeTransitive=true -DoutputFile=${DEPENDENCIES_FILE} -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
+mvn dependency:list -DexcludeTransitive=true -DoutputFile=dependencies.list -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
 
-python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/file_process.py ./${DEPENDENCIES_FILE} ./ci/pcf-scdf-streams-${DEPLOYING_ENVIRONMENT}/app-descriptor-template.df app-descriptor.df dependencies.json
+# Generate the app-descriptor for the microservice from the template
+python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/file_process.py ./dependencies.list ./app-descriptor-template.df app-descriptor.df dependencies.json
 
 # TODO: if contains #VERSION abort!! Not all dependencies were resolved!!
 #cat app-descriptor.df | grep '#VERSION' | wc -l
 
 # If does not exist app-descriptor.df put it in place and push
-if [ ! -f ${TMPDIR}/${REPO_RESOURCE}/ci/pcf-scdf-streams-${DEPLOYING_ENVIRONMENT}/app-descriptor.df ]; then
-  cp app-descriptor.df ${ROOT_FOLDER}/${REPO_RESOURCE}/ci/pcf-scdf-streams-${DEPLOYING_ENVIRONMENT}
+if [ ! -f ${TMPDIR}/${REPO_RESOURCE}/app-descriptor.df ]; then
+  cp app-descriptor.df ${ROOT_FOLDER}/${REPO_RESOURCE}
   
   cd "${ROOT_FOLDER}/${REPO_RESOURCE}"
 
@@ -81,8 +73,8 @@ if [ ! -f ${TMPDIR}/${REPO_RESOURCE}/ci/pcf-scdf-streams-${DEPLOYING_ENVIRONMENT
 else
   # Check if there are differencies
   echo "DEBUG: Checking for differencies..."
-  MD51=$(md5sum app-descriptor.df)
-  MD52=$(md5sum ${ROOT_FOLDER}/${REPO_RESOURCE}/ci/pcf-scdf-streams-${DEPLOYING_ENVIRONMENT}/app-descriptor.df)
+  MD51=$(md5sum app-descriptor.df | awk '{ print $1 }')
+  MD52=$(md5sum ${ROOT_FOLDER}/${REPO_RESOURCE}/app-descriptor.df | awk '{ print $1 }')
   echo "DEBUG: MD51: ${MD51}"
   echo "DEBUG: MD52: ${MD52}"
 
@@ -91,7 +83,7 @@ else
   else
     echo "DEBUG: There are differencies with the old app-descriptor and the new one, creating a new release"
 
-    mv app-descriptor.df ${ROOT_FOLDER}/${REPO_RESOURCE}/ci/pcf-scdf-streams-${DEPLOYING_ENVIRONMENT}
+    mv app-descriptor.df ${ROOT_FOLDER}/${REPO_RESOURCE}
   
     cd "${ROOT_FOLDER}/${REPO_RESOURCE}"
 
