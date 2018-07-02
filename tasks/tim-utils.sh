@@ -7,6 +7,21 @@ set -o pipefail
 
 export TMPDIR=${TMPDIR:-/tmp}
 
+function getUrlArtifact(){
+  USERNAME=$1 # devops-sdp
+  PASSWORD=$2 # zxcdsa011
+  REPOSITORY=$3 # maven-releases
+  GROUP=$4 # com.tim.sdp
+  NAME=$5 # logical-microservice
+  VERSION=$6 # 1.0.113
+
+  echo insecure >> ~/.curlrc
+
+  RESULT=$(curl -u ${USERNAME}:${PASSWORD} -X GET --header 'Accept: application/json' 'https://nexus-sdp.telecomitalia.local/nexus/service/siesta/rest/beta/search?repository='${REPOSITORY}'&group='${GROUP}'&name='${NAME}'&version='${VERSION}'' | jq '.items[].assets[].downloadUrl' | grep jar\" | sed -e 's/^"//' -e 's/"$//')
+
+  echo ${RESULT}
+}
+
 # Converts a string to lower case
 function toLowerCase() {
   echo "$1" | tr '[:upper:]' '[:lower:]'

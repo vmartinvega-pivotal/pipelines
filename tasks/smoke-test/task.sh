@@ -22,10 +22,9 @@ exportKeyValProperties
 
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
-echo "--- Test ---"
-#mvn test -Dmaven.test.failure.ignore=true ${BUILD_OPTIONS}
-mvn test ${BUILD_OPTIONS}
-echo "--- Test ---"
+echo "--- Smoke Test ---"
+echo "Running Smoke tests ..."
+echo "--- Smoke Test ---"
 echo ""
 
 # Adding values to the next job
