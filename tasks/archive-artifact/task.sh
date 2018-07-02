@@ -24,6 +24,7 @@ exportKeyValProperties
 
 echo ${TRUST_STORE_FILE}
 ls ${TRUST_STORE_FILE}
+cat ${TRUST_STORE_FILE}
 
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
