@@ -84,9 +84,9 @@ jobs:
       PWS_ORG: ((pws-org))
       PWS_SPACE: ((pws-space))
       PWS_API: ((pws-api))
-      APP_MEMORY_LIMIT: 2GB
-      APP_DISK_LIMIT: 1GB
-      APP_INSTANCES: 1
+      APP_MEMORY_LIMIT: ((app-memory-limit))
+      APP_DISK_LIMIT: ((app-disk-limit))
+      APP_INSTANCES: ((app-instances))
   - put: keyval
     params:
       file: keyvalout/keyval.properties
