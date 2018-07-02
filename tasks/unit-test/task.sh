@@ -25,6 +25,10 @@ cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 echo "--- Test ---"
 #mvn test -Dmaven.test.failure.ignore=true ${BUILD_OPTIONS}
 mvn test ${BUILD_OPTIONS}
+
+#TODO: If some bash file exists
+#run it
+
 echo "--- Test ---"
 echo ""
 
