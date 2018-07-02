@@ -22,6 +22,9 @@ source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/source-all.sh
 # Add properties as environment variables
 exportKeyValProperties
 
+echo ${TRUST_STORE_FILE}
+ls ${TRUST_STORE_FILE}
+
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
 echo "--- Archive Artifact ---"

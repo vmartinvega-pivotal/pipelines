@@ -1,5 +1,5 @@
-./set_pipeline-tim.sh  snapshot-dispositiva-processor credentials-snapshoot-dispositiva-processor-tim.yml pipeline-snapshoot.yml
-./set_pipeline-tim.sh credentials-snapshot-dispositiva-ricaricaonline-sink credentials-snapshot-dispositiva-ricaricaonline-sink.yml pipeline-snapshoot.yml
+#./set_pipeline-tim.sh  snapshot-dispositiva-processor credentials-snapshoot-dispositiva-processor-tim.yml pipeline-snapshoot.yml
+./set_pipeline-tim.sh  release-dispositiva-processor  credentials-release-dispositiva-processor-tim.yml pipeline-build.yml
 #./set_pipeline-tim.sh  build-release-sdp-demo-clienti credentials-build-tim.yml pipeline-build.yml
 #./set_pipeline-tim.sh  build-snapshoot-sdp-demo-clienti credentials-snapshoot-tim.yml pipeline-snapshoot.yml
 #./set_pipeline-tim.sh  build-snapshoot-logical credentials-logical-tim.yml pipeline-logical.yml
