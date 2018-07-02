@@ -22,11 +22,12 @@ exportKeyValProperties
 
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
+export TRUST_STORE_FILE=${ROOT_FOLDER}/${TOOLS_RESOURCE}/truststore/${TRUSTSTORE}
+
 echo "--- Snapshoot Artifact ---"
 
-cp ${ROOT_FOLDER}/${TOOLS_RESOURCE}/truststore/${TRUSTSTORE} .
-
-mvn deploy -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Djavax.net.ssl.trustStore=${TRUSTSTORE}
+#mvn deploy -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
+mvn deploy -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
 
 echo "--- Snapshoot Artifact ---"
 echo ""
