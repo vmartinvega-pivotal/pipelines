@@ -26,12 +26,7 @@ export TRUST_STORE_FILE=${ROOT_FOLDER}/${TOOLS_RESOURCE}/truststore/${TRUSTSTORE
 
 echo "--- Snapshoot Artifact ---"
 
-echo "El nuevo"
-
-#mvn deploy -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
-cat "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/settings.xml
-
-mvn -s "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/settings.xml deploy -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
+mvn deploy -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
 
 echo "--- Snapshoot Artifact ---"
 echo ""
