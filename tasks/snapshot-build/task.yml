@@ -16,4 +16,4 @@ outputs:
   - name: keyvalout
 
 run:
-  path: tools/tasks/snapshoot-deploy/task.sh
+  path: tools/tasks/snapshot-build/task.sh

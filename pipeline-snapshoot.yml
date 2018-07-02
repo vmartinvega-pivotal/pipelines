@@ -147,7 +147,7 @@ jobs:
       trigger: true
   - task: archive-snapshoot
     privileged: true
-    file: tools/tasks/snapshoot-build/task.yml
+    file: tools/tasks/snapshot-build/task.yml
     params:
       <<: *common-params
       USERNAME: ((github-username))
