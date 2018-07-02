@@ -29,6 +29,8 @@ echo "--- Snapshoot Artifact ---"
 echo "El nuevo"
 
 #mvn deploy -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
+cat /root/.m2/settings.xml
+
 mvn -s /root/.m2/settings.xml deploy -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
 
 echo "--- Snapshoot Artifact ---"
