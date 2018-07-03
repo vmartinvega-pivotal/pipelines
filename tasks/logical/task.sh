@@ -49,9 +49,22 @@ mvn versions:resolve-ranges -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
 mvn dependency:list -DexcludeTransitive=true -DoutputFile=dependencies.list -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
 
 # Generate the app-descriptor for the microservice from the template
-python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/file_process.py ./dependencies.list ./app-descriptor-template.df app-descriptor.df dependencies.json
+python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/file_process.py ./dependencies.list ./app-descriptor-template.df app-descriptor.df app-descriptor.json
 
 export PASSED_LOGICAL_SERVICE_NEW_VERSION="false"
+
+# If does not exist app-descriptor.df put it in place and push
+if [ ! -f ${ROOT_FOLDER}/${REPO_RESOURCE}/app-descriptor.json ]; then
+  echo "DEBUG: app-descriptor.json did not exist in the repo, adding it ..."
+
+  cp ${TMPDIR}/${REPO_RESOURCE}/app-descriptor.json ${ROOT_FOLDER}/${REPO_RESOURCE}
+  
+  cd "${ROOT_FOLDER}/${REPO_RESOURCE}"
+
+  git add --all
+  
+  git commit -a -m "[ci skip] Adding app-descriptor.json"
+fi
 
 # TODO: if contains #VERSION abort!! Not all dependencies were resolved!!
 #cat app-descriptor.df | grep '#VERSION' | wc -l

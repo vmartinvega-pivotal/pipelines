@@ -16,4 +16,4 @@ outputs:
   - name: keyvalout
 
 run:
-  path: tools/tasks/unit-test/task.sh
+  path: tools/tasks/physical/snapshot-build/task.sh

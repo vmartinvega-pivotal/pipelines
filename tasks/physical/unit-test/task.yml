@@ -16,4 +16,4 @@ outputs:
   - name: keyvalout
 
 run:
-  path: tools/tasks/sonarqube/task.sh
+  path: tools/tasks/physical/unit-test/task.sh

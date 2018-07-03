@@ -10,10 +10,11 @@ image_resource:
 inputs:
   - name: tools
   - name: repo
+  - name: keyval
 
 outputs:
   - name: out
   - name: keyvalout
 
 run:
-  path: tools/tasks/snapshot-build/task.sh
+  path: tools/tasks/physical/deploy-springboot-app/task.sh

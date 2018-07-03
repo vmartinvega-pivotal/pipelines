@@ -16,4 +16,4 @@ outputs:
   - name: keyvalout
 
 run:
-  path: tools/tasks/build/task.sh
+  path: tools/tasks/physical/archive-artifact/task.sh

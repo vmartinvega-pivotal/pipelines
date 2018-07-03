@@ -38,7 +38,7 @@ jobs:
       trigger: true
   - task: build
     privileged: true
-    file: tools/tasks/build/task.yml
+    file: tools/tasks/physical/build/task.yml
     params:
       <<: *common-params
   - put: keyval
@@ -57,7 +57,7 @@ jobs:
       trigger: true
   - task: unit-test
     privileged: true
-    file: tools/tasks/unit-test/task.yml
+    file: tools/tasks/physical/unit-test/task.yml
     params:
       <<: *common-params
   - put: keyval
@@ -76,7 +76,7 @@ jobs:
       trigger: true
   - task: deploy-microservice
     privileged: true
-    file: tools/tasks/deploy-springboot-app/task.yml
+    file: tools/tasks/physical/deploy-springboot-app/task.yml
     params:
       <<: *common-params
       PWS_USER: ((pws-user))
@@ -103,7 +103,7 @@ jobs:
       trigger: true
   - task: undeploy-microservice
     privileged: true
-    file: tools/tasks/undeploy-springboot-app/task.yml
+    file: tools/tasks/physical/undeploy-springboot-app/task.yml
     params:
       <<: *common-params
       PWS_USER: ((pws-user))
@@ -127,7 +127,7 @@ jobs:
       trigger: true
   - task: sonarqube
     privileged: true
-    file: tools/tasks/sonarqube/task.yml
+    file: tools/tasks/physical/sonarqube/task.yml
     params:
       <<: *common-params
       SONAR_BRANCH: ((sonar-branch))
@@ -147,7 +147,7 @@ jobs:
       trigger: true
   - task: archive-snapshoot
     privileged: true
-    file: tools/tasks/snapshot-build/task.yml
+    file: tools/tasks/physical/snapshot-build/task.yml
     params:
       <<: *common-params
       USERNAME: ((github-username))

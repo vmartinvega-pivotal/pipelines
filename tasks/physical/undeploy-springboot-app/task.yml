@@ -17,4 +17,4 @@ outputs:
   - name: keyvalout
 
 run:
-  path: tools/tasks/deploy-springboot-app/task.sh
+  path: tools/tasks/physical/undeploy-springboot-app/task.sh

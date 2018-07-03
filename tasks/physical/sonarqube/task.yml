@@ -10,11 +10,10 @@ image_resource:
 inputs:
   - name: tools
   - name: repo
-  - name: keyval
 
 outputs:
   - name: out
   - name: keyvalout
 
 run:
-  path: tools/tasks/undeploy-springboot-app/task.sh
+  path: tools/tasks/physical/sonarqube/task.sh
