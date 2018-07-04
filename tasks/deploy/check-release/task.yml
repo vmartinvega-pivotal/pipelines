@@ -17,4 +17,4 @@ outputs:
   - name: keyvalout
 
 run:
-  path: tools/tasks/logical/check-release/task.sh
+  path: tools/tasks/deploy/check-release/task.sh
