@@ -47,6 +47,8 @@ python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/file_process.py dependencies.li
 
 echo "Salgo"
 
+cat app-descriptor.df
+
 # If the file contains #VERSION abort!! Not all dependencies were resolved!!
 TAG_VERSION=$(cat app-descriptor.df | grep '#VERSION' | wc -l)
 
