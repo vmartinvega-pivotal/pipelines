@@ -28,20 +28,6 @@ echo "--- Logical Test ---"
 
 chmod 777 ${TRUST_STORE_FILE}
 
-git config --global http.sslKey "${HOME}/.gitprivatekey/privatekey"
-git config --global http.sslVerify false
-git config --global user.name "${GIT_NAME}"
-git config --global user.email "${GIT_EMAIL}"
-
-# For insecure connections
-# echo insecure >> ~/.curlrc
-
-# Copy all contents for the repo to a new location
-cp -r ${ROOT_FOLDER}/${REPO_RESOURCE} ${TMPDIR}
-
-# Change location
-cd ${TMPDIR}/${REPO_RESOURCE}
-
 # Resolve ranges for the dependencies
 mvn versions:resolve-ranges -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
 
@@ -73,7 +59,6 @@ then
   echo "Some physical microservices where not resolved!! Existing ..."
   exit 1
 fi
-
 
 # If does not exist app-descriptor.df put it in place and push
 #if [ ! -f ${ROOT_FOLDER}/${REPO_RESOURCE}/app-descriptor.df ]; then
