@@ -70,7 +70,7 @@ then
   # Deploying rabbitmq instance
   pcfSetupRabbitService ${RABBITMQ_SERVICE_NAME} ${RABBITMQ_SERVICE_PLAN} ${ENVIRONMENT_DEPLOYING} ${PASSED_TAG_VERSION_DEPLOYING} ${PASSED_ARTIFACT_ID_DEPLOYING}
 
-  # TODO: Create the exchange, queue and routing key
+  java -jar "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/setup-rabbit/rabbit-setup-1.0-SNAPSHOT-spring-boot.jar 
 fi
 
 # Checks if is needed to create a nfs instance
