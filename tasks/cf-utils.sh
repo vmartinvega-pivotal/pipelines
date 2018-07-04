@@ -176,6 +176,13 @@ function cfSCDFDeploy(){
     then
       break;
     else
+      if [[ $SERVICE_STATE = "failed" ]]
+      then
+        echo "DEBUG: Creation service with name ${RANDOM_SERVICE_NAME} was failed!!"
+        cf service ${RANDOM_SERVICE_NAME}
+        cfSCDFDestroy ${RANDOM_SERVICE_NAME}
+        break;
+      fi
       echo "DEBUG: Waiting for the service ${RANDOM_SERVICE_NAME} to be craeted"
       sleep 5
     fi
