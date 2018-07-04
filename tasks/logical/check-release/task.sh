@@ -52,42 +52,47 @@ mvn dependency:list -DexcludeTransitive=true -DoutputFile=dependencies.list -Dja
 python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/file_process.py ./dependencies.list ./app-descriptor-template.df app-descriptor.df app-versions.properties
 
 # TODO: if contains #VERSION abort!! Not all dependencies were resolved!!
-#cat app-descriptor.df | grep '#VERSION' | wc -l
+TAG_RELEASES=$(cat app-descriptor.df | grep '#VERSION' | wc -l)
+if [ "$a" -ne "$b" ]
+then
+  echo "There are versions that were not resolved!!! Exiting..."
+  exit 1
+fi
 
 # If does not exist app-descriptor.df put it in place and push
-if [ ! -f ${ROOT_FOLDER}/${REPO_RESOURCE}/app-descriptor.df ]; then
-  echo "DEBUG: app-descriptor did not exist in the repo, adding it ..."
+#if [ ! -f ${ROOT_FOLDER}/${REPO_RESOURCE}/app-descriptor.df ]; then
+#  echo "DEBUG: app-descriptor did not exist in the repo, adding it ..."
 
-  cp ${TMPDIR}/${REPO_RESOURCE}/app-descriptor.df ${ROOT_FOLDER}/${REPO_RESOURCE}
+#  cp ${TMPDIR}/${REPO_RESOURCE}/app-descriptor.df ${ROOT_FOLDER}/${REPO_RESOURCE}
   
-  cd "${ROOT_FOLDER}/${REPO_RESOURCE}"
+#  cd "${ROOT_FOLDER}/${REPO_RESOURCE}"
 
-  git add --all
+#  git add --all
   
-  git commit -a -m "[ci skip] Adding app-descriptor.df"
-else
+#  git commit -a -m "[ci skip] Adding app-descriptor.df"
+#else
   # Check if there are differencies
-  echo "DEBUG: Checking it there are new versions for the microservices ..."
+#  echo "DEBUG: Checking it there are new versions for the microservices ..."
   
-  MD51=$(md5sum app-descriptor.df | awk '{ print $1 }')
-  MD52=$(md5sum ${ROOT_FOLDER}/${REPO_RESOURCE}/app-descriptor.df | awk '{ print $1 }')
-  echo "DEBUG: MD51 (new app-descriptor): ${MD51}"
-  echo "DEBUG: MD52 (old app-descriptor): ${MD52}"
+#  MD51=$(md5sum app-descriptor.df | awk '{ print $1 }')
+#  MD52=$(md5sum ${ROOT_FOLDER}/${REPO_RESOURCE}/app-descriptor.df | awk '{ print $1 }')
+#  echo "DEBUG: MD51 (new app-descriptor): ${MD51}"
+#  echo "DEBUG: MD52 (old app-descriptor): ${MD52}"
 
-  if [ "'${MD51}'" == "'${MD52}'" ]; then
-    echo "DEBUG: There are not new versions for physical microservices, skipping..."
-  else
-    echo "DEBUG: There are new versions for the physical microservices, modifiying the app-descriptor.df"
+#  if [ "'${MD51}'" == "'${MD52}'" ]; then
+#    echo "DEBUG: There are not new versions for physical microservices, skipping..."
+#  else
+#    echo "DEBUG: There are new versions for the physical microservices, modifiying the app-descriptor.df"
 
-    mv ${TMPDIR}/${REPO_RESOURCE}/app-descriptor.df ${ROOT_FOLDER}/${REPO_RESOURCE}
+#    mv ${TMPDIR}/${REPO_RESOURCE}/app-descriptor.df ${ROOT_FOLDER}/${REPO_RESOURCE}
   
-    cd "${ROOT_FOLDER}/${REPO_RESOURCE}"
+#    cd "${ROOT_FOLDER}/${REPO_RESOURCE}"
 
-    git add --all
+#    git add --all
 
-    git commit -a -m "[ci skip] Replacing app-descriptor.df because there are new version for microservices"
-  fi
-fi
+#    git commit -a -m "[ci skip] Replacing app-descriptor.df because there are new version for microservices"
+#  fi
+#fi
 
 rm -Rf cd ${TMPDIR}/${REPO_RESOURCE}
 
