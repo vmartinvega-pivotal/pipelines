@@ -43,7 +43,9 @@ if [ -f app-versions.properties ]; then
   rm app-versions.properties
 fi
 
-python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/file_process.py ./dependencies.list ./app-descriptor-template.df app-descriptor.df app-versions.properties
+python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/file_process.py dependencies.list app-descriptor-template.df app-descriptor.df app-versions.properties
+
+echo "Salgo"
 
 # If the file contains #VERSION abort!! Not all dependencies were resolved!!
 TAG_VERSION=$(cat app-descriptor.df | grep '#VERSION' | wc -l)
