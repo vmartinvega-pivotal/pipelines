@@ -51,7 +51,7 @@ mvn dependency:list -DexcludeTransitive=true -DoutputFile=dependencies.list -Dja
 # Generate the app-descriptor for the microservice from the template
 python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/file_process.py ./dependencies.list ./app-descriptor-template.df app-descriptor.df app-versions.properties
 
-# TODO: if contains #VERSION abort!! Not all dependencies were resolved!!
+# If the file contains #VERSION abort!! Not all dependencies were resolved!!
 TAG_VERSION=$(cat app-descriptor.df | grep '#VERSION' | wc -l)
 
 if [ "$TAG_VERSION" -ne "0" ]
