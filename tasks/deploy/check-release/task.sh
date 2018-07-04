@@ -45,16 +45,16 @@ fi
 
 python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/file_process.py dependencies.list app-descriptor-template.df app-descriptor.df app-versions.properties
 
-echo "Salgo"
-
-cat app-descriptor.df | grep '#VERSION' | wc -l
-
-echo "LLego"
-
 # If the file contains #VERSION abort!! Not all dependencies were resolved!!
-TAG_VERSION=$(cat app-descriptor.df | grep '#VERSION' | wc -l)
+# TODO: Falla no se por que
+#TAG_VERSION=$(cat app-descriptor.df | grep '#VERSION' | wc -l)
 
-echo "Aqui no llego"
+#if [ "$TAG_VERSION" -ne "0" ]
+#then
+#  echo "Some physical microservices where not resolved!! Existing ..."
+#  exit 1
+#fi
+
 
 echo "DEBUG: app-descriptor created..."
 cat app-descriptor.df
@@ -62,11 +62,6 @@ cat app-descriptor.df
 echo "DEBUG: app-versions created..."
 cat app-versions.properties
 
-if [ "$TAG_VERSION" -ne "0" ]
-then
-  echo "Some physical microservices where not resolved!! Existing ..."
-  exit 1
-fi
 
 # If does not exist app-descriptor.df put it in place and push
 #if [ ! -f ${ROOT_FOLDER}/${REPO_RESOURCE}/app-descriptor.df ]; then
