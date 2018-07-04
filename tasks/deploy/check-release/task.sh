@@ -47,7 +47,7 @@ python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/file_process.py dependencies.li
 
 echo "Salgo"
 
-cat app-descriptor.df | grep '#VERSION'
+cat app-descriptor.df | grep '#VERSION' | wc -l
 
 echo "LLego"
 
