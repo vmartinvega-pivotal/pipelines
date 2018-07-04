@@ -38,7 +38,7 @@ jobs:
       trigger: true
   - task: build
     privileged: true
-    file: tools/tasks/pysical/build/task.yml
+    file: tools/tasks/physical/build/task.yml
     params:
       <<: *common-params
   - put: keyval
