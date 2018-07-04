@@ -49,8 +49,14 @@ mvn versions:resolve-ranges -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
 mvn dependency:list -DexcludeTransitive=true -DoutputFile=dependencies.list -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
 
 # Generate the app-descriptor for the microservice from the template
-rm app-descriptor.df
-rm app-versions.properties
+if [ -f app-descriptor.df ]; then
+  rm app-descriptor.df
+fi
+
+if [ -f app-versions.properties ]; then
+  rm app-versions.properties
+fi
+
 python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/file_process.py ./dependencies.list ./app-descriptor-template.df app-descriptor.df app-versions.properties
 
 # If the file contains #VERSION abort!! Not all dependencies were resolved!!
