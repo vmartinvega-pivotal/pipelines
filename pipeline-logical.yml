@@ -38,7 +38,7 @@ jobs:
       trigger: true
   - task: check-new-release
     privileged: true
-    file: tools/tasks/logical/task.yml
+    file: tools/tasks/logical/check-release/task.yml
     params:
       <<: *common-params
   - put: keyval

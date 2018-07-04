@@ -10,10 +10,11 @@ image_resource:
 inputs:
   - name: tools
   - name: repo
+  - name: keyval
 
 outputs:
   - name: out
   - name: keyvalout
 
 run:
-  path: tools/tasks/logical-release/task.sh
+  path: tools/tasks/logical/check-release/task.sh
