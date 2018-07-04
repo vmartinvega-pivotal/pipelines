@@ -28,18 +28,37 @@ resource_types:
       repository: swce/keyval-resource
 
 jobs:
-- name: setting-up-environment
+- name: check-new-logical-release
   public: true
   plan:
   - aggregate:
     - get: tools
     - get: repo
       trigger: true
+  - task: check-new-logical-release
+    privileged: true
+    file: tools/tasks/deploy/check-release/task.yml
+    params:
+      <<: *common-git-params
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+
+- name: setting-up-environment
+  public: true
+  plan:
+  - aggregate:
+    - get: tools
+    - get: repo
+    - get: keyval
+      passed:
+      - check-new-logical-release
+      trigger: true
   - task: setting-up-environment
     privileged: true
     file: tools/tasks/deploy/settingup-environment/task.yml
     params:
-      <<: *common-params
+      <<: *common-pcf-params
       NEXUS_USERNAME_FOR_SCDF: ((nexus-username-for-scdf))
       NEXUS_PASSWORD_FOR_SCDF: ((nexus-password-for-scdf))
       NEXUS_URL_FOR_SCDF: ((nexus-url-for-scdf))
@@ -75,7 +94,7 @@ jobs:
     privileged: true
     file: tools/tasks/deploy/streams-deploy/task.yml
     params:
-      <<: *common-params
+      <<: *common-pcf-params
   - put: keyval
     params:
       file: keyvalout/keyval.properties
@@ -94,7 +113,7 @@ jobs:
     privileged: true
     file: tools/tasks/deploy/soapui-tests/task.yml
     params:
-      <<: *common-params
+      <<: *common-pcf-params
   - put: keyval
     params:
       file: keyvalout/keyval.properties
@@ -113,7 +132,7 @@ jobs:
     privileged: true
     file: tools/tasks/deploy/undeploy-environment/task.yml
     params:
-      <<: *common-params
+      <<: *common-pcf-params
       DEPLOY_SCDF_SERVICE_INSTANCE: ((deploy-scdf-service-instance))
       DEPLOY_NFS_SERVICE_INSTANCE: ((deploy-nfs-service-instance))
       DEPLOY_RABBITMQ_SERVICE_INSTANCE: ((deploy-rabbitmq-service-instance))
@@ -121,7 +140,25 @@ jobs:
     params:
       file: keyvalout/keyval.properties
 
-common-params: &common-params
+common-git-params: &common-git-params
+  BUILD_OPTIONS: ((build-options))
+  GIT_EMAIL: ((git-email))
+  GIT_NAME: ((git-name))
+  CURRENT_BRANCH: ((app-branch))
+  TRUSTSTORE: ((truststore))
+  GITHUB_PRIVATE_KEY: ((github-private-key))
+  M2_SETTINGS_REPO_ID: ((m2-settings-repo-id))
+  M2_SETTINGS_REPO_PASSWORD: ((m2-settings-repo-password))
+  M2_SETTINGS_REPO_USERNAME: ((m2-settings-repo-username))
+  M2_SETTINGS_REPO_MIRROR_URL: ((repo-with-binaries))
+  M2_SETTINGS_REPO_SITE_URL: ((repo-with-site))
+  M2_SETTINGS_REPO_RELEASE_URL: ((repo-with-binaries-for-upload))
+  M2_SETTINGS_REPO_SNAPSHOTS_URL: ((repo-with-binaries-snapshots))
+  M2_SETTINGS_REPO_GIT_SERVER_URL: ((gitlab-server-url))
+  M2_SETTINGS_REPO_SONAR_URL: ((sonar-host-url))
+  M2_SETTINGS_REPO_SONAR_TOKEN: ((sonar-login-key))
+
+common-pcf-params: &common-pcf-params
   PWS_USER: ((pws-user))
   PWS_PWD: ((pws-pwd))
   PWS_ORG: ((pws-org))
