@@ -50,6 +50,8 @@ echo "Salgo"
 # If the file contains #VERSION abort!! Not all dependencies were resolved!!
 TAG_VERSION=$(cat app-descriptor.df | grep '#VERSION' | wc -l)
 
+echo "Aqui no llego"
+
 echo "DEBUG: app-descriptor created..."
 cat app-descriptor.df
 
