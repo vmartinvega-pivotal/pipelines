@@ -56,7 +56,7 @@ jobs:
       trigger: true
   - task: setting-up-environment
     privileged: true
-    file: tools/tasks/deploy/settingup-environment/task.yml
+    file: tools/tasks/deploy/do-nothing/task.yml
     params:
       <<: *common-pcf-params
       NEXUS_USERNAME_FOR_SCDF: ((nexus-username-for-scdf))
@@ -92,7 +92,7 @@ jobs:
       trigger: true
   - task: streams-deploy
     privileged: true
-    file: tools/tasks/deploy/streams-deploy/task.yml
+    file: tools/tasks/deploy/do-nothing/task.yml
     params:
       <<: *common-pcf-params
   - put: keyval
@@ -111,7 +111,7 @@ jobs:
       trigger: true
   - task: soapui-tests
     privileged: true
-    file: tools/tasks/deploy/soapui-tests/task.yml
+    file: tools/tasks/deploy/do-nothing/task.yml
     params:
       <<: *common-pcf-params
   - put: keyval
@@ -130,7 +130,7 @@ jobs:
       trigger: true
   - task: undeploy-environment
     privileged: true
-    file: tools/tasks/deploy/undeploy-environment/task.yml
+    file: tools/tasks/deploy/do-nothing/task.yml
     params:
       <<: *common-pcf-params
       DEPLOY_SCDF_SERVICE_INSTANCE: ((deploy-scdf-service-instance))
