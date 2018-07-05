@@ -24,7 +24,7 @@ exportKeyValProperties
 
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
-echo "--- Logical Release ---"
+echo "--- Prepare Release ---"
 
 chmod 777 ${TRUST_STORE_FILE}
 
@@ -33,15 +33,43 @@ git config --global http.sslVerify false
 git config --global user.name "${GIT_NAME}"
 git config --global user.email "${GIT_EMAIL}"
 
-#if [[ ${PASSED_LOGICAL_SERVICE_NEW_VERSION} = "true" ]]
-#then
-  echo "Maven release"
-  git checkout -f ${CURRENT_BRANCH} 
+# For insecure connections
+# echo insecure >> ~/.curlrc
 
-  mvn --batch-mode release:clean release:prepare release:perform -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}" -Dresume=false -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE} -DscmCommentPrefix="[ci skip]"
-#fi
+# Copy all contents for the repo to a new location
+cp -r ${ROOT_FOLDER}/${REPO_RESOURCE} ${TMPDIR}
 
-echo "--- Logical Release ---"
+# Change location
+cd ${TMPDIR}/${REPO_RESOURCE}
+
+# Resolve ranges for the dependencies
+mvn versions:resolve-ranges -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
+
+# Get the dependencies for the logical microservice
+mvn dependency:list -DexcludeTransitive=true -DoutputFile=dependencies.list -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
+
+# Generate the app-descriptor for the microservice from the template
+python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/file_process.py dependencies.list app-descriptor-template.df app-descriptor.df app-versions.properties
+
+
+echo "DEBUG: Adding the new app-descriptor.df "
+
+cp ${TMPDIR}/${REPO_RESOURCE}/app-descriptor.df ${ROOT_FOLDER}/${REPO_RESOURCE}
+  
+echo "DEBUG: Addig the new app-versions.properties"
+
+  
+cd "${ROOT_FOLDER}/${REPO_RESOURCE}"
+
+git add --all
+  
+git commit -a -m "[ci skip] Adding all compiled file for the version"
+
+
+
+rm -Rf cd ${TMPDIR}/${REPO_RESOURCE}
+
+echo "--- Prepare Release ---"
 echo ""
 
 # Adding values to the next job

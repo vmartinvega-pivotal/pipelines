@@ -7,6 +7,56 @@ set -o pipefail
 
 export TMPDIR=${TMPDIR:-/tmp}
 
+# Reads a file.properties as the first argument and add it as a environment variable
+function exportKeyValPropertiesForDeploying() {
+	props=$1
+	echo "Props are in [${props}]"
+	if [ -f "${props}" ]
+	then
+	  echo "Reading passed key values"
+	  while IFS= read -r var
+	  do
+	    if [ ! -z "${var}" ]
+	    then
+	      echo "Adding: ${var}"
+	      export "$var"
+	    fi
+	  done < "${props}"
+	fi
+}
+
+# Reads all key-value pairs in a file.properties input file and exports the ones that are needed for the environment system test, from the config file for that environment
+function exportKeyValPropertiesForSystemTest() {
+	props=$1
+	echo "Props are in [${props}]"
+	if [ -f "${props}" ]
+	then
+	  echo "Reading passed key values from file ${props}"
+	  while IFS= read -r var
+	  do
+	    if [ ! -z "${var}" ]
+	    then
+              if [[ "${name}" == 'PASSED_RUN'* ]]; then
+	        echo "Adding: ${var}"
+	        export "$var"
+              fi
+              if [[ "${name}" == 'PASSED_RABBIT_EXCHANGE' ]]; then
+                echo "Adding: ${var}"
+	        export "$var"
+              fi
+              if [[ "${name}" == 'PASSED_RABBIT_ROUTING_KEY' ]]; then
+                echo "Adding: ${var}"
+	        export "$var"
+              fi
+              if [[ "${name}" == 'PASSED_RABBIT_QUEUE' ]]; then
+                echo "Adding: ${var}"
+	        export "$var"
+              fi
+	    fi
+	  done < "${props}"
+	fi
+}
+
 function getUrlArtifact(){
   USERNAME=$1 # devops-sdp
   PASSWORD=$2 # zxcdsa011

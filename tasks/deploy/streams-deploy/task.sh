@@ -45,7 +45,6 @@ done
 echo "DEBUG: Creating the streams in the scdf server ${PASSED_SCDF_SERVER_URL}"
 scdf_shell ${PASSED_SCDF_SERVER_URL} "${ROOT_FOLDER_SCDF_SCRIPTS}/create.df"
 
-
 # Deploying the streams
 echo "DEBUG: Deploying the streams in the scdf server ${PASSED_SCDF_SERVER_URL}"
 scdf_shell ${PASSED_SCDF_SERVER_URL} "${ROOT_FOLDER_SCDF_SCRIPTS}/deploy.df"

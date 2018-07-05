@@ -56,7 +56,7 @@ jobs:
       trigger: true
   - task: setting-up-environment
     privileged: true
-    file: tools/tasks/deploy/do-nothing/task.yml
+    file: tools/tasks/deploy/settingup-environment/task.yml
     params:
       <<: *common-pcf-params
       NEXUS_USERNAME_FOR_SCDF: ((nexus-username-for-scdf))
@@ -136,6 +136,47 @@ jobs:
       DEPLOY_SCDF_SERVICE_INSTANCE: ((deploy-scdf-service-instance))
       DEPLOY_NFS_SERVICE_INSTANCE: ((deploy-nfs-service-instance))
       DEPLOY_RABBITMQ_SERVICE_INSTANCE: ((deploy-rabbitmq-service-instance))
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+
+- name: prepare-release
+  public: true
+  plan:
+  - aggregate:
+    - get: tools
+    - get: repo
+    - get: keyval
+      passed:
+      - soapui-tests
+      trigger: true
+  - task: prepare-release
+    privileged: true
+    file: tools/tasks/deploy/prepare-release/task.yml
+    params:
+      <<: *common-git-params
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+  - put: repo
+    params:
+      repository: out
+
+- name: create-release
+  public: true
+  plan:
+  - aggregate:
+    - get: tools
+    - get: repo
+    - get: keyval
+      passed:
+      - prepare-release
+      trigger: true
+  - task: create-release
+    privileged: true
+    file: tools/tasks/deploy/create-release/task.yml
+    params:
+      <<: *common-git-params
   - put: keyval
     params:
       file: keyvalout/keyval.properties
