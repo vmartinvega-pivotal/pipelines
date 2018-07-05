@@ -130,7 +130,7 @@ jobs:
       trigger: true
   - task: undeploy-environment
     privileged: true
-    file: tools/tasks/deploy/do-nothing/task.yml
+    file: tools/tasks/deploy/undeploy-environment/task.yml
     params:
       <<: *common-pcf-params
       DEPLOY_SCDF_SERVICE_INSTANCE: ((deploy-scdf-service-instance))

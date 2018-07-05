@@ -70,8 +70,6 @@ then
   # Deploying rabbitmq instance
   pcfSetupRabbitService ${RABBITMQ_SERVICE_NAME} ${RABBITMQ_SERVICE_PLAN} ${ENVIRONMENT_DEPLOYING} ${PASSED_TAG_VERSION_DEPLOYING} ${PASSED_ARTIFACT_ID_DEPLOYING}
 
-  cat "${ROOT_FOLDER}/${REPO_RESOURCE}"/ci/config-systemtest.properties
-
   # Export all variables that are needed for the creation of the queues for the rabbit
   exportKeyValPropertiesForSystemTest "${ROOT_FOLDER}/${REPO_RESOURCE}"/ci/config-systemtest.properties  
 

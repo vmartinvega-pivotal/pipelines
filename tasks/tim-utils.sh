@@ -32,28 +32,24 @@ function exportKeyValPropertiesForSystemTest() {
 	if [ -f "${props}" ]
 	then
 	  echo "Reading passed key values from file ${props}"
-	  while IFS= read -r var
+	  while IFS='=' read -r name value
 	  do
-	    if [ ! -z "${var}" ]
-	    then
-              echo "DEBUG: Read var ${name} from file ${props}"
-              if [[ "${name}" == 'PASSED_RUN'* ]]; then
-	        echo "Adding: ${var}"
-	        export "$var"
-              fi
-              if [[ "${name}" == 'PASSED_RABBIT_EXCHANGE' ]]; then
-                echo "Adding: ${var}"
-	        export "$var"
-              fi
-              if [[ "${name}" == 'PASSED_RABBIT_ROUTING_KEY' ]]; then
-                echo "Adding: ${var}"
-	        export "$var"
-              fi
-              if [[ "${name}" == 'PASSED_RABBIT_QUEUE' ]]; then
-                echo "Adding: ${var}"
-	        export "$var"
-              fi
-	    fi
+            if [[ "${name}" == 'PASSED_RUN'* ]]; then
+	      echo "Adding: ${name}=${value}"
+	      export "$name=$value"
+            fi
+            if [[ "${name}" == 'PASSED_RABBIT_EXCHANGE' ]]; then
+              echo "Adding: ${name}=${value}"
+	      export "$name=$value"
+            fi
+            if [[ "${name}" == 'PASSED_RABBIT_ROUTING_KEY' ]]; then
+              echo "Adding: ${name}=${value}"
+	      export "$name=$value"
+            fi
+            if [[ "${name}" == 'PASSED_RABBIT_QUEUE' ]]; then
+              echo "Adding: ${name}=${value}"
+	      export "$name=$value"
+            fi
 	  done < "${props}"
 	fi
 }
