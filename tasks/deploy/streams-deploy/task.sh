@@ -84,4 +84,6 @@ scdf_shell ${PASSED_SCDF_SERVER_URL} "${TMPDIR}/app-register.df"
 # Adding values to keyvalout
 passKeyValProperties
 
+exit 1
+
 echo "Done!!"
