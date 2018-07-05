@@ -36,6 +36,7 @@ function exportKeyValPropertiesForSystemTest() {
 	  do
 	    if [ ! -z "${var}" ]
 	    then
+              echo "DEBUG: Read var ${name} from file ${props}"
               if [[ "${name}" == 'PASSED_RUN'* ]]; then
 	        echo "Adding: ${var}"
 	        export "$var"
