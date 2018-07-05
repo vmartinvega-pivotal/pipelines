@@ -95,6 +95,7 @@ jobs:
     file: tools/tasks/deploy/streams-deploy/task.yml
     params:
       <<: *common-pcf-params
+      <<: *common-git-params
   - put: keyval
     params:
       file: keyvalout/keyval.properties
