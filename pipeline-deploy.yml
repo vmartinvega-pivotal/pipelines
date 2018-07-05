@@ -152,7 +152,7 @@ jobs:
       trigger: true
   - task: prepare-release
     privileged: true
-    file: tools/tasks/deploy/prepare-release/task.yml
+    file: tools/tasks/deploy/do-nothing/task.yml
     params:
       <<: *common-git-params
   - put: keyval
@@ -174,7 +174,7 @@ jobs:
       trigger: true
   - task: create-release
     privileged: true
-    file: tools/tasks/deploy/create-release/task.yml
+    file: tools/tasks/deploy/do-nothing/task.yml
     params:
       <<: *common-git-params
   - put: keyval
