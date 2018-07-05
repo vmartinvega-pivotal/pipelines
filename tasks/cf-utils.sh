@@ -182,9 +182,10 @@ function cfSCDFDeploy(){
 
   DASHBOARD=$(getSCDFServiceDashboard $PASSED_PCF_SERVICES_INSTANCES_URL $RANDOM_SERVICE_NAME)
 
-  SERVER_URL=$(echo ${DASHBOARD%/*})
+  #SERVER_URL=$(echo ${DASHBOARD%/*})
+  SERVER_URL="https://dataflow-${PASSED_SCDF_SERVER_GUID}.apps.sdpcollaudo.telecomitalia.local"  
   echo "DEBUG: SCDF server Url: ${SERVER_URL}"
-
+    
   export PASSED_SCDF_SERVER_URL=${SERVER_URL}
 }
 
