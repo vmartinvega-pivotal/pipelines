@@ -54,6 +54,4 @@ echo "-- Deploying streams ..."
 # Adding values to keyvalout
 passKeyValProperties
 
-exit 1
-
 echo "Done!!"

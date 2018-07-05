@@ -92,7 +92,7 @@ jobs:
       trigger: true
   - task: streams-deploy
     privileged: true
-    file: tools/tasks/deploy/do-nothing/task.yml
+    file: tools/tasks/deploy/streams-deploy/task.yml
     params:
       <<: *common-pcf-params
   - put: keyval
