@@ -92,7 +92,7 @@ jobs:
       trigger: true
   - task: streams-deploy
     privileged: true
-    file: tools/tasks/deploy/streams-deploy/task.yml
+    file: tools/tasks/deploy/do-nothing/task.yml
     params:
       <<: *common-pcf-params
       <<: *common-git-params
@@ -131,7 +131,7 @@ jobs:
       trigger: true
   - task: undeploy-environment
     privileged: true
-    file: tools/tasks/deploy/undeploy-environment/task.yml
+    file: tools/tasks/deploy/do-nothing/task.yml
     params:
       <<: *common-pcf-params
       DEPLOY_SCDF_SERVICE_INSTANCE: ((deploy-scdf-service-instance))
@@ -153,7 +153,7 @@ jobs:
       trigger: true
   - task: prepare-release
     privileged: true
-    file: tools/tasks/deploy/do-nothing/task.yml
+    file: tools/tasks/deploy/prepare-release/task.yml
     params:
       <<: *common-git-params
   - put: keyval
@@ -175,7 +175,7 @@ jobs:
       trigger: true
   - task: create-release
     privileged: true
-    file: tools/tasks/deploy/do-nothing/task.yml
+    file: tools/tasks/deploy/create-release/task.yml
     params:
       <<: *common-git-params
   - put: keyval

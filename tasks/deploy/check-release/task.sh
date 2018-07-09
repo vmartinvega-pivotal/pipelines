@@ -24,7 +24,7 @@ exportKeyValProperties
 
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
-echo "--- Logical Test ---"
+echo "--- Check Logical Release ---"
 
 chmod 777 ${TRUST_STORE_FILE}
 
@@ -39,68 +39,47 @@ if [ -f app-descriptor.df ]; then
   rm app-descriptor.df
 fi
 
-if [ -f app-versions.properties ]; then
-  rm app-versions.properties
+if [ -f app-version-collaudo-evolutivo.sh ]; then
+  rm app-version-collaudo-evolutivo.sh
 fi
 
-python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/file_process.py dependencies.list app-descriptor-template.df app-descriptor.df app-versions.properties
+if [ -f app-version-prod.sh ]; then
+  rm app-version-prod.sh
+fi
 
-# If the file contains #VERSION abort!! Not all dependencies were resolved!!
-# TODO: Falla no se por que
-#TAG_VERSION=$(cat app-descriptor.df | grep '#VERSION' | wc -l)
+python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/file_process.py dependencies.list app-descriptor-template.df app-descriptor.df app-version-collaudo-evolutivo-template.sh app-version-collaudo-evolutivo.sh app-version-prod-template.sh app-version-prod.sh
 
-#if [ "$TAG_VERSION" -ne "0" ]
-#then
-#  echo "Some physical microservices where not resolved!! Existing ..."
-#  exit 1
-#fi
+TAG_VERSION_APP_DESCRIPTOR=$(python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/check_file_version.py app-descriptor.df)
+if [[ $TAG_VERSION_APP_DESCRIPTOR = "true" ]]
+then
+  echo "Some physical microservices where not resolved in app-descriptor.df !! Existing ..."
+  exit 1
+fi
 
+TAG_VERSION_COLLAUDO=$(python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/check_file_version.py app-version-collaudo-evolutivo.sh)
+if [[ $TAG_VERSION_COLLAUDO = "true" ]]
+then
+  echo "Some physical microservices where not resolved in app-version-collaudo-evolutivo.sh !! Existing ..."
+  exit 1
+fi
+
+TAG_VERSION_PROD=$(python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/check_file_version.py app-version-prod.sh)
+if [[ $TAG_VERSION_PROD = "true" ]]
+then
+  echo "Some physical microservices where not resolved in app-version-prod.sh !! Existing ..."
+  exit 1
+fi
 
 echo "DEBUG: app-descriptor created..."
 cat app-descriptor.df
 
-echo "DEBUG: app-versions created..."
-cat app-versions.properties
+echo "DEBUG: app-version-collaudo-evolutivo.sh created..."
+cat app-version-collaudo-evolutivo.sh
 
+echo "DEBUG: app-version-prod.sh created..."
+cat app-version-prod.sh
 
-# If does not exist app-descriptor.df put it in place and push
-#if [ ! -f ${ROOT_FOLDER}/${REPO_RESOURCE}/app-descriptor.df ]; then
-#  echo "DEBUG: app-descriptor did not exist in the repo, adding it ..."
-
-#  cp ${TMPDIR}/${REPO_RESOURCE}/app-descriptor.df ${ROOT_FOLDER}/${REPO_RESOURCE}
-  
-#  cd "${ROOT_FOLDER}/${REPO_RESOURCE}"
-
-#  git add --all
-  
-#  git commit -a -m "[ci skip] Adding app-descriptor.df"
-#else
-  # Check if there are differencies
-#  echo "DEBUG: Checking it there are new versions for the microservices ..."
-  
-#  MD51=$(md5sum app-descriptor.df | awk '{ print $1 }')
-#  MD52=$(md5sum ${ROOT_FOLDER}/${REPO_RESOURCE}/app-descriptor.df | awk '{ print $1 }')
-#  echo "DEBUG: MD51 (new app-descriptor): ${MD51}"
-#  echo "DEBUG: MD52 (old app-descriptor): ${MD52}"
-
-#  if [ "'${MD51}'" == "'${MD52}'" ]; then
-#    echo "DEBUG: There are not new versions for physical microservices, skipping..."
-#  else
-#    echo "DEBUG: There are new versions for the physical microservices, modifiying the app-descriptor.df"
-
-#    mv ${TMPDIR}/${REPO_RESOURCE}/app-descriptor.df ${ROOT_FOLDER}/${REPO_RESOURCE}
-  
-#    cd "${ROOT_FOLDER}/${REPO_RESOURCE}"
-
-#    git add --all
-
-#    git commit -a -m "[ci skip] Replacing app-descriptor.df because there are new version for microservices"
-#  fi
-#fi
-
-rm -Rf cd ${TMPDIR}/${REPO_RESOURCE}
-
-echo "--- Logical Test ---"
+echo "--- Check Logical Release ---"
 echo ""
 
 # Adding values to the next job

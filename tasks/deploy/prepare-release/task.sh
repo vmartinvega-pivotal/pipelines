@@ -49,23 +49,56 @@ mvn versions:resolve-ranges -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
 mvn dependency:list -DexcludeTransitive=true -DoutputFile=dependencies.list -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
 
 # Generate the app-descriptor for the microservice from the template
-python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/file_process.py dependencies.list app-descriptor-template.df app-descriptor.df app-versions.properties
+if [ -f app-descriptor.df ]; then
+  rm app-descriptor.df
+fi
 
+if [ -f app-version-collaudo-evolutivo.sh ]; then
+  rm app-version-collaudo-evolutivo.sh
+fi
 
-echo "DEBUG: Adding the new app-descriptor.df "
+if [ -f app-version-prod.sh ]; then
+  rm app-version-prod.sh
+fi
 
+# Compiles the templates
+python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/file_process.py dependencies.list app-descriptor-template.df app-descriptor.df app-version-collaudo-evolutivo-template.sh app-version-collaudo-evolutivo.sh app-version-prod-template.sh app-version-prod.sh
+
+TAG_VERSION_APP_DESCRIPTOR=$(python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/check_file_version.py app-descriptor.df)
+if [[ $TAG_VERSION_APP_DESCRIPTOR = "true" ]]
+then
+  echo "Some physical microservices where not resolved in app-descriptor.df !! Existing ..."
+  exit 1
+fi
+
+TAG_VERSION_COLLAUDO=$(python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/check_file_version.py app-version-collaudo-evolutivo.sh)
+if [[ $TAG_VERSION_COLLAUDO = "true" ]]
+then
+  echo "Some physical microservices where not resolved in app-version-collaudo-evolutivo.sh !! Existing ..."
+  exit 1
+fi
+
+TAG_VERSION_PROD=$(python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/check_file_version.py app-version-prod.sh)
+if [[ $TAG_VERSION_PROD = "true" ]]
+then
+  echo "Some physical microservices where not resolved in app-version-prod.sh !! Existing ..."
+  exit 1
+fi
+
+echo "DEBUG: Adding the compiled app-descriptor.df "
 cp ${TMPDIR}/${REPO_RESOURCE}/app-descriptor.df ${ROOT_FOLDER}/${REPO_RESOURCE}
   
-echo "DEBUG: Addig the new app-versions.properties"
+echo "DEBUG: Addig the compiled app-version-collaudo-evolutivo.sh"
+cp ${TMPDIR}/${REPO_RESOURCE}/app-version-collaudo-evolutivo.sh ${ROOT_FOLDER}/${REPO_RESOURCE}
 
+echo "DEBUG: Addig the compiled app-version-prod.sh"
+cp ${TMPDIR}/${REPO_RESOURCE}/app-version-prod.sh ${ROOT_FOLDER}/${REPO_RESOURCE}
   
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}"
 
 git add --all
   
-git commit -a -m "[ci skip] Adding all compiled file for the version"
-
-
+git commit -a -m "[ci skip] Adding all compiled files for the version"
 
 rm -Rf cd ${TMPDIR}/${REPO_RESOURCE}
 
