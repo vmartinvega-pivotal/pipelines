@@ -87,29 +87,18 @@ fi
 
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}"
 
-if [ -f app-descriptor.df ]; then
-  rm app-descriptor.df
-fi
-echo "DEBUG: Adding the compiled app-descriptor.df "
-mv ${TMPDIR}/${REPO_RESOURCE}/app-descriptor.df ${ROOT_FOLDER}/${REPO_RESOURCE}
+APP_DESCRIPTOR_DIFERENCIES=$(checkDiferenciesForFilesAndCopyIfNeeded ${TMPDIR}/${REPO_RESOURCE}/app-descriptor.df ${ROOT_FOLDER}/${REPO_RESOURCE}/app-descriptor.df)
+COLLAUDO_EVOLUTIVO_DIFERENCIES=$(checkDiferenciesForFilesAndCopyIfNeeded ${TMPDIR}/${REPO_RESOURCE}/app-version-collaudo-evolutivo.sh ${ROOT_FOLDER}/${REPO_RESOURCE}/app-version-collaudo-evolutivo.sh)
+PROD_DIFERENCIES=$(checkDiferenciesForFilesAndCopyIfNeeded ${TMPDIR}/${REPO_RESOURCE}/app-version-prod.sh ${ROOT_FOLDER}/${REPO_RESOURCE}/app-version-prod.sh)
 
-if [ -f app-version-collaudo-evolutivo.sh ]; then
-  rm app-version-collaudo-evolutivo.sh
-fi  
-echo "DEBUG: Addig the compiled app-version-collaudo-evolutivo.sh"
-mv ${TMPDIR}/${REPO_RESOURCE}/app-version-collaudo-evolutivo.sh ${ROOT_FOLDER}/${REPO_RESOURCE}
-
-if [ -f app-version-prod.sh ]; then
-  rm app-version-prod.sh
-fi
-echo "DEBUG: Addig the compiled app-version-prod.sh"
-mv ${TMPDIR}/${REPO_RESOURCE}/app-version-prod.sh ${ROOT_FOLDER}/${REPO_RESOURCE}
-
-git add --all
+if [[ $THERE_ARE_DIFERENCIES = "true" ]] || [[ $COLLAUDO_EVOLUTIVO_DIFERENCIES = "true" ]] || [[ $PROD_DIFERENCIES = "true" ]]
+then
+  git add --all
   
-git commit -m "[ci skip] Adding all compiled files for the version"
+  git commit -m "[ci skip] Adding all compiled files for the version"
+fi
 
-rm -Rf cd ${TMPDIR}/${REPO_RESOURCE}
+rm -Rf ${TMPDIR}/${REPO_RESOURCE}
 
 echo "--- Prepare Release ---"
 echo ""

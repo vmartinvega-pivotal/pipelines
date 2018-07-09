@@ -7,6 +7,26 @@ set -o pipefail
 
 export TMPDIR=${TMPDIR:-/tmp}
 
+function checkDiferenciesForFilesAndCopyIfNeeded(){
+  FILE_1=$1
+  FILE_2=$2
+
+  if [ -f ${FILE_2} ]; then
+    cp ${FILE_1} ${FILE_2}
+    echo "true"
+  else
+    MD51=$(md5sum ${FILE_1} | awk '{ print $1 }')
+    MD52=$(md5sum ${FILE_2} | awk '{ print $1 }')
+    
+    if [ "'${MD51}'" == "'${MD52}'" ]; then
+      echo "false"
+    else
+      cp ${FILE_1} ${FILE_2}
+      echo "true"
+    fi
+  fi
+}
+
 # Reads a file.properties as the first argument and add it as a environment variable
 function exportKeyValPropertiesForDeploying() {
 	props=$1
