@@ -96,11 +96,11 @@ cp ${TMPDIR}/${REPO_RESOURCE}/app-version-prod.sh ${ROOT_FOLDER}/${REPO_RESOURCE
   
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}"
 
-git add ${ROOT_FOLDER}/${REPO_RESOURCE}/app-descriptor.df
-git add ${ROOT_FOLDER}/${REPO_RESOURCE}/app-version-collaudo-evolutivo.sh
-git add ${ROOT_FOLDER}/${REPO_RESOURCE}/app-version-prod.sh
+git add app-descriptor.df
+git add app-version-collaudo-evolutivo.sh
+git add app-version-prod.sh
   
-git commit -a -m "[ci skip] Adding all compiled files for the version"
+git commit -m "[ci skip] Adding all compiled files for the version"
 
 rm -Rf cd ${TMPDIR}/${REPO_RESOURCE}
 
