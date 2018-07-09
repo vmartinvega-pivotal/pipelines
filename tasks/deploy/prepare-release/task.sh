@@ -87,9 +87,6 @@ fi
 
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}"
 
-echo "Before"
-ls "${ROOT_FOLDER}/${REPO_RESOURCE}"
-
 # Check for differencies for the different compiled files
 APP_DESCRIPTOR_DIFERENCIES=$(checkDiferenciesForFilesAndCopyIfNeeded ${TMPDIR}/${REPO_RESOURCE}/app-descriptor.df ${ROOT_FOLDER}/${REPO_RESOURCE}/app-descriptor.df)
 COLLAUDO_EVOLUTIVO_DIFERENCIES=$(checkDiferenciesForFilesAndCopyIfNeeded ${TMPDIR}/${REPO_RESOURCE}/app-version-collaudo-evolutivo.sh ${ROOT_FOLDER}/${REPO_RESOURCE}/app-version-collaudo-evolutivo.sh)
@@ -97,16 +94,17 @@ PROD_DIFERENCIES=$(checkDiferenciesForFilesAndCopyIfNeeded ${TMPDIR}/${REPO_RESO
 
 if [[ $THERE_ARE_DIFERENCIES = "true" ]] || [[ $COLLAUDO_EVOLUTIVO_DIFERENCIES = "true" ]] || [[ $PROD_DIFERENCIES = "true" ]]
 then
-  echo "After"
-  ls "${ROOT_FOLDER}/${REPO_RESOURCE}"  
-
   echo "DEBUG: Updating compiled files for the new version ..."
 
   git add --all
   
   git commit -m "[ci skip] Adding all compiled files for the version"
+
+  export ADDED_NEW_LOGICAL_RELEASE="true"
 else
   echo "DEBUG: The compiled files have not been modified!!"
+  
+  export ADDED_NEW_LOGICAL_RELEASE="false"
 fi
 
 rm -Rf ${TMPDIR}/${REPO_RESOURCE}

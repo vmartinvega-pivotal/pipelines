@@ -33,13 +33,13 @@ git config --global http.sslVerify false
 git config --global user.name "${GIT_NAME}"
 git config --global user.email "${GIT_EMAIL}"
 
-#if [[ ${PASSED_LOGICAL_SERVICE_NEW_VERSION} = "true" ]]
-#then
+if [[ ${ADDED_NEW_LOGICAL_RELEASE} = "true" ]]
+then
   echo "Maven release"
   git checkout -f ${CURRENT_BRANCH} 
 
   mvn --batch-mode release:clean release:prepare release:perform -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}" -Dresume=false -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE} -DscmCommentPrefix="[ci skip]"
-#fi
+fi
 
 echo "--- Logical Release ---"
 echo ""
