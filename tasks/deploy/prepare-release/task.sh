@@ -87,12 +87,21 @@ fi
 
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}"
 
+if [ -f app-descriptor.df ]; then
+  rm app-descriptor.df
+fi
 echo "DEBUG: Adding the compiled app-descriptor.df "
 mv ${TMPDIR}/${REPO_RESOURCE}/app-descriptor.df ${ROOT_FOLDER}/${REPO_RESOURCE}
-  
+
+if [ -f app-version-collaudo-evolutivo.sh ]; then
+  rm app-version-collaudo-evolutivo.sh
+fi  
 echo "DEBUG: Addig the compiled app-version-collaudo-evolutivo.sh"
 mv ${TMPDIR}/${REPO_RESOURCE}/app-version-collaudo-evolutivo.sh ${ROOT_FOLDER}/${REPO_RESOURCE}
 
+if [ -f app-version-prod.sh ]; then
+  rm app-version-prod.sh
+fi
 echo "DEBUG: Addig the compiled app-version-prod.sh"
 mv ${TMPDIR}/${REPO_RESOURCE}/app-version-prod.sh ${ROOT_FOLDER}/${REPO_RESOURCE}
 
