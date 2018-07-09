@@ -17,6 +17,9 @@ function checkDiferenciesForFilesAndCopyIfNeeded(){
   else
     MD51=$(md5sum ${FILE_1} | awk '{ print $1 }')
     MD52=$(md5sum ${FILE_2} | awk '{ print $1 }')
+ 
+    echo ${MD51}
+    echo ${MD52}
     
     if [ "'${MD51}'" == "'${MD52}'" ]; then
       echo "false"
