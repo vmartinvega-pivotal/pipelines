@@ -87,7 +87,7 @@ fi
 
 # Compiled scripts to deploy
 chmod +x id.sh
-chmod +x app-version-collaudo-evolutivo
+chmod +x app-version-collaudo-evolutivo.sh
 chmod +x micro-collaudo-evolutivo.sh
 
 ./id.sh script app-version-collaudo-evolutivo.sh micro-collaudo-evolutivo.sh
