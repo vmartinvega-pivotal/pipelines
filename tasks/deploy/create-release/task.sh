@@ -33,7 +33,7 @@ git config --global http.sslVerify false
 git config --global user.name "${GIT_NAME}"
 git config --global user.email "${GIT_EMAIL}"
 
-if [[ ${ADDED_NEW_LOGICAL_RELEASE} = "true" ]]
+if [[ ${PASSED_NEW_LOGICAL_RELEASE} = "true" ]]
 then
   echo "Maven release"
   git checkout -f ${CURRENT_BRANCH} 

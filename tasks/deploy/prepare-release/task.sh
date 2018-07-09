@@ -100,11 +100,11 @@ then
   
   git commit -m "[ci skip] Adding all compiled files for the version"
 
-  export ADDED_NEW_LOGICAL_RELEASE="true"
+  export PASSED_NEW_LOGICAL_RELEASE="true"
 else
   echo "DEBUG: The compiled files have not been modified!!"
   
-  export ADDED_NEW_LOGICAL_RELEASE="false"
+  export PASSED_NEW_LOGICAL_RELEASE="false"
 fi
 
 rm -Rf ${TMPDIR}/${REPO_RESOURCE}
