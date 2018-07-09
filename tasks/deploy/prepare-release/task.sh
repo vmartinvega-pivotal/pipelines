@@ -85,6 +85,13 @@ then
   exit 1
 fi
 
+# Compiled scripts to deploy
+chmod +x id.sh
+chmod +x app-version-collaudo-evolutivo
+chmod +x micro-collaudo-evolutivo.sh
+
+./id.sh script app-version-collaudo-evolutivo.sh micro-collaudo-evolutivo.sh
+
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}"
 
 # Check for differencies for the different compiled files
@@ -92,7 +99,13 @@ APP_DESCRIPTOR_DIFERENCIES=$(checkDiferenciesForFilesAndCopyIfNeeded ${TMPDIR}/$
 COLLAUDO_EVOLUTIVO_DIFERENCIES=$(checkDiferenciesForFilesAndCopyIfNeeded ${TMPDIR}/${REPO_RESOURCE}/app-version-collaudo-evolutivo.sh ${ROOT_FOLDER}/${REPO_RESOURCE}/app-version-collaudo-evolutivo.sh)
 PROD_DIFERENCIES=$(checkDiferenciesForFilesAndCopyIfNeeded ${TMPDIR}/${REPO_RESOURCE}/app-version-prod.sh ${ROOT_FOLDER}/${REPO_RESOURCE}/app-version-prod.sh)
 
-if [[ $THERE_ARE_DIFERENCIES = "true" ]] || [[ $COLLAUDO_EVOLUTIVO_DIFERENCIES = "true" ]] || [[ $PROD_DIFERENCIES = "true" ]]
+CREATE_COLLAUDO_EVOLUTIVO_DIFERENCIES=$(checkDiferenciesForFilesAndCopyIfNeeded ${TMPDIR}/${REPO_RESOURCE}/create-collaudo-evolutivo.df ${ROOT_FOLDER}/${REPO_RESOURCE}/create.df)
+
+DEPLOY_COLLAUDO_EVOLUTIVO_DIFERENCIES=$(checkDiferenciesForFilesAndCopyIfNeeded ${TMPDIR}/${REPO_RESOURCE}/deploy-collaudo-evolutivo.df ${ROOT_FOLDER}/${REPO_RESOURCE}/deploy.df)
+
+DESTROY_COLLAUDO_EVOLUTIVO_DIFERENCIES=$(checkDiferenciesForFilesAndCopyIfNeeded ${TMPDIR}/${REPO_RESOURCE}/destroy-collaudo-evolutivo.df ${ROOT_FOLDER}/${REPO_RESOURCE}/destroy.df)
+
+if [[ $THERE_ARE_DIFERENCIES = "true" ]] || [[ $COLLAUDO_EVOLUTIVO_DIFERENCIES = "true" ]] || [[ $PROD_DIFERENCIES = "true" ]] || [[ $CREATE_COLLAUDO_EVOLUTIVO_DIFERENCIES = "true" ]] || [[ $DEPLOY_COLLAUDO_EVOLUTIVO_DIFERENCIES = "true" ]] || [[ $DESTROY_COLLAUDO_EVOLUTIVO_DIFERENCIES = "true" ]]
 then
   echo "DEBUG: Updating compiled files for the new version ..."
 
