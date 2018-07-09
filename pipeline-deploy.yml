@@ -179,6 +179,9 @@ jobs:
     file: tools/tasks/deploy/create-release/task.yml
     params:
       <<: *common-git-params
+      SONAR_BRANCH: ((sonar-branch))
+      USERNAME: ((github-username))
+      PASSWORD: ((github-password))
   - put: keyval
     params:
       file: keyvalout/keyval.properties
