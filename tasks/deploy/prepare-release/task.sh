@@ -105,9 +105,7 @@ fi
 echo "DEBUG: Addig the compiled app-version-prod.sh"
 mv ${TMPDIR}/${REPO_RESOURCE}/app-version-prod.sh ${ROOT_FOLDER}/${REPO_RESOURCE}
 
-git add app-descriptor.df
-git add app-version-collaudo-evolutivo.sh
-git add app-version-prod.sh
+git add --all
   
 git commit -m "[ci skip] Adding all compiled files for the version"
 
