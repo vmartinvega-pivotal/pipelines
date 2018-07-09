@@ -22,7 +22,11 @@ source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/source-all.sh
 # Add properties as environment variables
 exportKeyValProperties
 
-cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
+# Copy all contents for the repo to a new location
+cp -r ${ROOT_FOLDER}/${REPO_RESOURCE} ${TMPDIR}
+
+# Change location
+cd ${TMPDIR}/${REPO_RESOURCE}
 
 echo "--- Check Logical Release ---"
 
@@ -78,6 +82,10 @@ cat app-version-collaudo-evolutivo.sh
 
 echo "DEBUG: app-version-prod.sh created..."
 cat app-version-prod.sh
+
+cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
+
+rm -Rf ${TMPDIR}/${REPO_RESOURCE}
 
 echo "--- Check Logical Release ---"
 echo ""
