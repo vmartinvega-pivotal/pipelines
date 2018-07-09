@@ -56,7 +56,7 @@ jobs:
       trigger: true
   - task: setting-up-environment
     privileged: true
-    file: tools/tasks/deploy/settingup-environment/task.yml
+    file: tools/tasks/deploy/do-nothing/task.yml
     params:
       <<: *common-pcf-params
       NEXUS_USERNAME_FOR_SCDF: ((nexus-username-for-scdf))

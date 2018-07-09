@@ -38,7 +38,7 @@ if __name__ == "__main__":
                     template_line = "(.+?):" + line_tf_match.group(4) + ":jar:(.+?):compile" 
                     app_name = line_tf_match.group(1).upper() + "_" + line_tf_match.group(2).upper().replace('-', '_') + "_VERSION" 
                     
-                    print("Dependency line found: " + line)
+                    #print("Dependency line found: " + line)
 
                     with open(listfile) as lf:
                          # Search template line in the dependencies list file
