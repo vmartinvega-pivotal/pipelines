@@ -105,7 +105,7 @@ DEPLOY_COLLAUDO_EVOLUTIVO_DIFERENCIES=$(checkDiferenciesForFilesAndCopyIfNeeded 
 
 DESTROY_COLLAUDO_EVOLUTIVO_DIFERENCIES=$(checkDiferenciesForFilesAndCopyIfNeeded ${TMPDIR}/${REPO_RESOURCE}/destroy.df ${ROOT_FOLDER}/${REPO_RESOURCE}/destroy-collaudo-evolutivo.df)
 
-if [[ $THERE_ARE_DIFERENCIES = "true" ]] || [[ $COLLAUDO_EVOLUTIVO_DIFERENCIES = "true" ]] || [[ $PROD_DIFERENCIES = "true" ]] || [[ $CREATE_COLLAUDO_EVOLUTIVO_DIFERENCIES = "true" ]] || [[ $DEPLOY_COLLAUDO_EVOLUTIVO_DIFERENCIES = "true" ]] || [[ $DESTROY_COLLAUDO_EVOLUTIVO_DIFERENCIES = "true" ]]
+if [[ $APP_DESCRIPTOR_DIFERENCIES = "true" ]] || [[ $COLLAUDO_EVOLUTIVO_DIFERENCIES = "true" ]] || [[ $PROD_DIFERENCIES = "true" ]] || [[ $CREATE_COLLAUDO_EVOLUTIVO_DIFERENCIES = "true" ]] || [[ $DEPLOY_COLLAUDO_EVOLUTIVO_DIFERENCIES = "true" ]] || [[ $DESTROY_COLLAUDO_EVOLUTIVO_DIFERENCIES = "true" ]]
 then
   echo "DEBUG: Updating compiled files for the new version ..."
 

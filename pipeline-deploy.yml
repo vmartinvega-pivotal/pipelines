@@ -15,6 +15,17 @@ resources:
     - app-version-prod.sh
     - create-collaudo-evolutivo.df
     - deploy-collaudo-evolutivo.df
+    - destroy-collaudo-evolutivo.df
+
+- name: repoput
+  type: git
+  source:
+    uri: ((app-url))
+    branch: ((app-branch))
+    username: ((github-username))
+    password: ((github-password))
+    skip_ssl_verification: true
+    disable_ci_skip: false
 
 - name: tools
   type: git
@@ -166,7 +177,7 @@ jobs:
   - put: keyval
     params:
       file: keyvalout/keyval.properties
-  - put: repo
+  - put: repoput
     params:
       repository: out
 
