@@ -194,7 +194,6 @@ jobs:
   - task: create-release
     privileged: true
     file: tools/tasks/deploy/create-release/task.yml
-    input_mappings: {repo: repoput}
     params:
       <<: *common-git-params
       SONAR_BRANCH: ((sonar-branch))
