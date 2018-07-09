@@ -85,6 +85,8 @@ then
   exit 1
 fi
 
+cd "${ROOT_FOLDER}/${REPO_RESOURCE}"
+
 echo "DEBUG: Adding the compiled app-descriptor.df "
 mv ${TMPDIR}/${REPO_RESOURCE}/app-descriptor.df ${ROOT_FOLDER}/${REPO_RESOURCE}
   
@@ -93,8 +95,6 @@ mv ${TMPDIR}/${REPO_RESOURCE}/app-version-collaudo-evolutivo.sh ${ROOT_FOLDER}/$
 
 echo "DEBUG: Addig the compiled app-version-prod.sh"
 mv ${TMPDIR}/${REPO_RESOURCE}/app-version-prod.sh ${ROOT_FOLDER}/${REPO_RESOURCE}
-  
-cd "${ROOT_FOLDER}/${REPO_RESOURCE}"
 
 git add app-descriptor.df
 git add app-version-collaudo-evolutivo.sh
