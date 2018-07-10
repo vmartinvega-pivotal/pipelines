@@ -13,6 +13,7 @@ resources:
     - app-descriptor.df
     - app-version-collaudo-evolutivo.sh
     - app-version-prod.sh
+    - app-version-systemtest.sh
     - create-collaudo-evolutivo.df
     - deploy-collaudo-evolutivo.df
     - destroy-collaudo-evolutivo.df

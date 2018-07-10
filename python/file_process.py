@@ -10,8 +10,8 @@ if __name__ == "__main__":
 
   try:
       #Check argument number
-      if len(sys.argv) > 8 or len(sys.argv) < 8:
-          print("Invalid argument number. Usage: file_process.py list_file(path) template_file(path) output_file(path) template_collaudo_file(path) template_collaudo_file_output(path) template_prod_file(path) template_prod_file_output(path)")
+      if len(sys.argv) > 10 or len(sys.argv) < 10:
+          print("Invalid argument number. Usage: file_process.py list_file(path) template_file(path) output_file(path) template_collaudo_file(path) template_collaudo_file_output(path) template_prod_file(path) template_prod_file_output(path) template_systemtest_file(path) template_systemtest_file_output(path)")
           sys.exit()
 
       listfile = str(sys.argv[1])
@@ -21,12 +21,17 @@ if __name__ == "__main__":
       output_collaudo_file = str(sys.argv[5])
       template_prod_file = str(sys.argv[6])
       output_prod_file = str(sys.argv[7])
+      template_systemtest_file = str(sys.argv[8])
+      output_systemtest_file = str(sys.argv[9])
 
       temporary_template_collaudo_file = template_collaudo_file
       output_collaudo_temp_name = "/tmp/" + str(uuid.uuid4())[:8]
 
       temporary_template_prod_file = template_prod_file
       output_prod_temp_name = "/tmp/" + str(uuid.uuid4())[:8]
+
+      temporary_template_systemtest_file = template_systemtest_file
+      output_systemtest_temp_name = "/tmp/" + str(uuid.uuid4())[:8]
 
 
       # Open and get through it line by line
@@ -85,6 +90,23 @@ if __name__ == "__main__":
                                       output_prod_temp_name = "/tmp/" + str(uuid.uuid4())[:8]
                                  #-- PRODUCTION TEMPLATE
 
+                                 #-- SYSTEMTEST TEMPLATE
+                                 with open(temporary_template_systemtest_file) as tstf:
+                                      for line_tstf in tstf:
+                                           line_tstf_match = re.search(app_name.strip() + "=\"#VERSION#\"", line_tstf)
+                                           if line_tstf_match:
+                                                with open(output_systemtest_temp_name, 'a') as outputsystemtestfile:
+                                                     outputsystemtestfile.write(app_name.strip() + "=\"" + version + "\"" '\n')
+                                           else:
+                                                with open(output_systemtest_temp_name, 'a') as outputsystemtestfile:
+                                                     outputsystemtestfile.write(line_tstf)                
+                                      if not tstf.closed:
+                                           tstf.close()
+
+                                      temporary_template_systemtest_file = output_systemtest_temp_name
+                                      output_systemtest_temp_name = "/tmp/" + str(uuid.uuid4())[:8]
+                                 #-- SYSTEMTEST TEMPLATE
+
                          # Close files
                          if not lf.closed:
                              lf.close()
@@ -111,6 +133,14 @@ if __name__ == "__main__":
                      outputprodfile.write(line_opf)
            if not opf.closed:
                 opf.close()               
+
+      #-- SYSTEMTEST OUTPUT
+      with open(temporary_template_systemtest_file) as ostf:
+           for line_ostf in ostf:
+                with open(output_systemtest_file, 'a') as outputsystemtestfile:
+                     outputsystemtestfile.write(line_ostf)
+           if not ostf.closed:
+                ostf.close() 
 
   except Exception as e:
       print (e)
