@@ -38,6 +38,17 @@ if __name__ == "__main__":
       #output_systemtest_temp_name = "/tmp/" + str(uuid.uuid4())[:8]
 
 
+      # Creates the output for the files than need to be downloaded from nexus
+      with open(listfile) as lf:
+           regex = "(.+?):(.+?):jar:(.+?):(.+?)"
+           for line_lf in lf:
+                match = re.search(regex, line_lf)
+                if match:
+                     with open(output_maven_binaries_file, 'a') as outputmavenbinariesfile:                                 
+                          outputmavenbinariesfile.write(match.group(1) + ":" + match.group(2) + ":" + match.group(3) + ":jar" '\n')
+      if not lf.closed:
+           lf.close()
+
       # Open and get through it line by line
       with open(templatefile) as tf:
            for line in tf:
@@ -56,10 +67,6 @@ if __name__ == "__main__":
                              line_lf_match = re.search(template_line, line_lf)
                              if line_lf_match:
                                  version = line_lf_match.group(2)
-
-                                 with open(output_maven_binaries_file, 'a') as outputmavenbinariesfile:                                 
-                                      outputmavenbinariesfile.write(line_tf_match.group(1) + ":" + line_tf_match.group(2) + ":" + version + ":jar" '\n')
-                                 
 
                                  with open(resultfile, 'a') as outputfile:
                                       outputfile.write(line_tf_match.group(1) + "." + line_tf_match.group(2) + "=https://" + line_tf_match.group(3) + "/jar/" + line_tf_match.group(4) + "-" + version + ".jar" '\n')
