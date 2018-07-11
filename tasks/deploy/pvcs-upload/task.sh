@@ -36,14 +36,12 @@ cd ${TMPDIR}/${REPO_RESOURCE}
 
 # PVCS Integration, checkout
 echo "checkout pvcs url: ${PVCS_URL}"
-PVCS_PATH=${TMPDIR}/pvcs
-mkdir ${PVCS_PATH} 
+PVCS_PATH=${TMPDIR}/pvcs/vicente_test
+mkdir -p ${PVCS_PATH} 
 cd ${PVCS_PATH}
-svn checkout --username=${PVCS_USERNAME} --password=${PVCS_PASSWORD} ${PVCS_URL}
-cd ${PVCS_CHECKOUTDIR}
-mkdir vicente_test
-cd vicente_test
-pwd
+#svn checkout --username=${PVCS_USERNAME} --password=${PVCS_PASSWORD} ${PVCS_URL}
+#cd ${PVCS_CHECKOUTDIR}
+
 
 # Resolve ranges for the dependencies
 echo "Resolving version ranges"
@@ -68,9 +66,6 @@ done < "maven-binaries-file"
 ls ${TMPDIR}/pvcs/binaries
 
 rm -Rf ${TMPDIR}/${REPO_RESOURCE}
-
-mkdir ${TMPDIR}/pvcs
-cp -r ${ROOT_FOLDER}/${REPO_RESOURCE} ${TMPDIR}/pvcs
 
 echo "--- Pvcs Upload ---"
 echo ""
