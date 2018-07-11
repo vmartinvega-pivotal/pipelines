@@ -44,6 +44,8 @@ mvn dependency:list -DexcludeTransitive=true -DoutputFile=dependencies.list -Dja
 
 python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/file_process.py dependencies.list app-descriptor-template.df app-descriptor.df app-version-collaudo-evolutivo-template.sh app-version-collaudo-evolutivo.sh app-version-prod-template.sh app-version-prod.sh maven-binaries-file
 
+cat maven-binaries-file
+
 # Get all binaries from file to be uploaded to PVCS
 # PVCS Integration, checkout
 echo "checkout pvcs url: ${PVCS_URL}"
