@@ -10,10 +10,10 @@ if __name__ == "__main__":
 
   try:
       #Check argument number
-      #if len(sys.argv) > 12 or len(sys.argv) < 12:
+      #if len(sys.argv) > 11 or len(sys.argv) < 11:
       #    print("Invalid argument number. Usage: file_process.py list_file(path) template_file(path) output_file(path) template_collaudo_file(path) template_collaudo_file_output(path) template_prod_file(path) template_prod_file_output(path) template_systemtest_file(path) template_systemtest_file_output(path) file_maven_binaries(path)")
       #    sys.exit()
-      if len(sys.argv) > 10 or len(sys.argv) < 10:
+      if len(sys.argv) > 9 or len(sys.argv) < 9:
           print("Invalid argument number. Usage: file_process.py list_file(path) template_file(path) output_file(path) template_collaudo_file(path) template_collaudo_file_output(path) template_prod_file(path) template_prod_file_output(path)  file_maven_binaries(path)")
           sys.exit()
 
