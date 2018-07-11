@@ -60,7 +60,6 @@ mkdir ${PVCS_PATH}/binaries
 while IFS= read -r artifact
 do
   mvn org.apache.maven.plugins:maven-dependency-plugin:2.8:get -Dartifact=${artifact} -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE} -Ddest=${PVCS_PATH}/binaries -Dtransitive=false
-fi
 done < "maven-binaries-file"
 
 ls ${PVCS_PATH}/binaries
