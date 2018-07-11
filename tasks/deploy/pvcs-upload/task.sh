@@ -37,9 +37,13 @@ cd ${TMPDIR}/${REPO_RESOURCE}
 # PVCS Integration, checkout
 echo "checkout pvcs url: ${PVCS_URL}"
 PVCS_PATH=${TMPDIR}/pvcs
+mkdir ${PVCS_PATH} 
 cd ${PVCS_PATH}
 svn checkout --username=${PVCS_USERNAME} --password=${PVCS_PASSWORD} ${PVCS_URL}
 cd ${PVCS_CHECKOUTDIR}
+mkdir vicente_test
+cd vicente_test
+pwd
 
 # Resolve ranges for the dependencies
 echo "Resolving version ranges"
@@ -51,10 +55,8 @@ mvn dependency:list -DexcludeTransitive=true -DoutputFile=dependencies.list -Dja
 
 python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/file_process.py dependencies.list app-descriptor-template.df app-descriptor.df app-version-collaudo-evolutivo-template.sh app-version-collaudo-evolutivo.sh app-version-prod-template.sh app-version-prod.sh maven-binaries-file
 
-
-
 # Get all binaries from file to be uploaded to PVCS
-mkdir ${TMPDIR}/pvcs
+
 mkdir ${TMPDIR}/pvcs/binaries
 
 while IFS= read -r artifact
