@@ -219,6 +219,10 @@ jobs:
     file: tools/tasks/deploy/pvcs-upload/task.yml
     params:
       <<: *common-git-params
+      PVCS_URL: ((pvcs-url))
+      PVCS_USERNAME: ((pvcs-username))
+      PVCS_PASSWORD: ((pvcs-password))
+      PVCS_CHECKOUTDIR: ((pvcs-checkoutdir))
   - put: keyval
     params:
       file: keyvalout/keyval.properties
