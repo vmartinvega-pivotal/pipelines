@@ -10,8 +10,8 @@ if __name__ == "__main__":
 
   try:
       #Check argument number
-      if len(sys.argv) > 10 or len(sys.argv) < 10:
-          print("Invalid argument number. Usage: file_process.py list_file(path) template_file(path) output_file(path) template_collaudo_file(path) template_collaudo_file_output(path) template_prod_file(path) template_prod_file_output(path) template_systemtest_file(path) template_systemtest_file_output(path)")
+      if len(sys.argv) > 11 or len(sys.argv) < 11:
+          print("Invalid argument number. Usage: file_process.py list_file(path) template_file(path) output_file(path) template_collaudo_file(path) template_collaudo_file_output(path) template_prod_file(path) template_prod_file_output(path) template_systemtest_file(path) template_systemtest_file_output(path) file_maven_binaries(path)")
           sys.exit()
 
       listfile = str(sys.argv[1])
@@ -23,6 +23,7 @@ if __name__ == "__main__":
       output_prod_file = str(sys.argv[7])
       template_systemtest_file = str(sys.argv[8])
       output_systemtest_file = str(sys.argv[9])
+      output_maven_binaries_file = str(sys.argv[10])
 
       temporary_template_collaudo_file = template_collaudo_file
       output_collaudo_temp_name = "/tmp/" + str(uuid.uuid4())[:8]
@@ -52,6 +53,10 @@ if __name__ == "__main__":
                              line_lf_match = re.search(template_line, line_lf)
                              if line_lf_match:
                                  version = line_lf_match.group(2)
+
+                                 with open(output_maven_binaries_file, 'a') as outputmavenbinariesfile:                                 
+                                      outputmavenbinariesfile.write(line_tf_match.group(1) + ":" + line_tf_match.group(2) + ":" + version + ":jar" '\n')
+                                 
 
                                  with open(resultfile, 'a') as outputfile:
                                       outputfile.write(line_tf_match.group(1) + "." + line_tf_match.group(2) + "=https://" + line_tf_match.group(3) + "/jar/" + line_tf_match.group(4) + "-" + version + ".jar" '\n')

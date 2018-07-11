@@ -9,7 +9,7 @@ image_resource:
 
 inputs:
   - name: tools
-  - name: repo
+  - name: repoput
   - name: keyval
 
 outputs:
@@ -17,4 +17,4 @@ outputs:
   - name: keyvalout
 
 run:
-  path: tools/tasks/logical/create-release/task.sh
+  path: tools/tasks/deploy/pvcs-upload/task.sh

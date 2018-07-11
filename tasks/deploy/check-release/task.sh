@@ -51,7 +51,7 @@ if [ -f app-version-prod.sh ]; then
   rm app-version-prod.sh
 fi
 
-python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/file_process.py dependencies.list app-descriptor-template.df app-descriptor.df app-version-collaudo-evolutivo-template.sh app-version-collaudo-evolutivo.sh app-version-prod-template.sh app-version-prod.sh
+python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/file_process.py dependencies.list app-descriptor-template.df app-descriptor.df app-version-collaudo-evolutivo-template.sh app-version-collaudo-evolutivo.sh app-version-prod-template.sh app-version-prod.sh maven-binaries-file
 
 TAG_VERSION_APP_DESCRIPTOR=$(python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/check_file_version.py app-descriptor.df)
 if [[ $TAG_VERSION_APP_DESCRIPTOR = "true" ]]

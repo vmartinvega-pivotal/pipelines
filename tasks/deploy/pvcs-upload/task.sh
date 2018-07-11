@@ -1,0 +1,70 @@
+#!/bin/bash
+
+set -e +x
+
+set -o errexit
+set -o errtrace
+set -o pipefail
+
+export ROOT_FOLDER
+ROOT_FOLDER="$( pwd )"
+export REPO_RESOURCE=repoput
+export TOOLS_RESOURCE=tools
+export OUTPUT_RESOURCE=out
+export KEYVALOUTPUT_RESOURCE=keyvalout
+export KEYVAL_RESOURCE=keyval
+
+export TRUST_STORE_FILE=${ROOT_FOLDER}/${TOOLS_RESOURCE}/truststore/${TRUSTSTORE}
+
+# Source all usefull scripts
+source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/source-all.sh
+
+# Add properties as environment variables
+exportKeyValProperties
+
+cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
+
+echo "--- Pvcs Upload ---"
+
+chmod 777 ${TRUST_STORE_FILE}
+
+# Copy all contents for the repo to a new location
+cp -r ${ROOT_FOLDER}/${REPO_RESOURCE} ${TMPDIR}
+
+# Change location
+cd ${TMPDIR}/${REPO_RESOURCE}
+
+# Resolve ranges for the dependencies
+mvn versions:resolve-ranges -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
+
+# Get the dependencies for the logical microservice
+mvn dependency:list -DexcludeTransitive=true -DoutputFile=dependencies.list -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
+
+python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/file_process.py dependencies.list app-descriptor-template.df app-descriptor.df app-version-collaudo-evolutivo-template.sh app-version-collaudo-evolutivo.sh app-version-prod-template.sh app-version-prod.sh maven-binaries-file
+
+# Get all binaries from file to be uploaded to PVCS
+mkdir ${TMPDIR}/pvcs
+mkdir ${TMPDIR}/pvcs/binaries
+
+while IFS= read -r artifact
+do
+  mvn org.apache.maven.plugins:maven-dependency-plugin:2.8:get -Dartifact=${artifact} -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE} -Ddest=${TMPDIR}/pvcs/binaries -Dtransitive=false
+fi
+done < "maven-binaries-file"
+
+ls ${TMPDIR}/pvcs/binaries
+
+rm -Rf ${TMPDIR}/${REPO_RESOURCE}
+
+mkdir ${TMPDIR}/pvcs
+cp -r ${ROOT_FOLDER}/${REPO_RESOURCE} ${TMPDIR}/pvcs
+
+echo "--- Pvcs Upload ---"
+echo ""
+
+# Adding values to the next job
+passKeyValProperties
+
+cp -r "${ROOT_FOLDER}/${REPO_RESOURCE}"/. "${ROOT_FOLDER}/${OUTPUT_RESOURCE}/"
+
+echo "Done!!"

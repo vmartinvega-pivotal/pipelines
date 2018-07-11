@@ -204,6 +204,25 @@ jobs:
     params:
       file: keyvalout/keyval.properties
 
+- name: pvcs-upload
+  public: true
+  plan:
+  - aggregate:
+    - get: tools
+    - get: repoput
+    - get: keyval
+      passed:
+      - create-release
+      trigger: true
+  - task: pvcs-upload
+    privileged: true
+    file: tools/tasks/deploy/pvcs-upload/task.yml
+    params:
+      <<: *common-git-params
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+
 common-git-params: &common-git-params
   BUILD_OPTIONS: ((build-options))
   GIT_EMAIL: ((git-email))
