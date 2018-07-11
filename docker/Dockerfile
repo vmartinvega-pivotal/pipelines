@@ -7,6 +7,11 @@ RUN \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 
+# Install Subversion
+RUN \
+  apt-get update \
+  && apt-get install subversion -y
+
 # Install Java.
 RUN \
   apt-get update \
