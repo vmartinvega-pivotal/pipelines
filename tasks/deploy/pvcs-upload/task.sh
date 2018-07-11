@@ -34,15 +34,6 @@ cp -r ${ROOT_FOLDER}/${REPO_RESOURCE} ${TMPDIR}
 # Change location
 cd ${TMPDIR}/${REPO_RESOURCE}
 
-# PVCS Integration, checkout
-echo "checkout pvcs url: ${PVCS_URL}"
-PVCS_PATH=${TMPDIR}/pvcs/vicente_test
-mkdir -p ${PVCS_PATH} 
-cd ${PVCS_PATH}
-#svn checkout --username=${PVCS_USERNAME} --password=${PVCS_PASSWORD} ${PVCS_URL}
-#cd ${PVCS_CHECKOUTDIR}
-
-
 # Resolve ranges for the dependencies
 echo "Resolving version ranges"
 mvn versions:resolve-ranges -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
@@ -53,17 +44,26 @@ mvn dependency:list -DexcludeTransitive=true -DoutputFile=dependencies.list -Dja
 
 python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/file_process.py dependencies.list app-descriptor-template.df app-descriptor.df app-version-collaudo-evolutivo-template.sh app-version-collaudo-evolutivo.sh app-version-prod-template.sh app-version-prod.sh maven-binaries-file
 
-# Get all binaries from file to be uploaded to PVCS
+cat maven-binaries-file
 
-mkdir ${TMPDIR}/pvcs/binaries
+# Get all binaries from file to be uploaded to PVCS
+# PVCS Integration, checkout
+echo "checkout pvcs url: ${PVCS_URL}"
+PVCS_PATH=${TMPDIR}/pvcs/vicente_test
+mkdir -p ${PVCS_PATH} 
+cd ${PVCS_PATH}
+#svn checkout --username=${PVCS_USERNAME} --password=${PVCS_PASSWORD} ${PVCS_URL}
+#cd ${PVCS_CHECKOUTDIR}
+
+mkdir ${PVCS_PATH}/binaries
 
 while IFS= read -r artifact
 do
-  mvn org.apache.maven.plugins:maven-dependency-plugin:2.8:get -Dartifact=${artifact} -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE} -Ddest=${TMPDIR}/pvcs/binaries -Dtransitive=false
+  mvn org.apache.maven.plugins:maven-dependency-plugin:2.8:get -Dartifact=${artifact} -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE} -Ddest=${PVCS_PATH}/binaries -Dtransitive=false
 fi
 done < "maven-binaries-file"
 
-ls ${TMPDIR}/pvcs/binaries
+ls ${PVCS_PATH}/binaries
 
 rm -Rf ${TMPDIR}/${REPO_RESOURCE}
 
