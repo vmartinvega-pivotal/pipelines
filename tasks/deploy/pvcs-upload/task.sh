@@ -36,11 +36,11 @@ cd ${TMPDIR}/${REPO_RESOURCE}
 
 # Resolve ranges for the dependencies
 echo "Resolving version ranges"
-mvn versions:resolve-ranges -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
+mvn versions:resolve-ranges -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE} -Dtransitive=false
 
 # Get the dependencies for the logical microservice
 echo "Creationg dependency list file"
-mvn dependency:list -DexcludeTransitive=true -DoutputFile=dependencies.list -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
+mvn dependency:list -DexcludeTransitive=true -DoutputFile=dependencies.list -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE} -Dtransitive=false
 
 python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/file_process.py dependencies.list app-descriptor-template.df app-descriptor.df app-version-collaudo-evolutivo-template.sh app-version-collaudo-evolutivo.sh app-version-prod-template.sh app-version-prod.sh maven-binaries-file
 
