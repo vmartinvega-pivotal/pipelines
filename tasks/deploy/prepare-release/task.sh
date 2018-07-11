@@ -61,12 +61,8 @@ if [ -f app-version-prod.sh ]; then
   rm app-version-prod.sh
 fi
 
-if [ -f app-version-systemtest.sh ]; then
-  rm app-version-systemtest.sh
-fi
-
 # Compiles the templates
-python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/file_process.py dependencies.list app-descriptor-template.df app-descriptor.df app-version-collaudo-evolutivo-template.sh app-version-collaudo-evolutivo.sh app-version-prod-template.sh app-version-prod.sh app-version-systemtest-template.sh app-version-systemtest.sh
+python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/file_process.py dependencies.list app-descriptor-template.df app-descriptor.df app-version-collaudo-evolutivo-template.sh app-version-collaudo-evolutivo.sh app-version-prod-template.sh app-version-prod.sh maven-binaries-file
 
 TAG_VERSION_APP_DESCRIPTOR=$(python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/check_file_version.py app-descriptor.df)
 if [[ $TAG_VERSION_APP_DESCRIPTOR = "true" ]]
@@ -89,13 +85,6 @@ then
   exit 1
 fi
 
-TAG_VERSION_SYSTEMTEST=$(python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/check_file_version.py app-version-systemtest.sh)
-if [[ $TAG_VERSION_SYSTEMTEST = "true" ]]
-then
-  echo "Some physical microservices where not resolved in app-version-systemtest.sh !! Existing ..."
-  exit 1
-fi
-
 # Compiled scripts to deploy, create and destroy.df for collaudo evolutivo
 chmod +x id.sh
 chmod +x app-version-collaudo-evolutivo.sh
@@ -109,7 +98,6 @@ cd "${ROOT_FOLDER}/${REPO_RESOURCE}"
 APP_DESCRIPTOR_DIFERENCIES=$(checkDiferenciesForFilesAndCopyIfNeeded ${TMPDIR}/${REPO_RESOURCE}/app-descriptor.df ${ROOT_FOLDER}/${REPO_RESOURCE}/app-descriptor.df)
 COLLAUDO_EVOLUTIVO_DIFERENCIES=$(checkDiferenciesForFilesAndCopyIfNeeded ${TMPDIR}/${REPO_RESOURCE}/app-version-collaudo-evolutivo.sh ${ROOT_FOLDER}/${REPO_RESOURCE}/app-version-collaudo-evolutivo.sh)
 PROD_DIFERENCIES=$(checkDiferenciesForFilesAndCopyIfNeeded ${TMPDIR}/${REPO_RESOURCE}/app-version-prod.sh ${ROOT_FOLDER}/${REPO_RESOURCE}/app-version-prod.sh)
-SYSTEMTEST_DIFERENCIES=$(checkDiferenciesForFilesAndCopyIfNeeded ${TMPDIR}/${REPO_RESOURCE}/app-version-systemtest.sh ${ROOT_FOLDER}/${REPO_RESOURCE}/app-version-systemtest.sh)
 
 CREATE_COLLAUDO_EVOLUTIVO_DIFERENCIES=$(checkDiferenciesForFilesAndCopyIfNeeded ${TMPDIR}/${REPO_RESOURCE}/create.df ${ROOT_FOLDER}/${REPO_RESOURCE}/create-collaudo-evolutivo.df)
 
@@ -117,7 +105,7 @@ DEPLOY_COLLAUDO_EVOLUTIVO_DIFERENCIES=$(checkDiferenciesForFilesAndCopyIfNeeded 
 
 DESTROY_COLLAUDO_EVOLUTIVO_DIFERENCIES=$(checkDiferenciesForFilesAndCopyIfNeeded ${TMPDIR}/${REPO_RESOURCE}/destroy.df ${ROOT_FOLDER}/${REPO_RESOURCE}/destroy-collaudo-evolutivo.df)
 
-if [[ $APP_DESCRIPTOR_DIFERENCIES = "true" ]] || [[ $COLLAUDO_EVOLUTIVO_DIFERENCIES = "true" ]] || [[ $PROD_DIFERENCIES = "true" ]] || [[ $CREATE_COLLAUDO_EVOLUTIVO_DIFERENCIES = "true" ]] || [[ $DEPLOY_COLLAUDO_EVOLUTIVO_DIFERENCIES = "true" ]] || [[ $DESTROY_COLLAUDO_EVOLUTIVO_DIFERENCIES = "true" ]] || [[ $SYSTEMTEST_DIFERENCIES = "true" ]]
+if [[ $APP_DESCRIPTOR_DIFERENCIES = "true" ]] || [[ $COLLAUDO_EVOLUTIVO_DIFERENCIES = "true" ]] || [[ $PROD_DIFERENCIES = "true" ]] || [[ $CREATE_COLLAUDO_EVOLUTIVO_DIFERENCIES = "true" ]] || [[ $DEPLOY_COLLAUDO_EVOLUTIVO_DIFERENCIES = "true" ]] || [[ $DESTROY_COLLAUDO_EVOLUTIVO_DIFERENCIES = "true" ]]
 then
   echo "DEBUG: Updating compiled files for the new version ..."
 
