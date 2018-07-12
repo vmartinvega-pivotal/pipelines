@@ -236,7 +236,7 @@ jobs:
     - get: keyval
       passed:
       - pvcs-upload
-      trigger: true
+      trigger: false
   - task: deploy-to-collaudo
     privileged: true
     file: tools/tasks/deploy/deploy-to-collaudo/task.yml
