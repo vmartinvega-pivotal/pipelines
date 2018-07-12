@@ -44,8 +44,6 @@ mvn dependency:list -DexcludeTransitive=true -DoutputFile=dependencies.list -Dja
 
 python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/file_process.py dependencies.list app-descriptor-template.df app-descriptor.df app-version-collaudo-evolutivo-template.sh app-version-collaudo-evolutivo.sh app-version-prod-template.sh app-version-prod.sh maven-binaries-file
 
-cat maven-binaries-file
-
 # Get all binaries from file to be uploaded to PVCS
 # PVCS Integration, checkout
 echo "checkout pvcs url: ${PVCS_URL}"
@@ -57,12 +55,10 @@ cd ${PVCS_PATH}
 
 mkdir ${PVCS_PATH}/binaries
 
-while IFS= read -r artifact
-do
-  mvn org.apache.maven.plugins:maven-dependency-plugin:2.8:get -Dartifact=${artifact} -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE} -Ddest=${PVCS_PATH}/binaries -Dtransitive=false
-done < "${TMPDIR}/${REPO_RESOURCE}/maven-binaries-file"
-
-ls ${PVCS_PATH}/binaries
+#while IFS= read -r artifact
+#do
+#  mvn org.apache.maven.plugins:maven-dependency-plugin:2.8:get -Dartifact=${artifact} -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE} -Ddest=${PVCS_PATH}/binaries -Dtransitive=false
+#done < "${TMPDIR}/${REPO_RESOURCE}/maven-binaries-file"
 
 rm -Rf ${TMPDIR}/${REPO_RESOURCE}
 

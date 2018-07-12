@@ -227,6 +227,25 @@ jobs:
     params:
       file: keyvalout/keyval.properties
 
+- name: deploy-to-collaudo
+  public: true
+  plan:
+  - aggregate:
+    - get: tools
+    - get: repoput
+    - get: keyval
+      passed:
+      - pvcs-upload
+      trigger: true
+  - task: deploy-to-collaudo
+    privileged: true
+    file: tools/tasks/deploy/do-nothing/task.yml
+    params:
+      <<: *common-git-params
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+
 common-git-params: &common-git-params
   BUILD_OPTIONS: ((build-options))
   GIT_EMAIL: ((git-email))
