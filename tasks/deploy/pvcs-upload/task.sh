@@ -39,7 +39,7 @@ if [[ ${PASSED_NEW_LOGICAL_RELEASE} = "true" ]]
 then
 
   # Gets the release created previously
-  git checkout ${PASSED_TAG_RELEASED_CREATED}
+  git checkout "${PASSED_TAG_RELEASED_CREATED}"
 
   # Get all binaries from file to be uploaded to PVCS
   echo "checkout pvcs url: ${PVCS_URL}"
@@ -53,7 +53,7 @@ then
 
   #while IFS= read -r artifact
   #do
-#   mvn org.apache.maven.plugins:maven-dependency-plugin:2.8:get -Dartifact=${artifact} -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE} -Ddest=${PVCS_PATH}/binaries -  Dtransitive=false
+   #mvn org.apache.maven.plugins:maven-dependency-plugin:2.8:get -Dartifact=${artifact} -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE} -Ddest=${PVCS_PATH}/binaries -  Dtransitive=false
   #done < "${TMPDIR}/${REPO_RESOURCE}/maven-binaries-file"
 fi
 
