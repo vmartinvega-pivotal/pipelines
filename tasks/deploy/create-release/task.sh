@@ -43,7 +43,7 @@ then
   # Gets the release created
   TAG=$(git describe --tags $(git rev-list --tags --max-count=1))
 
-  export PASSED_TAG_RELEASED_CREATED = ${TAG}
+  export PASSED_TAG_RELEASED_CREATED=${TAG}
 fi
 
 echo "--- Logical Release ---"
