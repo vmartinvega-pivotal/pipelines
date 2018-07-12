@@ -30,9 +30,8 @@ echo "--- Pvcs Upload ---"
 # If a new release was created
 if [[ ${PASSED_NEW_LOGICAL_RELEASE} = "true" ]]
 then
-
   # Gets the release created previously
-  git checkout "${PASSED_TAG_RELEASED_CREATED}"
+  git checkout -f "${PASSED_TAG_RELEASED_CREATED}"
 
   # Get all binaries from file to be uploaded to PVCS
   echo "checkout pvcs url: ${PVCS_URL}"
