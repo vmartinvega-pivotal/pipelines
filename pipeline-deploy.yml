@@ -239,7 +239,7 @@ jobs:
       trigger: true
   - task: deploy-to-collaudo
     privileged: true
-    file: tools/tasks/deploy/do-nothing/task.yml
+    file: tools/tasks/deploy/deploy-to-collaudo/task.yml
     params:
       <<: *common-git-params
   - put: keyval
