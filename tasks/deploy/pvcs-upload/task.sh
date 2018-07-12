@@ -27,6 +27,11 @@ cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
 echo "--- Pvcs Upload ---"
 
+git config --global http.sslKey "${HOME}/.gitprivatekey/privatekey"
+git config --global http.sslVerify false
+git config --global user.name "${GIT_NAME}"
+git config --global user.email "${GIT_EMAIL}"
+
 # If a new release was created
 if [[ ${PASSED_NEW_LOGICAL_RELEASE} = "true" ]]
 then

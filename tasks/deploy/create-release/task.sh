@@ -15,6 +15,7 @@ export KEYVALOUTPUT_RESOURCE=keyvalout
 export KEYVAL_RESOURCE=keyval
 
 export TRUST_STORE_FILE=${ROOT_FOLDER}/${TOOLS_RESOURCE}/truststore/${TRUSTSTORE}
+chmod 777 ${TRUST_STORE_FILE}
 
 # Source all usefull scripts
 source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/source-all.sh
@@ -25,8 +26,6 @@ exportKeyValProperties
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
 echo "--- Logical Release ---"
-
-chmod 777 ${TRUST_STORE_FILE}
 
 git config --global http.sslKey "${HOME}/.gitprivatekey/privatekey"
 git config --global http.sslVerify false
