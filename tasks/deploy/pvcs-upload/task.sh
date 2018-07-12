@@ -30,6 +30,8 @@ echo "--- Pvcs Upload ---"
 # If a new release was created
 if [[ ${PASSED_NEW_LOGICAL_RELEASE} = "true" ]]
 then
+  git fetch
+
   # Gets the release created previously
   git checkout -f "${PASSED_TAG_RELEASED_CREATED}"
 
