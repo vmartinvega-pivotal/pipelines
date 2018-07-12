@@ -15,6 +15,7 @@ export KEYVALOUTPUT_RESOURCE=keyvalout
 export KEYVAL_RESOURCE=keyval
 
 export TRUST_STORE_FILE=${ROOT_FOLDER}/${TOOLS_RESOURCE}/truststore/${TRUSTSTORE}
+chmod 777 ${TRUST_STORE_FILE}
 
 # Source all usefull scripts
 source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/source-all.sh
@@ -25,14 +26,6 @@ exportKeyValProperties
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
 echo "--- Pvcs Upload ---"
-
-chmod 777 ${TRUST_STORE_FILE}
-
-# Copy all contents for the repo to a new location
-cp -r ${ROOT_FOLDER}/${REPO_RESOURCE} ${TMPDIR}
-
-# Change location
-cd ${TMPDIR}/${REPO_RESOURCE}
 
 # If a new release was created
 if [[ ${PASSED_NEW_LOGICAL_RELEASE} = "true" ]]
@@ -56,8 +49,6 @@ then
    #mvn org.apache.maven.plugins:maven-dependency-plugin:2.8:get -Dartifact=${artifact} -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE} -Ddest=${PVCS_PATH}/binaries -  Dtransitive=false
   #done < "${TMPDIR}/${REPO_RESOURCE}/maven-binaries-file"
 fi
-
-rm -Rf ${TMPDIR}/${REPO_RESOURCE}
 
 echo "--- Pvcs Upload ---"
 echo ""
