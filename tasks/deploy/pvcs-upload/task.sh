@@ -34,31 +34,28 @@ cp -r ${ROOT_FOLDER}/${REPO_RESOURCE} ${TMPDIR}
 # Change location
 cd ${TMPDIR}/${REPO_RESOURCE}
 
-# Resolve ranges for the dependencies
-echo "Resolving version ranges"
-mvn versions:resolve-ranges -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
+# If a new release was created
+if [[ ${PASSED_NEW_LOGICAL_RELEASE} = "true" ]]
+then
 
-# Get the dependencies for the logical microservice
-echo "Creationg dependency list file"
-mvn dependency:list -DexcludeTransitive=true -DoutputFile=dependencies.list -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
+  # Gets the release created previously
+  git checkout ${PASSED_TAG_RELEASED_CREATED}
 
-python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/file_process.py dependencies.list app-descriptor-template.df app-descriptor.df app-version-collaudo-evolutivo-template.sh app-version-collaudo-evolutivo.sh app-version-prod-template.sh app-version-prod.sh maven-binaries-file
+  # Get all binaries from file to be uploaded to PVCS
+  echo "checkout pvcs url: ${PVCS_URL}"
+  PVCS_PATH=${TMPDIR}/pvcs/vicente_test
+  mkdir -p ${PVCS_PATH} 
+  cd ${PVCS_PATH}
+  #svn checkout --username=${PVCS_USERNAME} --password=${PVCS_PASSWORD} ${PVCS_URL}
+  #cd ${PVCS_CHECKOUTDIR}
 
-# Get all binaries from file to be uploaded to PVCS
-# PVCS Integration, checkout
-echo "checkout pvcs url: ${PVCS_URL}"
-PVCS_PATH=${TMPDIR}/pvcs/vicente_test
-mkdir -p ${PVCS_PATH} 
-cd ${PVCS_PATH}
-#svn checkout --username=${PVCS_USERNAME} --password=${PVCS_PASSWORD} ${PVCS_URL}
-#cd ${PVCS_CHECKOUTDIR}
+  mkdir ${PVCS_PATH}/binaries
 
-mkdir ${PVCS_PATH}/binaries
-
-#while IFS= read -r artifact
-#do
-#  mvn org.apache.maven.plugins:maven-dependency-plugin:2.8:get -Dartifact=${artifact} -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE} -Ddest=${PVCS_PATH}/binaries -Dtransitive=false
-#done < "${TMPDIR}/${REPO_RESOURCE}/maven-binaries-file"
+  #while IFS= read -r artifact
+  #do
+#   mvn org.apache.maven.plugins:maven-dependency-plugin:2.8:get -Dartifact=${artifact} -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE} -Ddest=${PVCS_PATH}/binaries -  Dtransitive=false
+  #done < "${TMPDIR}/${REPO_RESOURCE}/maven-binaries-file"
+fi
 
 rm -Rf ${TMPDIR}/${REPO_RESOURCE}
 

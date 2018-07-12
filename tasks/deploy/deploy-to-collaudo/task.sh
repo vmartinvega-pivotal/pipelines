@@ -15,6 +15,7 @@ export KEYVALOUTPUT_RESOURCE=keyvalout
 export KEYVAL_RESOURCE=keyval
 
 export TRUST_STORE_FILE=${ROOT_FOLDER}/${TOOLS_RESOURCE}/truststore/${TRUSTSTORE}
+chmod 777 ${TRUST_STORE_FILE}
 
 # Source all usefull scripts
 source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/source-all.sh
@@ -26,8 +27,15 @@ cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
 echo "--- Deploy to Collaudo ---"
 
-chmod 777 ${TRUST_STORE_FILE}
+# If a new release was created
+if [[ ${PASSED_NEW_LOGICAL_RELEASE} = "true" ]]
+then
 
+  # Gets the release created previously
+  git checkout ${PASSED_TAG_RELEASED_CREATED}
+
+  echo "DEBUG: Version to be deployed: " ${PASSED_TAG_RELEASED_CREATED}
+fi
 
 echo "--- Deploy to Collaudo ---"
 echo ""

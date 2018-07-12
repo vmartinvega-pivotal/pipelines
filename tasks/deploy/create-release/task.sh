@@ -39,6 +39,11 @@ then
   git checkout -f ${CURRENT_BRANCH} 
 
   mvn --batch-mode release:clean release:prepare release:perform -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}" -Dresume=false -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE} -DscmCommentPrefix="[ci skip]"
+  
+  # Gets the release created
+  TAG=$(git describe --tags $(git rev-list --tags --max-count=1))
+
+  export PASSED_TAG_RELEASED_CREATED = ${TAG}
 fi
 
 echo "--- Logical Release ---"
