@@ -30,6 +30,7 @@ echo "--- Pvcs Upload ---"
 # If a new release was created
 if [[ ${PASSED_NEW_LOGICAL_RELEASE} = "true" ]]
 then
+  mkdir /root/.subversion
   cp ${ROOT_FOLDER}/${TOOLS_RESOURCE}/subversion/servers /root/.subversion/servers
   # Get all binaries from file to be uploaded to PVCS
   echo "checkout pvcs url: ${PVCS_URL}"
