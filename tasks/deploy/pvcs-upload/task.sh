@@ -43,16 +43,6 @@ then
   fi
   mkdir ${FOLDER_TO_WORK}
   cd ${FOLDER_TO_WORK}
-  
-  # Add logical scripts
-  if [ -f ${FOLDER_TO_WORK}/logical ]; then
-    rm -Rf ${FOLDER_TO_WORK}/logical
-  fi
-  mkdir ${FOLDER_TO_WORK}/logical
-
-  cp -R ${ROOT_FOLDER}/${REPO_RESOURCE} ${FOLDER_TO_WORK}
-  mv ${FOLDER_TO_WORK}/${REPO_RESOURCE} ${FOLDER_TO_WORK}/logical
-  rm -Rf ${FOLDER_TO_WORK}/logical/.git
 
   svn add --force ${FOLDER_TO_WORK}
 
