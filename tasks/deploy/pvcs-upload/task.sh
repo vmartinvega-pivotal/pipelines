@@ -30,8 +30,6 @@ echo "--- Pvcs Upload ---"
 # If a new release was created
 if [[ ${PASSED_NEW_LOGICAL_RELEASE} = "true" ]]
 then
-  mkdir /root/.subversion
-  #cp ${ROOT_FOLDER}/${TOOLS_RESOURCE}/subversion/servers /root/.subversion/servers
   # Get all binaries from file to be uploaded to PVCS
   echo "checkout pvcs url: ${PVCS_URL}"
   PVCS_PATH=${TMPDIR}/pvcs/vicente_test
@@ -42,12 +40,21 @@ then
   #eval $(${COMMAND})
   cd ${PVCS_CHECKOUTDIR}
 
-  mkdir ${PVCS_PATH}/binaries
+  if [ -f app-version-collaudo-evolutivo.sh ]; then
+    rm -Rf ${PVCS_PATH}/logical
+  fi
+  mkdir ${PVCS_PATH}/logical
+
+  cp -R ${ROOT_FOLDER}/${REPO_RESOURCE} ${PVCS_PATH}/logical
+
+  #mkdir ${PVCS_PATH}/binaries
 
   #while IFS= read -r artifact
   #do
    #mvn org.apache.maven.plugins:maven-dependency-plugin:2.8:get -Dartifact=${artifact} -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE} -Ddest=${PVCS_PATH}/binaries -  Dtransitive=false
   #done < "${TMPDIR}/${REPO_RESOURCE}/maven-binaries-file"
+
+  svn commit -m "Logical microservice version ${PASSED_TAG_RELEASED_CREATED}"
 fi
 
 echo "--- Pvcs Upload ---"
