@@ -30,6 +30,7 @@ echo "--- Pvcs Upload ---"
 # If a new release was created
 if [[ ${PASSED_NEW_LOGICAL_RELEASE} = "true" ]]
 then
+  echo "store-plaintext-passwords = no" >> /root/.subversion/servers
   # Get all binaries from file to be uploaded to PVCS
   echo "checkout pvcs url: ${PVCS_URL}"
   PVCS_PATH=${TMPDIR}/pvcs/vicente_test
