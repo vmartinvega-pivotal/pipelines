@@ -43,6 +43,7 @@ then
   fi
   mkdir ${FOLDER_TO_WORK}
   cd ${FOLDER_TO_WORK}
+  touch prueba
 
   svn add --force ${FOLDER_TO_WORK}
 
