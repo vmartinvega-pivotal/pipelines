@@ -36,7 +36,7 @@ chmod 777 ${TRUST_STORE_FILE}
 mvn versions:resolve-ranges -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
 
 # Get the dependencies for the logical microservice
-mvn -s ${ROOT_FOLDER}/${TOOLS_RESOURCE}/settings.xml dependency:list -DexcludeTransitive=true -DoutputFile=dependencies.list -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
+mvn dependency:list -DexcludeTransitive=true -DoutputFile=dependencies.list -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
 
 # Generate the app-descriptor for the microservice from the template
 if [ -f app-descriptor.df ]; then
