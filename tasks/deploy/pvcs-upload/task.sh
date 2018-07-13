@@ -31,17 +31,13 @@ echo "--- Pvcs Upload ---"
 if [[ ${PASSED_NEW_LOGICAL_RELEASE} = "true" ]]
 then
   mkdir /root/.subversion
-  cp ${ROOT_FOLDER}/${TOOLS_RESOURCE}/subversion/servers /root/.subversion/servers
+  #cp ${ROOT_FOLDER}/${TOOLS_RESOURCE}/subversion/servers /root/.subversion/servers
   # Get all binaries from file to be uploaded to PVCS
   echo "checkout pvcs url: ${PVCS_URL}"
   PVCS_PATH=${TMPDIR}/pvcs/vicente_test
   mkdir -p ${PVCS_PATH} 
   cd ${PVCS_PATH}
-  #echo ${PVCS_USERNAME}
-  #echo ${PVCS_PASSWORD}
-  #svn help checkout
-  COMMAND="svn checkout --username=${PVCS_USERNAME} --password=${PVCS_PASSWORD} ${PVCS_URL}"
-  svn checkout --username=${PVCS_USERNAME} --password=${PVCS_PASSWORD} ${PVCS_URL}
+  svn checkout --config-option servers:global:store-plaintext-passwords=no --username=${PVCS_USERNAME} --password=${PVCS_PASSWORD} ${PVCS_URL}
   #echo ${COMMAND}
   #eval $(${COMMAND})
   cd ${PVCS_CHECKOUTDIR}
