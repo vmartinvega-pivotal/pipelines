@@ -39,8 +39,8 @@ then
   cd ${PVCS_PATH}
   echo ${PVCS_USERNAME}
   echo ${PVCS_PASSWORD}
-  svn help checkout
-  svn checkout --username="${PVCS_USERNAME}" --password="${PVCS_PASSWORD}" ${PVCS_URL}
+  #svn help checkout
+  svn checkout --username=X1017391 --password=Tkr!pt0nM ${PVCS_URL}
   cd ${PVCS_CHECKOUTDIR}
 
   mkdir ${PVCS_PATH}/binaries
