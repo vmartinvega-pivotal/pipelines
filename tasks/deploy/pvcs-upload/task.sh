@@ -37,12 +37,13 @@ then
   PVCS_PATH=${TMPDIR}/pvcs/vicente_test
   mkdir -p ${PVCS_PATH} 
   cd ${PVCS_PATH}
-  echo ${PVCS_USERNAME}
-  echo ${PVCS_PASSWORD}
+  #echo ${PVCS_USERNAME}
+  #echo ${PVCS_PASSWORD}
   #svn help checkout
   COMMAND="svn checkout --username=${PVCS_USERNAME} --password=${PVCS_PASSWORD} ${PVCS_URL}"
-  echo ${COMMAND}
-  eval $(${COMMAND})
+  svn checkout --username=${PVCS_USERNAME} --password=${PVCS_PASSWORD} ${PVCS_URL}
+  #echo ${COMMAND}
+  #eval $(${COMMAND})
   cd ${PVCS_CHECKOUTDIR}
 
   mkdir ${PVCS_PATH}/binaries
