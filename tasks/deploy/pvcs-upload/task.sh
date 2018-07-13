@@ -37,6 +37,8 @@ then
   PVCS_PATH=${TMPDIR}/pvcs/vicente_test
   mkdir -p ${PVCS_PATH} 
   cd ${PVCS_PATH}
+  echo ${PVCS_USERNAME}
+  echo ${PVCS_PASSWORD}
   svn checkout --username=${PVCS_USERNAME} --password=${PVCS_PASSWORD} ${PVCS_URL}
   #cd ${PVCS_CHECKOUTDIR}
 
