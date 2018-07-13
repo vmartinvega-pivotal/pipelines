@@ -30,17 +30,12 @@ echo "--- Pvcs Upload ---"
 # If a new release was created
 if [[ ${PASSED_NEW_LOGICAL_RELEASE} = "true" ]]
 then
-  cat pom.xml  
-
-  # Gets the release created previously
-  git checkout -f "${PASSED_TAG_RELEASED_CREATED}"
-
   # Get all binaries from file to be uploaded to PVCS
   echo "checkout pvcs url: ${PVCS_URL}"
   PVCS_PATH=${TMPDIR}/pvcs/vicente_test
   mkdir -p ${PVCS_PATH} 
   cd ${PVCS_PATH}
-  #svn checkout --username=${PVCS_USERNAME} --password=${PVCS_PASSWORD} ${PVCS_URL}
+  svn checkout --username=${PVCS_USERNAME} --password=${PVCS_PASSWORD} ${PVCS_URL}
   #cd ${PVCS_CHECKOUTDIR}
 
   mkdir ${PVCS_PATH}/binaries
