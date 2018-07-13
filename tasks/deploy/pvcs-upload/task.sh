@@ -39,6 +39,7 @@ then
   cd ${PVCS_PATH}
   echo ${PVCS_USERNAME}
   echo ${PVCS_PASSWORD}
+  svn help checkout
   svn checkout --username=${PVCS_USERNAME} --password=${PVCS_PASSWORD} ${PVCS_URL}
   #cd ${PVCS_CHECKOUTDIR}
 
