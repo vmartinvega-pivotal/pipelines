@@ -49,6 +49,7 @@ exportKeyValPropertiesForDeploying apps-version.env
 envsubst < app-descriptor-aux.df > app-descriptor-aux1.df
 rm app-descriptor-aux.df
 
+# Remove comillas 
 sed -e 's|["'\'']||g' app-descriptor-aux1.df > app-descriptor.df
 rm app-descriptor-aux1.df
 
