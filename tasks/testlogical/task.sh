@@ -11,6 +11,7 @@ ROOT_FOLDER="$( pwd )"
 export REPO_RESOURCE=repo
 export TOOLS_RESOURCE=tools
 export OUTPUT_RESOURCE=out
+export CONFIG_RESOURCE=config
 export KEYVALOUTPUT_RESOURCE=keyvalout
 export KEYVAL_RESOURCE=keyval
 
@@ -51,10 +52,19 @@ echo "--- APP-DESCRIPTOR.DF CREATED ---"
 cat app-descriptor.df
 echo "--- APP-DESCRIPTOR.DF CREATED ---"
 
+#TODO: Check differencies for app-descriptor.df file
+mv app-descriptor.df ${ROOT_FOLDER}/${REPO_RESOURCE}
+
 echo ""
 echo "--- APPS-VERSION.ENV CREATED ---"
 cat apps-version.env
 echo "--- APPS-VERSION.ENV CREATED ---"
+
+#TODO: Check differencies for apps-version.env file
+mv apps-version.env ${ROOT_FOLDER}/${REPO_RESOURCE}
+
+rm -Rf ${TMPDIR}/${REPO_RESOURCE}
+cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
 echo ""
 echo "--- CREATING COMPILED FILES FOR COLLAUDO"
@@ -62,8 +72,6 @@ echo "--- CREATING COMPILED FILES FOR COLLAUDO"
 
 echo "--- Test Logical ---"
 echo ""
-
-rm -Rf ${TMPDIR}/${REPO_RESOURCE}
 
 # Adding values to the next job
 passKeyValProperties
