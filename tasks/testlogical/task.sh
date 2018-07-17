@@ -39,6 +39,14 @@ mvn versions:resolve-ranges -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
 # Get the dependencies for the logical microservice
 mvn dependency:list -DexcludeTransitive=true -DoutputFile=dependencies.list -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
 
+if [ -f apps-version.env ]; then
+    rm apps-version.env
+fi
+
+if [ -f app-descriptor.df ]; then
+    rm app-descriptor.df
+fi
+
 python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/file_process.py dependencies.list app-descriptor-template.df app-descriptor-aux.df apps-version-template.env apps-version.env
 
 cat dependencies.list
@@ -74,7 +82,7 @@ cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
 echo ""
 echo "--- CREATING COMPILED FILES FOR COLLAUDO EVOLUTIVO"
-#./microservice.sh ../config/collaudo-evolutivo.env microservice.env script
+/microservice.sh ../config/collaudo-evolutivo.env microservice.env script
 
 echo "--- Test Logical ---"
 echo ""
