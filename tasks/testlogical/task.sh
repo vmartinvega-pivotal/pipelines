@@ -82,7 +82,7 @@ cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
 echo ""
 echo "--- CREATING COMPILED FILES FOR COLLAUDO EVOLUTIVO"
-/microservice.sh ../config/collaudo-evolutivo.env microservice.env script
+./microservice.sh ../config/collaudo-evolutivo.env microservice.env script
 
 echo "--- Test Logical ---"
 echo ""
