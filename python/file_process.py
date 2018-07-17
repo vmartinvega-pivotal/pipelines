@@ -9,8 +9,8 @@ import uuid
 if __name__ == "__main__":
 
   try:
-      if len(sys.argv) > 7 or len(sys.argv) < 7:
-          print("Invalid argument number. Usage: file_process.py list_file(path) appdescriptor_template_file(path) appdescriptor_file(path) apps_versions_template_file(path) apps_versions_file(path) file_maven_binaries(path)")
+      if len(sys.argv) > 6 or len(sys.argv) < 6:
+          print("Invalid argument number. Usage: file_process.py list_file(path) appdescriptor_template_file(path) appdescriptor_file(path) apps_versions_template_file(path) apps_versions_file(path)")
           sys.exit()
 
       listfile = str(sys.argv[1])
@@ -18,22 +18,9 @@ if __name__ == "__main__":
       resultfile = str(sys.argv[3])
       apps_versions_template_file = str(sys.argv[4])
       apps_versions_file = str(sys.argv[5])
-      output_maven_binaries_file = str(sys.argv[6])
 
       temporary_app_versions_template_file = apps_versions_template_file
       output_app_versions_temp_name = "/tmp/" + str(uuid.uuid4())[:8]
-
-
-      # Creates the output for the files than need to be downloaded from nexus
-      with open(listfile) as lf:
-           regex = "(.+?):(.+?):jar:(.+?):(.+?)"
-           for line_lf in lf:
-                match = re.search(regex, line_lf)
-                if match:
-                     with open(output_maven_binaries_file, 'a') as outputmavenbinariesfile:                                 
-                          outputmavenbinariesfile.write(match.group(1) + ":" + match.group(2) + ":" + match.group(3) + ":jar" '\n')
-      if not lf.closed:
-           lf.close()
 
       # Open and get through it line by line
       with open(templatefile) as tf:

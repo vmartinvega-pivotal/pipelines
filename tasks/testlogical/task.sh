@@ -38,24 +38,32 @@ mvn versions:resolve-ranges -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
 # Get the dependencies for the logical microservice
 mvn dependency:list -DexcludeTransitive=true -DoutputFile=dependencies.list -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
 
-python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/file_process.py dependencies.list app-descriptor-template.df app-descriptor-aux.df apps-version-template.env apps-version.env maven-binaries-file
+python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/file_process.py dependencies.list app-descriptor-template.df app-descriptor-aux.df apps-version-template.env apps-version.env
 
+chmod +s apps-version.env
 exportKeyValPropertiesForDeploying apps-version.env
 
 envsubst < app-descriptor-aux.df > app-descriptor.df
-
 rm app-descriptor-aux.df
 
+echo ""
 echo "--- APP-DESCRIPTOR.DF CREATED ---"
 cat app-descriptor.df
 echo "--- APP-DESCRIPTOR.DF CREATED ---"
 
+echo ""
 echo "--- APPS-VERSION.ENV CREATED ---"
 cat apps-version.env
 echo "--- APPS-VERSION.ENV CREATED ---"
 
+echo ""
+echo "--- CREATING COMPILED FILES FOR COLLAUDO"
+./microservice.sh ../config/prod.env microservice.env script
+
 echo "--- Test Logical ---"
 echo ""
+
+rm -Rf ${TMPDIR}/${REPO_RESOURCE}
 
 # Adding values to the next job
 passKeyValProperties
