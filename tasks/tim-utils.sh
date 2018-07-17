@@ -38,8 +38,12 @@ function exportKeyValPropertiesForDeploying() {
 	  do
 	    if [ ! -z "${var}" ]
 	    then
-	      echo "Adding: ${var}"
-	      export "$var"
+              if [[ "${var}" =~ ^#.* ]]; then
+                echo "Skipping line ${var}"
+              else
+	        echo "Adding: ${var}"
+	        export "$var"
+              fi
 	    fi
 	  done < "${props}"
 	fi
