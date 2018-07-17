@@ -43,7 +43,7 @@ python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/file_process.py dependencies.list
 
 cat dependencies.list
 
-chmod +s apps-version.env
+chmod +x apps-version.env
 exportKeyValPropertiesForDeploying apps-version.env
 
 envsubst < app-descriptor-aux.df > app-descriptor-aux1.df
@@ -74,7 +74,7 @@ cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
 echo ""
 echo "--- CREATING COMPILED FILES FOR COLLAUDO EVOLUTIVO"
-./microservice.sh ../config/collaudo-evolutivo.env microservice.env script
+#./microservice.sh ../config/collaudo-evolutivo.env microservice.env script
 
 echo "--- Test Logical ---"
 echo ""
