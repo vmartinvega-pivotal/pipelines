@@ -46,7 +46,13 @@ envsubst < app-descriptor-aux.df > app-descriptor.df
 
 rm app-descriptor-aux.df
 
+echo "--- APP-DESCRIPTOR.DF CREATED ---"
 cat app-descriptor.df
+echo "--- APP-DESCRIPTOR.DF CREATED ---"
+
+echo "--- APPS-VERSION.ENV CREATED ---"
+cat apps-version.env
+echo "--- APPS-VERSION.ENV CREATED ---"
 
 echo "--- Test Logical ---"
 echo ""
