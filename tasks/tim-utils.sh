@@ -93,6 +93,7 @@ function getUrlArtifact(){
   echo ${RESULT}
 }
 
+
 # Converts a string to lower case
 function toLowerCase() {
   echo "$1" | tr '[:upper:]' '[:lower:]'

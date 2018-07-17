@@ -46,8 +46,11 @@ cat dependencies.list
 chmod +s apps-version.env
 exportKeyValPropertiesForDeploying apps-version.env
 
-envsubst < app-descriptor-aux.df > app-descriptor.df
+envsubst < app-descriptor-aux.df > app-descriptor-aux1.df
 rm app-descriptor-aux.df
+
+sed -e 's|["'\'']||g' app-descriptor-aux1.df > app-descriptor.df
+rm app-descriptor-aux1.df
 
 echo ""
 echo "--- APP-DESCRIPTOR.DF CREATED ---"
