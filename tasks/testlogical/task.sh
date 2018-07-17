@@ -67,8 +67,8 @@ rm -Rf ${TMPDIR}/${REPO_RESOURCE}
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
 echo ""
-echo "--- CREATING COMPILED FILES FOR COLLAUDO"
-./microservice.sh ../config/prod.env microservice.env script
+echo "--- CREATING COMPILED FILES FOR COLLAUDO EVOLUTIVO"
+./microservice.sh ../config/collaudo-evolutivo.env microservice.env script
 
 echo "--- Test Logical ---"
 echo ""
