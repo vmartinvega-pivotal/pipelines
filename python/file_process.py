@@ -9,15 +9,16 @@ import uuid
 if __name__ == "__main__":
 
   try:
-      if len(sys.argv) > 6 or len(sys.argv) < 6:
-          print("Invalid argument number. Usage: file_process.py list_file(path) template_file(path) apps_versions_template_file(path) apps_versions_file(path) file_maven_binaries(path)")
+      if len(sys.argv) > 7 or len(sys.argv) < 7:
+          print("Invalid argument number. Usage: file_process.py list_file(path) appdescriptor_template_file(path) appdescriptor_file(path) apps_versions_template_file(path) apps_versions_file(path) file_maven_binaries(path)")
           sys.exit()
 
       listfile = str(sys.argv[1])
       templatefile = str(sys.argv[2])
-      apps_versions_template_file = str(sys.argv[3])
-      apps_versions_file = str(sys.argv[4])
-      output_maven_binaries_file = str(sys.argv[5])
+      resultfile = str(sys.argv[3])
+      apps_versions_template_file = str(sys.argv[4])
+      apps_versions_file = str(sys.argv[5])
+      output_maven_binaries_file = str(sys.argv[6])
 
       temporary_app_versions_template_file = apps_versions_template_file
       output_app_versions_temp_name = "/tmp/" + str(uuid.uuid4())[:8]
@@ -53,8 +54,8 @@ if __name__ == "__main__":
                              if line_lf_match: 
                                  version = line_lf_match.group(2)
                      
-                                 #with open(resultfile, 'a') as outputfile:
-                                      #outputfile.write(line_tf_match.group(1) + "." + line_tf_match.group(2) + "=https://" + line_tf_match.group(3) + "/jar/" + line_tf_match.group(4) + "-" + version + ".jar" '\n')
+                                 with open(resultfile, 'a') as outputfile:
+                                      outputfile.write(line_tf_match.group(1) + "." + line_tf_match.group(2) + "=maven://" + line_tf_match.group(3) + ":" + line_tf_match.group(4) + ":" + "${" + app_name + "}" + '\n')
                                                              
                                  #-- APPS VERSION TEMPLATE
                                  with open(temporary_app_versions_template_file) as avf:
@@ -76,9 +77,9 @@ if __name__ == "__main__":
                          # Close files
                          if not lf.closed:
                              lf.close()
-               #else:
-                   #with open(resultfile, 'a') as outputfile:
-                       #outputfile.write(line)
+               else:
+                   with open(resultfile, 'a') as outputfile:
+                       outputfile.write(line)
 
       # Close files
       if not tf.closed:
