@@ -49,7 +49,6 @@ fi
 
 python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/file_process.py dependencies.list app-descriptor-template.df app-descriptor-aux.df apps-version-template.env apps-version.env
 
-cat dependencies.list
 
 chmod +x apps-version.env
 exportKeyValPropertiesForDeploying apps-version.env

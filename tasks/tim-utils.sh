@@ -7,6 +7,68 @@ set -o pipefail
 
 export TMPDIR=${TMPDIR:-/tmp}
 
+function prepareScriptsToDeploy(){
+  # Resolve ranges for the dependencies
+  mvn versions:resolve-ranges -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
+
+  # Get the dependencies for the logical microservice
+  mvn dependency:list -DexcludeTransitive=true -DoutputFile=dependencies.list -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
+
+  # Generate the app-descriptor for the microservice from the template
+  if [ -f app-descriptor.df ]; then
+    rm app-descriptor.df
+  fi
+
+  if [ -f apps-version.env ]; then
+    rm apps-version.env
+  fi
+
+  if [ -f compiled ]; then
+    rm -Rf compiled
+  fi
+
+  python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/file_process.py dependencies.list app-descriptor-template.df app-descriptor-aux.df apps-version-template.env apps-version.env
+
+  chmod +x apps-version.env
+  exportKeyValPropertiesForDeploying apps-version.env
+
+  envsubst < app-descriptor-aux.df > app-descriptor-aux1.df
+  rm app-descriptor-aux.df
+
+  # Remove comillas 
+  sed -e 's|["'\'']||g' app-descriptor-aux1.df > app-descriptor.df
+  rm app-descriptor-aux1.df
+
+  TAG_VERSION_APP_DESCRIPTOR=$(python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/check_file_version.py app-descriptor.df)
+  if [[ $TAG_VERSION_APP_DESCRIPTOR = "true" ]]
+  then
+    echo "Some physical microservices where not resolved in app-descriptor.df !! Existing ..."
+    exit 1
+  fi
+
+  echo "DEBUG: app-descriptor created..."
+  cat app-descriptor.df
+
+  echo "DEBUG: apps-version.env created..."
+  cat apps-version.env
+
+  echo ""
+  echo "--- CREATING COMPILED FILES FOR COLLAUDO EVOLUTIVO"
+  ./microservice.sh ../config/collaudo-evolutivo.env microservice.env script
+
+  echo ""
+  echo "--- CREATING COMPILED FILES FOR COLLAUDO CONSOLIDATO"
+  ./microservice.sh ../config/collaudo-consolidato.env microservice.env script
+
+  echo ""
+  echo "--- CREATING COMPILED FILES FOR PROD"
+  ./microservice.sh ../config/collaudo-consolidato.env microservice.env script
+
+  echo ""
+  echo "--- CREATING COMPILED FILES FOR DEV1"
+  ./microservice.sh ../config/dev1.env microservice.env script
+}
+
 function checkDiferenciesForFilesAndCopyIfNeeded(){
   FILE_1=$1
   FILE_2=$2

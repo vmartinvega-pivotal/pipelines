@@ -23,19 +23,15 @@ source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/source-all.sh
 # Add properties as environment variables
 exportKeyValProperties
 
-cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
+echo "--- Deploy Streams ---"
 
-echo "--- Prepare Release ---"
+prepareScriptsToDeploy
 
-mvn --batch-mode release:clean release:prepare -DdryRun=true -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Drelease.arguments=" -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}" -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
+# DEPLOY STREAMS
 
-cp pom.xml.next pom.xml.backup
+# DEPLOY STREAMS
 
-mvn release:clean -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
-
-mvn versions:resolve-ranges -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
-
-echo "--- Prepare Release ---"
+echo "--- Deploy Streams ---"
 echo ""
 
 # Adding values to the next job

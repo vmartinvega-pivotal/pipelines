@@ -8,7 +8,7 @@ set -o pipefail
 
 export ROOT_FOLDER
 ROOT_FOLDER="$( pwd )"
-export REPO_RESOURCE=repo
+export REPO_RESOURCE=repoput1
 export TOOLS_RESOURCE=tools
 export OUTPUT_RESOURCE=out
 export KEYVALOUTPUT_RESOURCE=keyvalout
@@ -25,17 +25,18 @@ exportKeyValProperties
 
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
-echo "--- Prepare Release ---"
+echo "--- Create Release ---"
 
-mvn --batch-mode release:clean release:prepare -DdryRun=true -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Drelease.arguments=" -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}" -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
+git config --global http.sslKey "${HOME}/.gitprivatekey/privatekey"
+git config --global http.sslVerify false
+git config --global user.name "${GIT_NAME}"
+git config --global user.email "${GIT_EMAIL}"
 
-cp pom.xml.next pom.xml.backup
+git checkout -f ${CURRENT_BRANCH}
 
-mvn release:clean -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
+mvn --batch-mode release:perform -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}" -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
 
-mvn versions:resolve-ranges -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
-
-echo "--- Prepare Release ---"
+echo "--- Create Release ---"
 echo ""
 
 # Adding values to the next job
