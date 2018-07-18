@@ -39,8 +39,6 @@ cp ${ROOT_FOLDER}/${FILES_FROM_STEP1}/pom.xml.releaseBackup .
 cp ${ROOT_FOLDER}/${FILES_FROM_STEP1}/release.properties .
 cp -r ${ROOT_FOLDER}/${FILES_FROM_STEP1}/target .
 
-mvn --batch-mode release:clean release:prepare -DdryRun=true -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}" -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}  -DscmCommentPrefix="[ci skip]" 
-
 mvn --batch-mode release:perform -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}" -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}  -DscmCommentPrefix="[ci skip]" 
 
 echo "--- Create Release ---"
