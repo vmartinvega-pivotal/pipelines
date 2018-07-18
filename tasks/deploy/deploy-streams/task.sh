@@ -28,6 +28,8 @@ echo "--- Deploy Streams ---"
 
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
+cat ../config/collaudo-evolutivo.env
+
 prepareScriptsToDeploy
 
 # DEPLOY STREAMS
