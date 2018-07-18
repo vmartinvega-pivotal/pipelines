@@ -11,6 +11,7 @@ ROOT_FOLDER="$( pwd )"
 export REPO_RESOURCE=repo
 export TOOLS_RESOURCE=tools
 export OUTPUT_RESOURCE=out
+export CONFIG_RESOURCE=config
 export KEYVALOUTPUT_RESOURCE=keyvalout
 export KEYVAL_RESOURCE=keyval
 
@@ -26,6 +27,8 @@ exportKeyValProperties
 echo "--- Deploy Streams ---"
 
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
+
+ls ../${CONFIG_RESOURCE}
 
 prepareScriptsToDeploy
 
