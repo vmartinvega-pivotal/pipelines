@@ -14,7 +14,6 @@ inputs:
   - name: keyval
 
 outputs:
-  - name: out-release-step2
   - name: keyvalout
   - name: out
 
