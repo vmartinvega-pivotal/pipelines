@@ -77,6 +77,25 @@ jobs:
     params:
       file: keyvalout/keyval.properties
 
+- name: soapui-tests
+  public: true
+  plan:
+  - aggregate:
+    - get: tools
+    - get: repo
+    - get: keyval
+      passed:
+      - deploy-streams
+      trigger: true
+  - task: soapui-tests
+    privileged: true
+    file: tools/tasks/deploy/do-nothing/task.yml
+    params:
+      <<: *common-pcf-params
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+
 - name: create-release
   public: true
   plan:
@@ -86,7 +105,7 @@ jobs:
     - get: config
     - get: keyval
       passed:
-      - deploy-streams
+      - soapui-tests
       trigger: true
   - task: prepare-release
     privileged: true
@@ -130,6 +149,29 @@ jobs:
   - put: repo
     params:
       repository: out
+
+- name: pvcs-upload
+  public: true
+  plan:
+  - aggregate:
+    - get: tools
+    - get: repo
+    - get: keyval
+      passed:
+      - create-release
+      trigger: true
+  - task: pvcs-upload
+    privileged: true
+    file: tools/tasks/deploy/pvcs-upload/task.yml
+    params:
+      <<: *common-git-params
+      PVCS_URL: ((pvcs-url))
+      PVCS_USERNAME: ((pvcs-username))
+      PVCS_PASSWORD: ((pvcs-password))
+      PVCS_CHECKOUTDIR: ((pvcs-checkoutdir))
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
 
 common-git-params: &common-git-params
   BUILD_OPTIONS: ((build-options))

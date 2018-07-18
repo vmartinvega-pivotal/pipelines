@@ -8,7 +8,7 @@ set -o pipefail
 
 export ROOT_FOLDER
 ROOT_FOLDER="$( pwd )"
-export REPO_RESOURCE=repoput
+export REPO_RESOURCE=repo
 export TOOLS_RESOURCE=tools
 export OUTPUT_RESOURCE=out
 export KEYVALOUTPUT_RESOURCE=keyvalout
@@ -54,7 +54,7 @@ then
    #mvn org.apache.maven.plugins:maven-dependency-plugin:2.8:get -Dartifact=${artifact} -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE} -Ddest=${PVCS_PATH}/binaries -  Dtransitive=false
   #done < "${TMPDIR}/${REPO_RESOURCE}/maven-binaries-file"
 
-  svn commit -m "Logical microservice version ${PASSED_TAG_RELEASED_CREATED}" --username=${PVCS_USERNAME} --password=${PVCS_PASSWORD}
+  #svn commit -m "Logical microservice version ${PASSED_TAG_RELEASED_CREATED}" --username=${PVCS_USERNAME} --password=${PVCS_PASSWORD}
 fi
 
 echo "--- Pvcs Upload ---"

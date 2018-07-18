@@ -25,9 +25,9 @@ cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 # TODO: Can be the latest version in the git repository or configured!!
 export PASSED_TAG_VERSION_DEPLOYING="V1.0.2"
 
-echo "-- Running SaopUI tests for version ${PASSED_TAG_VERSION_DEPLOYING} and environment ${ENVIRONMENT_DEPLOYING}..."
+echo "-- Running SaopUI tests"
 
-echo "-- Setting up Environment for version ${PASSED_TAG_VERSION_DEPLOYING} and environment ${ENVIRONMENT_DEPLOYING}..."
+echo "-- Running SaopUI tests"
 
 # Adding values to keyvalout
 passKeyValProperties
