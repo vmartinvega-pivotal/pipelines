@@ -44,7 +44,8 @@ git add pom.xml
   
 git commit -m "[ci skip] Adding pom.xml resolved"
 
-git push https://${USERNAME}:${PASSWORD}@gitlab-sdp.telecomitalia.local/demodevops/consistenze-id20.git
+git push https://andrea.lambruschini:zxcdsa01\!@gitlab-sdp.telecomitalia.local/demodevops/consistenze-id20.git --all
+#git push https://${USERNAME}:${PASSWORD}@gitlab-sdp.telecomitalia.local/demodevops/consistenze-id20.git
 
 echo "***************************************Push done!!"
 
@@ -52,17 +53,12 @@ mvn --batch-mode release:clean release:prepare -Dusername=${USERNAME} -Dpassword
 
 echo "***************************************Prepared release!!"
 
-git push https://${USERNAME}:${PASSWORD}@gitlab-sdp.telecomitalia.local/demodevops/consistenze-id20.git
-
-echo "****************+++ DONE PUSH"
-
 mv pom.xml.backup pom.xml
 
 git add pom.xml
 
-Your branch is ahead of 'origin/master' by
-
-git push https://${USERNAME}:${PASSWORD}@gitlab-sdp.telecomitalia.local/demodevops/consistenze-id20.git
+git push https://andrea.lambruschini:zxcdsa01\!@gitlab-sdp.telecomitalia.local/demodevops/consistenze-id20.git --all
+#git push https://${USERNAME}:${PASSWORD}@gitlab-sdp.telecomitalia.local/demodevops/consistenze-id20.git
 
 echo "***************************************Push done!!"
 
