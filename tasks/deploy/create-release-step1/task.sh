@@ -34,6 +34,8 @@ git config --global user.email "${GIT_EMAIL}"
 
 git checkout -f ${CURRENT_BRANCH}
 
+git pull 
+
 mvn --batch-mode release:clean release:prepare -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}" -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}  -DscmCommentPrefix="[ci skip]" 
 
 mv pom.xml.backup pom.xml

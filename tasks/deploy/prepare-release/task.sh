@@ -27,6 +27,10 @@ cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
 echo "--- Prepare Release ---"
 
+# Creates the files to be uploaded
+#TODO: create the app-descriptor.df apps-version.env and compiled files and put them in the right place
+
+
 git config --global http.sslKey "${HOME}/.gitprivatekey/privatekey"
 git config --global http.sslVerify false
 git config --global user.name "${GIT_NAME}"
@@ -44,28 +48,8 @@ git add pom.xml
   
 git commit -m "[ci skip] Adding pom.xml resolved"
 
-#git push https://andrea.lambruschini:zxcdsa01\!@gitlab-sdp.telecomitalia.local/demodevops/consistenze-id20.git --all
-#git push https://${USERNAME}:${PASSWORD}@gitlab-sdp.telecomitalia.local/demodevops/consistenze-id20.git
-
-#echo "***************************************Push done!!"
-
-#mvn --batch-mode release:clean release:prepare -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}" -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}  -DscmCommentPrefix="[ci skip]" 
-
-#echo "***************************************Prepared release!!"
-
-#mv pom.xml.backup pom.xml
-
-#git add pom.xml
-
-#git push https://andrea.lambruschini:zxcdsa01\!@gitlab-sdp.telecomitalia.local/demodevops/consistenze-id20.git --all
-#git push https://${USERNAME}:${PASSWORD}@gitlab-sdp.telecomitalia.local/demodevops/consistenze-id20.git
-
-#echo "***************************************Push done!!"
-
-#mvn --batch-mode release:perform -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}" -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}  -DscmCommentPrefix="[ci skip]" 
-
-#echo "--- Prepare Release ---"
-#echo ""
+echo "--- Prepare Release ---"
+echo ""
 
 # Adding values to the next job
 passKeyValProperties
