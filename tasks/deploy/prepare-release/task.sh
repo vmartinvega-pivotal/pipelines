@@ -27,6 +27,11 @@ cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
 echo "--- Prepare Release ---"
 
+git config --global http.sslKey "${HOME}/.gitprivatekey/privatekey"
+git config --global http.sslVerify false
+git config --global user.name "${GIT_NAME}"
+git config --global user.email "${GIT_EMAIL}"
+
 mvn --batch-mode release:clean release:prepare -DdryRun=true -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Drelease.arguments=" -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}" -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
 
 cp pom.xml.next pom.xml.backup
