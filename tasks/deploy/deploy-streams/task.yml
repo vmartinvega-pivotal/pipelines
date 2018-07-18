@@ -16,4 +16,4 @@ outputs:
   - name: keyvalout
 
 run:
-  path: tools/tasks/deploy/check-release/task.sh
+  path: tools/tasks/deploy/deploy-streams/task.sh
