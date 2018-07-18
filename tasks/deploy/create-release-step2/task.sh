@@ -8,9 +8,10 @@ set -o pipefail
 
 export ROOT_FOLDER
 ROOT_FOLDER="$( pwd )"
-export REPO_RESOURCE=out-release-step1
+export REPO_RESOURCE=repoput
 export TOOLS_RESOURCE=tools
-export OUTPUT_RESOURCE=out-release-step2
+export OUTPUT_RESOURCE=out
+export FILES_FROM_STEP1=out-release-step1
 export KEYVALOUTPUT_RESOURCE=keyvalout
 export KEYVAL_RESOURCE=keyval
 
@@ -32,7 +33,7 @@ git config --global http.sslVerify false
 git config --global user.name "${GIT_NAME}"
 git config --global user.email "${GIT_EMAIL}"
 
-git checkout -f ${CURRENT_BRANCH}
+#TODO: copy files from step 1
 
 mvn --batch-mode release:clean release:prepare -DdryRun=true -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}" -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}  -DscmCommentPrefix="[ci skip]" 
 

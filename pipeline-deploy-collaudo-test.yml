@@ -97,7 +97,7 @@ jobs:
       file: keyvalout/keyval.properties
   - put: repoput
     params:
-      repository: out-preprare-release
+      repository: out
   - task: create-release-step1
     privileged: true
     file: tools/tasks/deploy/create-release-step1/task.yml

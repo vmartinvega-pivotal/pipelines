@@ -9,8 +9,9 @@ image_resource:
 
 inputs:
   - name: tools
-  - name: out-preprare-release
+  - name: repoput
   - name: keyval
+  - name: out-preprare-release
 
 outputs:
   - name: out-release-step1

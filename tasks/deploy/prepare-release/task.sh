@@ -10,9 +10,10 @@ export ROOT_FOLDER
 ROOT_FOLDER="$( pwd )"
 export REPO_RESOURCE=repo
 export TOOLS_RESOURCE=tools
-export OUTPUT_RESOURCE=out-preprare-release
+export OUTPUT_RESOURCE=out
 export KEYVALOUTPUT_RESOURCE=keyvalout
 export KEYVAL_RESOURCE=keyval
+export OUTPUT_FILES=out-preprare-release
 
 export TRUST_STORE_FILE=${ROOT_FOLDER}/${TOOLS_RESOURCE}/truststore/${TRUSTSTORE}
 chmod 777 ${TRUST_STORE_FILE}
@@ -55,5 +56,7 @@ echo ""
 passKeyValProperties
 
 cp -r "${ROOT_FOLDER}/${REPO_RESOURCE}"/. "${ROOT_FOLDER}/${OUTPUT_RESOURCE}/"
+
+cp -r "${ROOT_FOLDER}/${REPO_RESOURCE}"/. "${ROOT_FOLDER}/${OUTPUT_FILES}/"
 
 echo "Done!!"

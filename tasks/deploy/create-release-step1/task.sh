@@ -8,7 +8,8 @@ set -o pipefail
 
 export ROOT_FOLDER
 ROOT_FOLDER="$( pwd )"
-export REPO_RESOURCE=out-preprare-release
+export REPO_RESOURCE=repoput
+export FILES_FROM_PREPARE_RELEASE=out-preprare-release
 export TOOLS_RESOURCE=tools
 export OUTPUT_RESOURCE=out-release-step1
 export KEYVALOUTPUT_RESOURCE=keyvalout
@@ -34,14 +35,11 @@ git config --global user.email "${GIT_EMAIL}"
 
 git checkout -f ${CURRENT_BRANCH}
 
-git pull 
-
 mvn --batch-mode release:clean release:prepare -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}" -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}  -DscmCommentPrefix="[ci skip]" 
 
-mv pom.xml.backup pom.xml
+mv ${FILES_FROM_PREPARE_RELEASE}/pom.xml.backup pom.xml
 
 git add pom.xml
-git add pom.xml.backup
 
 git commit -m "[ci skip] Restoring pom.xml to create the release"
 
