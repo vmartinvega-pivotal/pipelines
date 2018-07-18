@@ -43,7 +43,13 @@ then
   fi
   mkdir ${FOLDER_TO_WORK}
   cd ${FOLDER_TO_WORK}
-  touch prueba
+
+  #TODO: PASSED_TAG_RELEASED_CREATED tiene que venir de un paso anterior
+  PASSED_TAG_RELEASED_CREATED="v1.0.22"
+
+  #TODO: maybe hacer un checkout de la version que se ha creado y subir los archivos que corresponda  
+
+  cp "${ROOT_FOLDER}/${REPO_RESOURCE}"/pom.xml ${FOLDER_TO_WORK} 
 
   svn add --force ${FOLDER_TO_WORK}
 
@@ -54,7 +60,7 @@ then
    #mvn org.apache.maven.plugins:maven-dependency-plugin:2.8:get -Dartifact=${artifact} -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE} -Ddest=${PVCS_PATH}/binaries -  Dtransitive=false
   #done < "${TMPDIR}/${REPO_RESOURCE}/maven-binaries-file"
 
-  #svn commit -m "Logical microservice version ${PASSED_TAG_RELEASED_CREATED}" --username=${PVCS_USERNAME} --password=${PVCS_PASSWORD}
+  svn commit -m "Logical microservice version ${PASSED_TAG_RELEASED_CREATED}" --username=${PVCS_USERNAME} --password=${PVCS_PASSWORD}
 fi
 
 echo "--- Pvcs Upload ---"
