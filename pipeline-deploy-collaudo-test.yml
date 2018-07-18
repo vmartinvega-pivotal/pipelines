@@ -46,6 +46,16 @@ resources:
     skip_ssl_verification: true
     disable_ci_skip: false
 
+- name: repoput1
+  type: git
+  source:
+    uri: ((app-url))
+    branch: ((app-branch))
+    username: ((github-username))
+    password: ((github-password))
+    skip_ssl_verification: true
+    disable_ci_skip: false
+
 - name: keyval
   type: keyval
 
@@ -109,7 +119,7 @@ jobs:
   - put: keyval
     params:
       file: keyvalout/keyval.properties
-  - put: repoput
+  - put: repoput1
     params:
       repository: out
   - task: create-release-step2
