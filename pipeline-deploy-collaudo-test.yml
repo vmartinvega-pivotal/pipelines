@@ -141,6 +141,7 @@ common-git-params: &common-git-params
   M2_SETTINGS_REPO_GIT_SERVER_URL: ((gitlab-server-url))
   M2_SETTINGS_REPO_SONAR_URL: ((sonar-host-url))
   M2_SETTINGS_REPO_SONAR_TOKEN: ((sonar-login-key))
+
 common-pcf-params: &common-pcf-params
   PWS_USER: ((pws-user))
   PWS_PWD: ((pws-pwd))
