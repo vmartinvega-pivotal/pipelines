@@ -89,6 +89,7 @@ jobs:
   - aggregate:
     - get: tools
     - get: repo
+    - get: config
     - get: keyval
       passed:
       - deploy-streams
