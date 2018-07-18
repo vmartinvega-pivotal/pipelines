@@ -43,12 +43,6 @@ git add pom.xml.backup
 
 git commit -m "[ci skip] Restoring pom.xml to create the release"
 
-git push
-
-git pull
-
-mvn --batch-mode release:perform -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}" -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}  -DscmCommentPrefix="[ci skip]"
-
 #if [[ ${PASSED_NEW_LOGICAL_RELEASE} = "true" ]]
 #then
 #  echo "Maven release"

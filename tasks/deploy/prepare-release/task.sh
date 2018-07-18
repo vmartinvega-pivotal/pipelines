@@ -45,6 +45,21 @@ git add pom.xml
   
 git commit -m "[ci skip] Adding pom.xml resolved"
 
+git push https://${USERNAME}:${PASSWORD}@myrepository.biz/gitlab-sdp.telecomitalia.local/demodevops/consistenze-id20.git
+
+mvn --batch-mode release:clean release:prepare -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}" -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}  -DscmCommentPrefix="[ci skip]" 
+
+mv pom.xml.backup pom.xml
+
+git add pom.xml
+git add pom.xml.backup
+
+git commit -m "[ci skip] Restoring pom.xml to create the release"
+
+git push https://${USERNAME}:${PASSWORD}@myrepository.biz/gitlab-sdp.telecomitalia.local/demodevops/consistenze-id20.git
+
+mvn --batch-mode release:perform -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}" -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}  -DscmCommentPrefix="[ci skip]" 
+
 echo "--- Prepare Release ---"
 echo ""
 
