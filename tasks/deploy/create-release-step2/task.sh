@@ -33,6 +33,8 @@ git config --global http.sslVerify false
 git config --global user.name "${GIT_NAME}"
 git config --global user.email "${GIT_EMAIL}"
 
+git checkout -f ${CURRENT_BRANCH}
+
 cp ${ROOT_FOLDER}/${FILES_FROM_STEP1}/pom.xml.releaseBackup .
 cp ${ROOT_FOLDER}/${FILES_FROM_STEP1}/release.properties .
 cp -r ${ROOT_FOLDER}/${FILES_FROM_STEP1}/target .
