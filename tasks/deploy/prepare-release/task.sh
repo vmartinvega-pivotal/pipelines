@@ -40,23 +40,27 @@ mvn release:clean -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
 
 mvn versions:resolve-ranges -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
 
-git add pom.xml.backup
 git add pom.xml
   
 git commit -m "[ci skip] Adding pom.xml resolved"
 
 git push https://${USERNAME}:${PASSWORD}@gitlab-sdp.telecomitalia.local/demodevops/consistenze-id20.git
 
+echo "Push done!!"
+
+git checkout -f ${CURRENT_BRANCH}
+
 mvn --batch-mode release:clean release:prepare -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}" -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}  -DscmCommentPrefix="[ci skip]" 
 
 mv pom.xml.backup pom.xml
 
 git add pom.xml
-git add pom.xml.backup
 
 git commit -m "[ci skip] Restoring pom.xml to create the release"
 
 git push https://${USERNAME}:${PASSWORD}@gitlab-sdp.telecomitalia.local/demodevops/consistenze-id20.git
+
+echo "Push done!!"
 
 mvn --batch-mode release:perform -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}" -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}  -DscmCommentPrefix="[ci skip]" 
 
