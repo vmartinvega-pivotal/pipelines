@@ -25,6 +25,8 @@ exportKeyValProperties
 
 echo "--- Deploy Streams ---"
 
+cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
+
 prepareScriptsToDeploy
 
 # DEPLOY STREAMS
