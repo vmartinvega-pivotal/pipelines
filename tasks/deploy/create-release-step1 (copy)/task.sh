@@ -34,9 +34,27 @@ git config --global user.email "${GIT_EMAIL}"
 
 git checkout -f ${CURRENT_BRANCH}
 
-mvn --batch-mode release:clean release:prepare -DdryRun=true -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}" -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}  -DscmCommentPrefix="[ci skip]" 
+mvn --batch-mode release:clean release:prepare -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}" -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}  -DscmCommentPrefix="[ci skip]" 
 
-mvn --batch-mode release:perform -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}" -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}  -DscmCommentPrefix="[ci skip]" 
+mv pom.xml.backup pom.xml
+
+git add pom.xml
+git add pom.xml.backup
+
+git commit -m "[ci skip] Restoring pom.xml to create the release"
+
+#if [[ ${PASSED_NEW_LOGICAL_RELEASE} = "true" ]]
+#then
+#  echo "Maven release"
+#  git checkout -f ${CURRENT_BRANCH} 
+
+#  mvn --batch-mode release:clean release:prepare release:perform -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}" -Dresume=false -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE} -DscmCommentPrefix="[ci skip]"
+  
+  # Gets the release created
+#  TAG=$(git describe --tags $(git rev-list --tags --max-count=1))
+
+#  export PASSED_TAG_RELEASED_CREATED=${TAG}
+#fi
 
 echo "--- Create Release ---"
 echo ""

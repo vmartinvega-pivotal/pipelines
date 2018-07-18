@@ -40,32 +40,32 @@ mvn release:clean -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
 
 mvn versions:resolve-ranges -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
 
-git add --all
+git add pom.xml
   
 git commit -m "[ci skip] Adding pom.xml resolved"
 
-git push https://andrea.lambruschini:zxcdsa01\!@gitlab-sdp.telecomitalia.local/demodevops/consistenze-id20.git --all
+#git push https://andrea.lambruschini:zxcdsa01\!@gitlab-sdp.telecomitalia.local/demodevops/consistenze-id20.git --all
 #git push https://${USERNAME}:${PASSWORD}@gitlab-sdp.telecomitalia.local/demodevops/consistenze-id20.git
 
-echo "***************************************Push done!!"
+#echo "***************************************Push done!!"
 
-mvn --batch-mode release:clean release:prepare -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}" -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}  -DscmCommentPrefix="[ci skip]" 
+#mvn --batch-mode release:clean release:prepare -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}" -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}  -DscmCommentPrefix="[ci skip]" 
 
-echo "***************************************Prepared release!!"
+#echo "***************************************Prepared release!!"
 
-mv pom.xml.backup pom.xml
+#mv pom.xml.backup pom.xml
 
-git add pom.xml
+#git add pom.xml
 
-git push https://andrea.lambruschini:zxcdsa01\!@gitlab-sdp.telecomitalia.local/demodevops/consistenze-id20.git --all
+#git push https://andrea.lambruschini:zxcdsa01\!@gitlab-sdp.telecomitalia.local/demodevops/consistenze-id20.git --all
 #git push https://${USERNAME}:${PASSWORD}@gitlab-sdp.telecomitalia.local/demodevops/consistenze-id20.git
 
-echo "***************************************Push done!!"
+#echo "***************************************Push done!!"
 
-mvn --batch-mode release:perform -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}" -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}  -DscmCommentPrefix="[ci skip]" 
+#mvn --batch-mode release:perform -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}" -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}  -DscmCommentPrefix="[ci skip]" 
 
-echo "--- Prepare Release ---"
-echo ""
+#echo "--- Prepare Release ---"
+#echo ""
 
 # Adding values to the next job
 passKeyValProperties

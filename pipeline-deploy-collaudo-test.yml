@@ -1,0 +1,163 @@
+---
+resources:
+- name: repo
+  type: git
+  source:
+    uri: ((app-url))
+    branch: ((app-branch))
+    username: ((github-username))
+    password: ((github-password))
+    skip_ssl_verification: true
+    disable_ci_skip: false
+    ignore_paths:
+    - app-descriptor.df
+    - app-version-collaudo-evolutivo.sh
+    - app-version-prod.sh
+    - app-version-systemtest.sh
+    - create-collaudo-evolutivo.df
+    - deploy-collaudo-evolutivo.df
+    - destroy-collaudo-evolutivo.df
+
+- name: tools
+  type: git
+  source:
+    uri: ((tools-scripts-url))
+    branch: ((tools-branch))
+    username: ((github-username))
+    password: ((github-password))
+    skip_ssl_verification: true
+
+- name: config
+  type: git
+  source:
+    uri: ((config-scripts-url))
+    branch: ((tools-branch))
+    username: ((github-username))
+    password: ((github-password))
+    skip_ssl_verification: true
+
+- name: repoput
+  type: git
+  source:
+    uri: ((app-url))
+    branch: ((app-branch))
+    username: ((github-username))
+    password: ((github-password))
+    skip_ssl_verification: true
+    disable_ci_skip: false
+
+- name: repoput1
+  type: git
+  source:
+    uri: ((app-url))
+    branch: ((app-branch))
+    username: ((github-username))
+    password: ((github-password))
+    skip_ssl_verification: true
+    disable_ci_skip: false
+
+- name: keyval
+  type: keyval
+
+resource_types:
+  - name: keyval
+    type: docker-image
+    source:
+      repository: swce/keyval-resource
+
+jobs:
+- name: deploy-streams
+  public: true
+  plan:
+  - aggregate:
+    - get: tools
+    - get: repo
+    - get: config
+      trigger: true
+  - task: deploy-streams
+    privileged: true
+    file: tools/tasks/deploy/deploy-streams/task.yml
+    params:
+      <<: *common-git-params
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+
+- name: prepare-release
+  public: true
+  plan:
+  - aggregate:
+    - get: tools
+    - get: repo
+    - get: config
+    - get: keyval
+      passed:
+      - deploy-streams
+      trigger: true
+  - task: prepare-release
+    privileged: true
+    file: tools/tasks/deploy/prepare-release/task.yml
+    params:
+      <<: *common-git-params
+      SONAR_BRANCH: ((sonar-branch))
+      USERNAME: ((github-username))
+      PASSWORD: ((github-password))
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+  - put: repoput
+    params:
+      repository: out
+  - task: create-release-step1
+    privileged: true
+    file: tools/tasks/deploy/create-release-step1/task.yml
+    params:
+      <<: *common-git-params
+      SONAR_BRANCH: ((sonar-branch))
+      USERNAME: ((github-username))
+      PASSWORD: ((github-password))
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+  - put: repoput
+    params:
+      repository: out
+  - task: create-release-step2
+    privileged: true
+    file: tools/tasks/deploy/create-release-step2/task.yml
+    params:
+      <<: *common-git-params
+      SONAR_BRANCH: ((sonar-branch))
+      USERNAME: ((github-username))
+      PASSWORD: ((github-password))
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+  - put: repoput
+    params:
+      repository: out
+
+common-git-params: &common-git-params
+  BUILD_OPTIONS: ((build-options))
+  GIT_EMAIL: ((git-email))
+  GIT_NAME: ((git-name))
+  CURRENT_BRANCH: ((app-branch))
+  TRUSTSTORE: ((truststore))
+  GITHUB_PRIVATE_KEY: ((github-private-key))
+  M2_SETTINGS_REPO_ID: ((m2-settings-repo-id))
+  M2_SETTINGS_REPO_PASSWORD: ((m2-settings-repo-password))
+  M2_SETTINGS_REPO_USERNAME: ((m2-settings-repo-username))
+  M2_SETTINGS_REPO_MIRROR_URL: ((repo-with-binaries))
+  M2_SETTINGS_REPO_SITE_URL: ((repo-with-site))
+  M2_SETTINGS_REPO_RELEASE_URL: ((repo-with-binaries-for-upload))
+  M2_SETTINGS_REPO_SNAPSHOTS_URL: ((repo-with-binaries-snapshots))
+  M2_SETTINGS_REPO_GIT_SERVER_URL: ((gitlab-server-url))
+  M2_SETTINGS_REPO_SONAR_URL: ((sonar-host-url))
+  M2_SETTINGS_REPO_SONAR_TOKEN: ((sonar-login-key))
+common-pcf-params: &common-pcf-params
+  PWS_USER: ((pws-user))
+  PWS_PWD: ((pws-pwd))
+  PWS_ORG: ((pws-org))
+  PWS_SPACE: ((pws-space))
+  PWS_API: ((pws-api))
+  ENVIRONMENT_DEPLOYING: ((environment-deploying))
