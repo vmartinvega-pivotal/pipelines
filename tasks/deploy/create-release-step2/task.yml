@@ -9,7 +9,7 @@ image_resource:
 
 inputs:
   - name: tools
-  - name: repoput
+  - name: repoput1
   - name: keyval
 
 outputs:
