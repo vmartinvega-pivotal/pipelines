@@ -58,15 +58,15 @@ function prepareScriptsToDeploy(){
 
   echo ""
   echo "--- CREATING COMPILED FILES FOR COLLAUDO CONSOLIDATO"
-  ./microservice.sh ../${CONFIG_RESOURCE}/collaudo-consolidato.env microservice.env script
+  #./microservice.sh ../${CONFIG_RESOURCE}/collaudo-consolidato.env microservice.env script
 
   echo ""
   echo "--- CREATING COMPILED FILES FOR PROD"
-  ./microservice.sh ../${CONFIG_RESOURCE}/prod.env microservice.env script
+  #./microservice.sh ../${CONFIG_RESOURCE}/prod.env microservice.env script
 
   echo ""
   echo "--- CREATING COMPILED FILES FOR DEV1"
-  ./microservice.sh ../config/dev1.env microservice.env script
+  #./microservice.sh ../config/dev1.env microservice.env script
 }
 
 function checkDiferenciesForFilesAndCopyIfNeeded(){
