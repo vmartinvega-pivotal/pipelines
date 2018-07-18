@@ -28,6 +28,12 @@ echo "--- Deploy Streams ---"
 
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
+pwd
+
+ls .
+
+ls ..
+
 ls ../${CONFIG_RESOURCE}
 
 prepareScriptsToDeploy
