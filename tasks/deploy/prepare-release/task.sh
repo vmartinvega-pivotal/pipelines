@@ -56,11 +56,13 @@ echo "***************************************Prepared release!!"
 
 git push https://${USERNAME}:${PASSWORD}@gitlab-sdp.telecomitalia.local/demodevops/consistenze-id20.git
 
+echo "****************+++ DONE PUSH"
+
 mv pom.xml.backup pom.xml
 
 git add pom.xml
 
-git commit -m "[ci skip] Restoring pom.xml to create the release"
+Your branch is ahead of 'origin/master' by
 
 git push https://${USERNAME}:${PASSWORD}@gitlab-sdp.telecomitalia.local/demodevops/consistenze-id20.git
 
