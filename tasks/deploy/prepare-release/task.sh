@@ -35,6 +35,11 @@ mvn release:clean -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
 
 mvn versions:resolve-ranges -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
 
+git add pom.xml.backup
+git add pom.xml
+  
+git commit -m "[ci skip] Adding pom.xml resolved"
+
 echo "--- Prepare Release ---"
 echo ""
 

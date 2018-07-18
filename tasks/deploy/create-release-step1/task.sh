@@ -38,6 +38,11 @@ mvn --batch-mode release:clean release:prepare -Dusername=${USERNAME} -Dpassword
 
 mv pom.xml.backup pom.xml
 
+git add pom.xml
+git add pom.xml.backup
+
+git commit -m "[ci skip] Restoring pom.xml to create the release"
+
 #if [[ ${PASSED_NEW_LOGICAL_RELEASE} = "true" ]]
 #then
 #  echo "Maven release"
