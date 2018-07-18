@@ -38,9 +38,7 @@ git checkout -f ${CURRENT_BRANCH}
 
 mvn --batch-mode release:clean release:prepare -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}" -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}  -DscmCommentPrefix="[ci skip]" 
 
-ls ${FILES_FROM_PREPARE_RELEASE}
-
-mv ${FILES_FROM_PREPARE_RELEASE}/pom.xml.backup pom.xml
+mv ${ROOT_FOLDER}/${FILES_FROM_PREPARE_RELEASE}/pom.xml.backup pom.xml
 
 git add pom.xml
 

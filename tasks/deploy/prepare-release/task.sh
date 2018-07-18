@@ -59,6 +59,4 @@ cp -r "${ROOT_FOLDER}/${REPO_RESOURCE}"/. "${ROOT_FOLDER}/${OUTPUT_RESOURCE}/"
 
 cp -r "${ROOT_FOLDER}/${REPO_RESOURCE}"/. "${ROOT_FOLDER}/${FILES}/"
 
-ls "${ROOT_FOLDER}/${FILES}/"
-
 echo "Done!!"
