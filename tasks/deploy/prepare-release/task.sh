@@ -54,7 +54,7 @@ mvn --batch-mode release:clean release:prepare -Dusername=${USERNAME} -Dpassword
 
 echo "***************************************Prepared release!!"
 
-git checkout -f ${CURRENT_BRANCH}
+git push https://${USERNAME}:${PASSWORD}@gitlab-sdp.telecomitalia.local/demodevops/consistenze-id20.git
 
 mv pom.xml.backup pom.xml
 
