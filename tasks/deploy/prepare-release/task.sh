@@ -48,8 +48,6 @@ git push https://${USERNAME}:${PASSWORD}@gitlab-sdp.telecomitalia.local/demodevo
 
 echo "***************************************Push done!!"
 
-git checkout -f ${CURRENT_BRANCH}
-
 mvn --batch-mode release:clean release:prepare -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}" -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}  -DscmCommentPrefix="[ci skip]" 
 
 echo "***************************************Prepared release!!"
