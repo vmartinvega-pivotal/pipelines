@@ -197,4 +197,3 @@ common-pcf-params: &common-pcf-params
   PWS_ORG: ((pws-org))
   PWS_SPACE: ((pws-space))
   PWS_API: ((pws-api))
-  ENVIRONMENT_DEPLOYING: ((environment-deploying))
