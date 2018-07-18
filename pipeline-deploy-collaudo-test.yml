@@ -73,7 +73,7 @@ jobs:
     params:
       file: keyvalout/keyval.properties
 
-- name: prepare-release
+- name: create-release
   public: true
   plan:
   - aggregate:
