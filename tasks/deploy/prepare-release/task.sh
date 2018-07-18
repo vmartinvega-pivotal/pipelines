@@ -10,7 +10,7 @@ export ROOT_FOLDER
 ROOT_FOLDER="$( pwd )"
 export REPO_RESOURCE=repo
 export TOOLS_RESOURCE=tools
-export OUTPUT_RESOURCE=out
+export OUTPUT_RESOURCE=out-preprare-release
 export KEYVALOUTPUT_RESOURCE=keyvalout
 export KEYVAL_RESOURCE=keyval
 

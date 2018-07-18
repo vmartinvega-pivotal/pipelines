@@ -8,9 +8,9 @@ set -o pipefail
 
 export ROOT_FOLDER
 ROOT_FOLDER="$( pwd )"
-export REPO_RESOURCE=repoput
+export REPO_RESOURCE=out-release-step1
 export TOOLS_RESOURCE=tools
-export OUTPUT_RESOURCE=out
+export OUTPUT_RESOURCE=out-release-step2
 export KEYVALOUTPUT_RESOURCE=keyvalout
 export KEYVAL_RESOURCE=keyval
 

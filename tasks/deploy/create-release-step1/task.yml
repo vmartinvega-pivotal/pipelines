@@ -9,11 +9,11 @@ image_resource:
 
 inputs:
   - name: tools
-  - name: repoput
+  - name: out-preprare-release
   - name: keyval
 
 outputs:
-  - name: out
+  - name: out-release-step1
   - name: keyvalout
 
 run:

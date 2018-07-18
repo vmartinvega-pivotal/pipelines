@@ -14,7 +14,7 @@ inputs:
   - name: keyval
 
 outputs:
-  - name: out
+  - name: out-preprare-release
   - name: keyvalout
 
 run:

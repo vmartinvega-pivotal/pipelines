@@ -97,7 +97,7 @@ jobs:
       file: keyvalout/keyval.properties
   - put: repoput
     params:
-      repository: out
+      repository: out-preprare-release
   - task: create-release-step1
     privileged: true
     file: tools/tasks/deploy/create-release-step1/task.yml
@@ -111,7 +111,7 @@ jobs:
       file: keyvalout/keyval.properties
   - put: repoput
     params:
-      repository: out
+      repository: out-release-step1
   - task: create-release-step2
     privileged: true
     file: tools/tasks/deploy/create-release-step2/task.yml
@@ -123,9 +123,6 @@ jobs:
   - put: keyval
     params:
       file: keyvalout/keyval.properties
-  - put: repoput
-    params:
-      repository: out
 
 common-git-params: &common-git-params
   BUILD_OPTIONS: ((build-options))
