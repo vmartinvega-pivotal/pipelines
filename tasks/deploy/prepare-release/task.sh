@@ -27,6 +27,8 @@ exportKeyValProperties
 
 echo "--- Prepare Release ---"
 
+cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
+
 git config --global http.sslKey "${HOME}/.gitprivatekey/privatekey"
 git config --global http.sslVerify false
 git config --global user.name "${GIT_NAME}"
