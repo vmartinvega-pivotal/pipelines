@@ -10,6 +10,7 @@ export ROOT_FOLDER
 ROOT_FOLDER="$( pwd )"
 export REPO_RESOURCE=repo
 export TOOLS_RESOURCE=tools
+export CONFIG_RESOURCE=config
 export OUTPUT_RESOURCE=out
 export KEYVALOUTPUT_RESOURCE=keyvalout
 export KEYVAL_RESOURCE=keyval
@@ -28,6 +29,7 @@ echo "--- Prepare Release ---"
 
 # Creates the files to be uploaded
 cp -r ${ROOT_FOLDER}/${REPO_RESOURCE} ${TMPDIR}
+cp -r ${ROOT_FOLDER}/${CONFIG_RESOURCE} ${TMPDIR}
 
 # Change location
 cd ${TMPDIR}/${REPO_RESOURCE}
@@ -42,9 +44,6 @@ if [ -f compiled ]; then
     rm -Rf compiled
 fi 
 mv ${TMPDIR}/${REPO_RESOURCE}/compiled "${ROOT_FOLDER}/${REPO_RESOURCE}"/
-
-# Remove the temp repo
-rm -Rf cd ${TMPDIR}/${REPO_RESOURCE}
 
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
