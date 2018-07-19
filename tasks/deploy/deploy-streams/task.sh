@@ -32,6 +32,8 @@ prepareScriptsToDeploy
 
 # DEPLOY STREAMS
 
+ENVIRONMENT_TO_DEPLOY="dev1"
+
 # DEPLOY STREAMS
 
 echo "--- Deploy Streams ---"

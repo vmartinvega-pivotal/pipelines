@@ -30,6 +30,20 @@ echo "--- Prepare Release ---"
 
 # Creates the files to be uploaded
 #TODO: create the app-descriptor.df apps-version.env and compiled files and put them in the right place
+# Copy all contents for the repo to a new location
+cp -r ${ROOT_FOLDER}/${REPO_RESOURCE} ${TMPDIR}
+
+# Change location
+cd ${TMPDIR}/${REPO_RESOURCE}
+
+prepareScriptsToDeploy
+
+# Move the app-descriptor.df for the logical microservice
+mv ${TMPDIR}/${REPO_RESOURCE}/app-descriptor.df "${ROOT_FOLDER}/${REPO_RESOURCE}"/app-descriptor.df
+
+mv ${TMPDIR}/${REPO_RESOURCE}/apps-version.env "${ROOT_FOLDER}/${REPO_RESOURCE}"/apps-version.env
+
+echo "app import --uri file:${TMPDIR}/${REPO_RESOURCE}/app-descriptor.df" >> ${TMPDIR}/app-register.df
 
 
 git config --global http.sslKey "${HOME}/.gitprivatekey/privatekey"

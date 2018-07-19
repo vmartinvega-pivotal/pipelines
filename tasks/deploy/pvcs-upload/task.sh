@@ -27,41 +27,43 @@ cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
 echo "--- Pvcs Upload ---"
 
-# If a new release was created
-if [[ ${PASSED_NEW_LOGICAL_RELEASE} = "true" ]]
-then
-  # Get all binaries from file to be uploaded to PVCS
-  echo "checkout pvcs url: ${PVCS_URL}"
-  PVCS_PATH=${TMPDIR}/pvcs/vicente_test
-  mkdir -p ${PVCS_PATH} 
-  cd ${PVCS_PATH}
-  svn checkout --config-option servers:global:store-plaintext-passwords=no --username=${PVCS_USERNAME} --password=${PVCS_PASSWORD} ${PVCS_URL}
-  
-  FOLDER_TO_WORK=${PVCS_PATH}/${PVCS_CHECKOUTDIR}/vicente
-  if [ -f ${FOLDER_TO_WORK} ]; then
-    rm -Rf ${FOLDER_TO_WORK}
-  fi
-  mkdir ${FOLDER_TO_WORK}
-  cd ${FOLDER_TO_WORK}
+#TODO: PASSED_TAG_RELEASED_CREATED tiene que venir de un paso anterior
+PASSED_TAG_RELEASED_CREATED="v1.0.22"
 
-  #TODO: PASSED_TAG_RELEASED_CREATED tiene que venir de un paso anterior
-  PASSED_TAG_RELEASED_CREATED="v1.0.22"
+git checkout tags/${PASSED_TAG_RELEASED_CREATED} -b ${CURRENT_BRANCH}
 
-  #TODO: maybe hacer un checkout de la version que se ha creado y subir los archivos que corresponda  
+exit 1
 
-  cp "${ROOT_FOLDER}/${REPO_RESOURCE}"/pom.xml ${FOLDER_TO_WORK} 
+# Get all binaries from file to be uploaded to PVCS
+echo "checkout pvcs url: ${PVCS_URL}"
+PVCS_PATH=${TMPDIR}/pvcs/vicente_test
+mkdir -p ${PVCS_PATH} 
+cd ${PVCS_PATH}
+svn checkout --config-option servers:global:store-plaintext-passwords=no --username=${PVCS_USERNAME} --password=${PVCS_PASSWORD} ${PVCS_URL}
 
-  svn add --force ${FOLDER_TO_WORK}
-
-  #mkdir ${PVCS_PATH}/binaries
-
-  #while IFS= read -r artifact
-  #do
-   #mvn org.apache.maven.plugins:maven-dependency-plugin:2.8:get -Dartifact=${artifact} -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE} -Ddest=${PVCS_PATH}/binaries -  Dtransitive=false
-  #done < "${TMPDIR}/${REPO_RESOURCE}/maven-binaries-file"
-
-  svn commit -m "Logical microservice version ${PASSED_TAG_RELEASED_CREATED}" --username=${PVCS_USERNAME} --password=${PVCS_PASSWORD}
+FOLDER_TO_WORK=${PVCS_PATH}/${PVCS_CHECKOUTDIR}/vicente
+if [ -f ${FOLDER_TO_WORK} ]; then
+rm -Rf ${FOLDER_TO_WORK}
 fi
+mkdir ${FOLDER_TO_WORK}
+cd ${FOLDER_TO_WORK}
+
+
+
+#TODO: maybe hacer un checkout de la version que se ha creado y subir los archivos que corresponda  
+
+cp "${ROOT_FOLDER}/${REPO_RESOURCE}"/pom.xml ${FOLDER_TO_WORK} 
+
+svn add --force ${FOLDER_TO_WORK}
+
+#mkdir ${PVCS_PATH}/binaries
+
+#while IFS= read -r artifact
+#do
+#mvn org.apache.maven.plugins:maven-dependency-plugin:2.8:get -Dartifact=${artifact} -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE} -Ddest=${PVCS_PATH}/binaries -  Dtransitive=false
+#done < "${TMPDIR}/${REPO_RESOURCE}/maven-binaries-file"
+
+svn commit -m "Logical microservice version ${PASSED_TAG_RELEASED_CREATED}" --username=${PVCS_USERNAME} --password=${PVCS_PASSWORD}
 
 echo "--- Pvcs Upload ---"
 echo ""

@@ -7,6 +7,21 @@ RUN \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 
+# Install SoapUI
+ENV SOAPUI_VERSION 5.4.0
+
+COPY SoapUI-${SOAPUI_VERSION}-linux-bin.tar.gz /tmp/SoapUI-${SOAPUI_VERSION}-linux-bin.tar.gz
+
+RUN mkdir -p /opt
+
+RUN gunzip -c /tmp/SoapUI-${SOAPUI_VERSION}-linux-bin.tar.gz | tar -xf - -C /opt
+
+RUN ln -s /opt/SoapUI-${SOAPUI_VERSION} /opt/SoapUI
+
+ENV PATH ${PATH}:/opt/SoapUI/bin
+
+RUN rm -f /tmp/SoapUI-${SOAPUI_VERSION}-linux-bin.tar.gz
+
 # Install Subversion
 RUN \
   apt-get update \

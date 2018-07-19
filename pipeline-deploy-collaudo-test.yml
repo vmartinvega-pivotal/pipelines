@@ -73,6 +73,7 @@ jobs:
     file: tools/tasks/deploy/deploy-streams/task.yml
     params:
       <<: *common-git-params
+      ENVIRONMENT_TO_DEPLOY: dev1
   - put: keyval
     params:
       file: keyvalout/keyval.properties
