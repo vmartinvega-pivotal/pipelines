@@ -24,13 +24,9 @@ source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/source-all.sh
 # Add properties as environment variables
 exportKeyValProperties
 
-cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
-
 echo "--- Prepare Release ---"
 
 # Creates the files to be uploaded
-#TODO: create the app-descriptor.df apps-version.env and compiled files and put them in the right place
-# Copy all contents for the repo to a new location
 cp -r ${ROOT_FOLDER}/${REPO_RESOURCE} ${TMPDIR}
 
 # Change location
@@ -38,13 +34,19 @@ cd ${TMPDIR}/${REPO_RESOURCE}
 
 prepareScriptsToDeploy
 
-# Move the app-descriptor.df for the logical microservice
+# Move all compiled files to the repo
 mv ${TMPDIR}/${REPO_RESOURCE}/app-descriptor.df "${ROOT_FOLDER}/${REPO_RESOURCE}"/app-descriptor.df
-
 mv ${TMPDIR}/${REPO_RESOURCE}/apps-version.env "${ROOT_FOLDER}/${REPO_RESOURCE}"/apps-version.env
 
-echo "app import --uri file:${TMPDIR}/${REPO_RESOURCE}/app-descriptor.df" >> ${TMPDIR}/app-register.df
+if [ -f compiled ]; then
+    rm -Rf compiled
+fi 
+mv ${TMPDIR}/${REPO_RESOURCE}/compiled "${ROOT_FOLDER}/${REPO_RESOURCE}"/
 
+# Remove the temp repo
+rm -Rf cd ${TMPDIR}/${REPO_RESOURCE}
+
+cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
 git config --global http.sslKey "${HOME}/.gitprivatekey/privatekey"
 git config --global http.sslVerify false
@@ -55,13 +57,21 @@ mvn --batch-mode release:clean release:prepare -DdryRun=true -Dusername=${USERNA
 
 cp pom.xml.next pom.xml.backup
 
+RELEASED_VERSION=$(getPomVersion pom.xml.backup)
+export PASSED_TAG_RELEASED_CREATED="v"${RELEASED_VERSION}
+
 mvn release:clean -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
 
 mvn versions:resolve-ranges -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
 
-git add pom.xml
-  
-git commit -m "[ci skip] Adding pom.xml resolved"
+# I dont want to push this file
+mv pom.xml.backup ..
+
+git add --all
+
+mv ../pom.xml.backup .
+
+git commit -m "[ci skip] Adding pom.xml for the current version, and all compiled files"
 
 echo "--- Prepare Release ---"
 echo ""
