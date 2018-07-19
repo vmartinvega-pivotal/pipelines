@@ -27,26 +27,6 @@ exportKeyValProperties
 
 echo "--- Prepare Release ---"
 
-# Creates the files to be uploaded
-cp -r ${ROOT_FOLDER}/${REPO_RESOURCE} ${TMPDIR}
-cp -r ${ROOT_FOLDER}/${CONFIG_RESOURCE} ${TMPDIR}
-
-# Change location
-cd ${TMPDIR}/${REPO_RESOURCE}
-
-prepareScriptsToDeploy
-
-# Move all compiled files to the repo
-mv ${TMPDIR}/${REPO_RESOURCE}/app-descriptor.df "${ROOT_FOLDER}/${REPO_RESOURCE}"/app-descriptor.df
-mv ${TMPDIR}/${REPO_RESOURCE}/apps-version.env "${ROOT_FOLDER}/${REPO_RESOURCE}"/apps-version.env
-
-if [ -f compiled ]; then
-    rm -Rf compiled
-fi 
-mv ${TMPDIR}/${REPO_RESOURCE}/compiled "${ROOT_FOLDER}/${REPO_RESOURCE}"/
-
-cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
-
 git config --global http.sslKey "${HOME}/.gitprivatekey/privatekey"
 git config --global http.sslVerify false
 git config --global user.name "${GIT_NAME}"
@@ -62,6 +42,25 @@ export PASSED_TAG_RELEASED_CREATED="v"${RELEASED_VERSION}
 mvn release:clean -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
 
 mvn versions:resolve-ranges -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
+
+# Creates the files to be uploaded
+cp -r ${ROOT_FOLDER}/${REPO_RESOURCE} ${TMPDIR}
+cp -r ${ROOT_FOLDER}/${CONFIG_RESOURCE} ${TMPDIR}
+cd ${TMPDIR}/${REPO_RESOURCE}
+
+prepareScriptsToDeploy
+
+# Move all compiled files to the repo
+mv ${TMPDIR}/${REPO_RESOURCE}/app-descriptor.df "${ROOT_FOLDER}/${REPO_RESOURCE}"/app-descriptor.df
+mv ${TMPDIR}/${REPO_RESOURCE}/apps-version.env "${ROOT_FOLDER}/${REPO_RESOURCE}"/apps-version.env
+
+if [ -f compiled ]; then
+    rm -Rf compiled
+fi 
+ls ${TMPDIR}/${REPO_RESOURCE}/compiled
+mv ${TMPDIR}/${REPO_RESOURCE}/compiled "${ROOT_FOLDER}/${REPO_RESOURCE}"/
+
+cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
 # I dont want to push this file
 mv pom.xml.backup ..
