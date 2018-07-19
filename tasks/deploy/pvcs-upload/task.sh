@@ -28,11 +28,9 @@ cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 echo "--- Pvcs Upload ---"
 
 #TODO: PASSED_TAG_RELEASED_CREATED tiene que venir de un paso anterior
-PASSED_TAG_RELEASED_CREATED="v1.0.22"
+PASSED_TAG_RELEASED_CREATED="v1.0.27"
 
 git checkout tags/${PASSED_TAG_RELEASED_CREATED}
-
-exit 1
 
 # Get all binaries from file to be uploaded to PVCS
 echo "checkout pvcs url: ${PVCS_URL}"
@@ -41,20 +39,19 @@ mkdir -p ${PVCS_PATH}
 cd ${PVCS_PATH}
 svn checkout --config-option servers:global:store-plaintext-passwords=no --username=${PVCS_USERNAME} --password=${PVCS_PASSWORD} ${PVCS_URL}
 
-FOLDER_TO_WORK=${PVCS_PATH}/${PVCS_CHECKOUTDIR}/vicente
-if [ -f ${FOLDER_TO_WORK} ]; then
-rm -Rf ${FOLDER_TO_WORK}
+FOLDER_TO_WORK_IN_PVCS=${PVCS_PATH}/${PVCS_CHECKOUTDIR}/vicente
+if [ -f ${FOLDER_TO_WORK_IN_PVCS} ]; then
+rm -Rf ${FOLDER_TO_WORK_IN_PVCS}
 fi
-mkdir ${FOLDER_TO_WORK}
-cd ${FOLDER_TO_WORK}
-
+mkdir ${FOLDER_TO_WORK_IN_PVCS}
+cd ${FOLDER_TO_WORK_IN_PVCS}
 
 
 #TODO: maybe hacer un checkout de la version que se ha creado y subir los archivos que corresponda  
 
-cp "${ROOT_FOLDER}/${REPO_RESOURCE}"/pom.xml ${FOLDER_TO_WORK} 
+cp "${ROOT_FOLDER}/${REPO_RESOURCE}"/pom.xml ${FOLDER_TO_WORK_IN_PVCS} 
 
-svn add --force ${FOLDER_TO_WORK}
+svn add --force ${FOLDER_TO_WORK_IN_PVCS}
 
 #mkdir ${PVCS_PATH}/binaries
 
