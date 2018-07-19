@@ -30,7 +30,7 @@ echo "--- Pvcs Upload ---"
 #TODO: PASSED_TAG_RELEASED_CREATED tiene que venir de un paso anterior
 PASSED_TAG_RELEASED_CREATED="v1.0.22"
 
-git checkout tags/${PASSED_TAG_RELEASED_CREATED} -b ${CURRENT_BRANCH}
+git checkout tags/${PASSED_TAG_RELEASED_CREATED}
 
 exit 1
 
