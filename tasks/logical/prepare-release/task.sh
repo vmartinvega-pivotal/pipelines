@@ -38,9 +38,6 @@ mvn --batch-mode release:clean release:prepare -DdryRun=true -Dusername=${USERNA
 
 cp pom.xml.next pom.xml.backup
 
-RELEASED_VERSION=$(getPomVersion pom.xml.backup)
-export PASSED_TAG_RELEASED_CREATED="v"${RELEASED_VERSION}
-
 mvn release:clean -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
 
 mvn versions:resolve-ranges -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
