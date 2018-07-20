@@ -71,7 +71,7 @@ jobs:
   - task: deploy-streams
     privileged: true
     file: tools/tasks/deploy/deploy-streams/task.yml
-    input_mappings: {repo: repo-coll-evo}
+    input_mapping: {repo: repo-coll-evo}
     params:
       <<: *common-git-params
       ENVIRONMENT_TO_DEPLOY: dev1
@@ -92,7 +92,7 @@ jobs:
   - task: soapui-tests
     privileged: true
     file: tools/tasks/deploy/do-nothing/task.yml
-    input_mappings: {repo: repo-coll-evo}
+    input_mapping: {repo: repo-coll-evo}
     params:
       <<: *common-git-params
   - put: keyval
@@ -113,7 +113,7 @@ jobs:
   - task: prepare-release
     privileged: true
     file: tools/tasks/deploy/prepare-release/task.yml
-    input_mappings: {repo: repo-coll-evo}
+    input_mapping: {repo: repo-coll-evo}
     params:
       <<: *common-git-params
       SONAR_BRANCH: ((sonar-branch))
