@@ -35,7 +35,6 @@ git config --global user.email "${GIT_EMAIL}"
 
 cp ${ROOT_FOLDER}/${FILES_FROM_STEP1}/pom.xml.releaseBackup .
 cp ${ROOT_FOLDER}/${FILES_FROM_STEP1}/release.properties .
-cp -r ${ROOT_FOLDER}/${FILES_FROM_STEP1}/target .
 
 mvn --batch-mode release:perform -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}" -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}  -DscmCommentPrefix="[ci skip]" 
 
