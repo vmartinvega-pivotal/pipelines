@@ -12,7 +12,7 @@ resources:
     ignore_paths:
     - app-descriptor.df
 
-- name: pipelines-tools
+- name: tools
   type: git
   source:
     uri: ((tools-scripts-url))
@@ -64,7 +64,7 @@ jobs:
   public: true
   plan:
   - aggregate:
-    - get: pipelines-tools
+    - get: tools
     - get: repo-coll-evo
     - get: config-logical-micro
       trigger: true
@@ -73,7 +73,6 @@ jobs:
     file: tools/tasks/deploy/deploy-streams/task.yml
     input_mapping: {repo: repo-coll-evo}
     input_mapping: {config: config-logical-micro}
-    input_mapping: {tools: pipelines-tools}
     params:
       <<: *common-git-params
       ENVIRONMENT_TO_DEPLOY: dev1
@@ -85,7 +84,7 @@ jobs:
   public: true
   plan:
   - aggregate:
-    - get: pipelines-tools
+    - get: tools
     - get: repo-coll-evo
     - get: keyval
       passed:
@@ -95,7 +94,6 @@ jobs:
     privileged: true
     file: tools/tasks/deploy/do-nothing/task.yml
     input_mapping: {repo: repo-coll-evo}
-    input_mapping: {tools: pipelines-tools}
     params:
       <<: *common-git-params
   - put: keyval
@@ -106,7 +104,7 @@ jobs:
   public: true
   plan:
   - aggregate:
-    - get: pipelines-tools
+    - get: tools
     - get: repo-coll-evo
     - get: config-logical-micro
     - get: keyval
@@ -118,7 +116,6 @@ jobs:
     file: tools/tasks/deploy/prepare-release/task.yml
     input_mapping: {repo: repo-coll-evo}
     input_mapping: {config: config-logical-micro}
-    input_mapping: {tools: pipelines-tools}
     params:
       <<: *common-git-params
       SONAR_BRANCH: ((sonar-branch))
@@ -133,7 +130,6 @@ jobs:
   - task: create-release-step1
     privileged: true
     file: tools/tasks/deploy/create-release-step1/task.yml
-    input_mapping: {tools: pipelines-tools}
     params:
       <<: *common-git-params
       SONAR_BRANCH: ((sonar-branch))
@@ -148,7 +144,6 @@ jobs:
   - task: create-release-step2
     privileged: true
     file: tools/tasks/deploy/create-release-step2/task.yml
-    input_mapping: {tools: pipelines-tools}
     params:
       <<: *common-git-params
       SONAR_BRANCH: ((sonar-branch))
@@ -165,7 +160,7 @@ jobs:
   public: true
   plan:
   - aggregate:
-    - get: pipelines-tools
+    - get: tools
     - get: repo-coll-evo
     - get: keyval
       passed:
@@ -175,7 +170,6 @@ jobs:
     privileged: true
     file: tools/tasks/deploy/pvcs-upload/task.yml
     input_mapping: {repo: repo-coll-evo}
-    input_mapping: {tools: pipelines-tools}
     params:
       <<: *common-git-params
       PVCS_URL: ((pvcs-url))
