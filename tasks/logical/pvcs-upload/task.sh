@@ -40,15 +40,15 @@ svn checkout --config-option servers:global:store-plaintext-passwords=no --usern
 
 FOLDER_TO_WORK_IN_PVCS=${PVCS_PATH}/${PVCS_CHECKOUTDIR}/vicente
 if [ -f ${FOLDER_TO_WORK_IN_PVCS} ]; then
-rm -Rf ${FOLDER_TO_WORK_IN_PVCS}
+  rm -Rf ${FOLDER_TO_WORK_IN_PVCS}
 fi
-mkdir ${FOLDER_TO_WORK_IN_PVCS}
-cd ${FOLDER_TO_WORK_IN_PVCS}
+#mkdir ${FOLDER_TO_WORK_IN_PVCS}
+#cd ${FOLDER_TO_WORK_IN_PVCS}
 
 
 #TODO: COPIAR LO QUE CORRESPONDA, FUENTES  
 
-cp "${ROOT_FOLDER}/${REPO_RESOURCE}"/pom.xml ${FOLDER_TO_WORK_IN_PVCS} 
+#cp "${ROOT_FOLDER}/${REPO_RESOURCE}"/pom.xml ${FOLDER_TO_WORK_IN_PVCS} 
 
 svn add --force ${FOLDER_TO_WORK_IN_PVCS}
 
