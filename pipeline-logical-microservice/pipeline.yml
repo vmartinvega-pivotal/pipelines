@@ -21,7 +21,7 @@ resources:
     password: ((github-password))
     skip_ssl_verification: true
 
-- name: config-log-micro
+- name: config-logical-micro
   type: git
   source:
     uri: ((config-scripts-url))
@@ -66,13 +66,13 @@ jobs:
   - aggregate:
     - get: pipelines-tools
     - get: repo-coll-evo
-    - get: config-log-micro
+    - get: config-logical-micro
       trigger: true
   - task: deploy-streams
     privileged: true
     file: tools/tasks/deploy/deploy-streams/task.yml
     input_mapping: {repo: repo-coll-evo}
-    input_mapping: {config: config-log-micro}
+    input_mapping: {config: config-logical-micro}
     input_mapping: {tools: pipelines-tools}
     params:
       <<: *common-git-params
@@ -108,7 +108,7 @@ jobs:
   - aggregate:
     - get: pipelines-tools
     - get: repo-coll-evo
-    - get: config-log-micro
+    - get: config-logical-micro
     - get: keyval
       passed:
       - soapui-tests
@@ -117,7 +117,7 @@ jobs:
     privileged: true
     file: tools/tasks/deploy/prepare-release/task.yml
     input_mapping: {repo: repo-coll-evo}
-    input_mapping: {config: config-log-micro}
+    input_mapping: {config: config-logical-micro}
     input_mapping: {tools: pipelines-tools}
     params:
       <<: *common-git-params
