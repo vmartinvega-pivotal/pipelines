@@ -56,20 +56,16 @@ prepareScriptsToDeploy
 mv ${TMPDIR}/${REPO_RESOURCE}/app-descriptor.df "${ROOT_FOLDER}/${REPO_RESOURCE}"/app-descriptor.df
 mv ${TMPDIR}/${REPO_RESOURCE}/apps-version.env "${ROOT_FOLDER}/${REPO_RESOURCE}"/apps-version.env
 
-if [ -f compiled ]; then
-    rm -Rf compiled
-fi 
-ls ${TMPDIR}/${REPO_RESOURCE}/compiled
-mv ${TMPDIR}/${REPO_RESOURCE}/compiled "${ROOT_FOLDER}/${REPO_RESOURCE}"/
+#if [ -f ${ROOT_FOLDER}/${REPO_RESOURCE}/compiled ]; then
+#    rm -Rf compiled
+#fi 
+#mv ${TMPDIR}/${REPO_RESOURCE}/compiled "${ROOT_FOLDER}/${REPO_RESOURCE}"/
 
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
-# I dont want to push this file
-mv pom.xml.backup ..
-
-git add --all
-
-mv ../pom.xml.backup .
+git add pom.xml
+git add app-descriptor.df
+git add apps-version.env
 
 git commit -m "[ci skip] Adding pom.xml for the current version, and all compiled files"
 
