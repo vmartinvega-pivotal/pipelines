@@ -63,15 +63,14 @@ jobs:
 - name: deploy-streams
   public: true
   plan:
-  - aggregate:
-    - get: pipeline-tools
-    - get: repo-coll-evo
-    - get: config-logical-micro
-      trigger: true
+  - get: pipeline-tools
+  - get: repo-coll-evo
+  - get: config-logical-micro
+    trigger: true
   - task: deploy-streams
     privileged: true
     file: tools/tasks/deploy/deploy-streams/task.yml
-    input_mapping: {repo: repo-coll-evo, config: config-logical-micro, tools: pipeline-tools}
+    input_mapping: {repo-coll-evo: repo, config-logical-micro: config, pipeline-tools: tools}
     params:
       <<: *common-git-params
       ENVIRONMENT_TO_DEPLOY: dev1
