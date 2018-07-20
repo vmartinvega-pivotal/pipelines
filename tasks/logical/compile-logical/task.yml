@@ -17,4 +17,4 @@ outputs:
   - name: keyvalout
 
 run:
-  path: tools/tasks/logical/deploy-streams/task.sh
+  path: tools/tasks/logical/compile-logical/task.sh

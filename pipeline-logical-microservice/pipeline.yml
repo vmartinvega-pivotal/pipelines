@@ -63,23 +63,50 @@ jobs:
 - name: deploy-streams
   public: true
   plan:
-  - get: tools
-  - get: repo-coll-evo
-  - get: config-logical-micro
-    trigger: true
-  - task: deploy-streams
+  - aggregate:
+    - get: tools
+    - get: repo-coll-evo
+    - get: config-logical-micro
+      trigger: true
+  - task: compile-logical-microservice
     privileged: true
-    file: tools/tasks/logical/deploy-streams/task.yml
+    file: tools/tasks/logical/compile-logical/task.yml
     input_mapping:
       repo: repo-coll-evo
       config: config-logical-micro
+    out_mapping:
+      logical_compiled_files: out
     params:
       <<: *common-git-params
-      ENVIRONMENT_TO_DEPLOY: dev1
   - put: keyval
     params:
       file: keyvalout/keyval.properties
-
+  - task: deploy-streams
+    privileged: true
+    input_mapping:
+      repo: logical_compiled_files
+      config: config-logical-micro
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: vmartinvega/concourse-tools-tim
+          tag: "latest"
+      inputs:
+        - name: repo
+        - name: config
+      params:
+        ENVIRONMENT_TO_DEPLOY: dev1
+      run:
+        path: sh
+        args:
+        - -exc
+        - |
+          ROOT_FOLDER="$( pwd )"
+          cd ${ROOT_FOLDER}/repo
+          ./microservice.sh ../config/${ENVIRONMENT_TO_DEPLOY}.env microservice.env script
+          #git checkout tags/v1.0.26
 - name: soapui-tests
   public: true
   plan:
