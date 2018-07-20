@@ -74,8 +74,8 @@ jobs:
     input_mapping:
       repo: repo-coll-evo
       config: config-logical-micro
-    out_mapping:
-      logical_compiled_files: out
+    output_mapping:
+      out: logical_compiled_files
     params:
       <<: *common-git-params
   - put: keyval
@@ -97,7 +97,7 @@ jobs:
         - name: repo
         - name: config
       params:
-        ENVIRONMENT_TO_DEPLOY: dev1
+        ENVIRONMENT_TO_DEPLOY: collaudo-evolutivo
       run:
         path: sh
         args:
