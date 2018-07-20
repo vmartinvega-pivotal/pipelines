@@ -56,7 +56,13 @@ resources:
 - name: send-email
   type: email
   source:
-    from: YOUR-SENDER-EMAIL-GOES-HERE
+    smtp:
+      host: smtp.gmail.com
+      port: "587" # this must be a string
+      username: vicente.martin.vega
+      password: M@r1n@yc@rl0S
+    from: vicente.martin.vega@gmail.com
+    to: [ "vicente.martin.vega@gmail.com" ]
 
 resource_types:
   - name: keyval
@@ -67,7 +73,7 @@ resource_types:
   - name: email
     type: docker-image
     source:
-      repository: mdomke/concourse-email-resource
+      repository: pcfseceng/email-resource
 
 jobs:
 - name: deploy-streams
@@ -229,7 +235,7 @@ jobs:
       outputs:
         - name: email-text
       run:
-        path: sh
+        path: bash
         args:
         - -exc
         - |
@@ -238,10 +244,9 @@ jobs:
           source ${ROOT_FOLDER}/tools/tasks/resource-utils.sh
           exportKeyValProperties
           echo "Version $PASSED_TAG_RELEASED_CREATED is ready to ship to Collaudo Consolidato!" >  ./email-text/email-subject.txt
-          echo "Version $PASSED_TAG_RELEASED_CREATED is ready to ship to Collaudo Consolidato! For details, see pipeline {{ BUILD_PIPELINE_NAME }}, build {{ BUILD_NAME }}, job {{ BUILD_JOB_NAME }}." >  ./email-text/email-body.txt
+          echo "Version $PASSED_TAG_RELEASED_CREATED is ready to ship to Collaudo Consolidato!" >  ./email-text/email-body.txt
   - put: send-email
     params:
-      to: YOUR-EMAIL-GOES-HERE
       subject: ./email-text/email-subject.txt
       body: ./email-text/email-body.txt
 
