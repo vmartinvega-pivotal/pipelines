@@ -53,11 +53,21 @@ resources:
 - name: keyval
   type: keyval
 
+- name: send-email
+  type: email
+  source:
+    from: YOUR-SENDER-EMAIL-GOES-HERE
+
 resource_types:
   - name: keyval
     type: docker-image
     source:
       repository: swce/keyval-resource
+  
+  - name: email
+    type: docker-image
+    source:
+      repository: mdomke/concourse-email-resource
 
 jobs:
 - name: deploy-streams
@@ -140,7 +150,7 @@ jobs:
       trigger: true
   - task: prepare-release
     privileged: true
-    file: tools/tasks/deploy/prepare-release/task.yml
+    file: tools/tasks/logical/prepare-release/task.yml
     input_mapping: {repo: repo-coll-evo, config: config-logical-micro}
     params:
       <<: *common-git-params
@@ -205,6 +215,35 @@ jobs:
   - put: keyval
     params:
       file: keyvalout/keyval.properties
+  - task: prepare-email-text
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: vmartinvega/concourse-tools-tim
+          tag: "latest"
+      inputs:
+        - name: keyval
+        - name: tools
+      outputs:
+        - name: email-text
+      run:
+        path: sh
+        args:
+        - -exc
+        - |
+          ROOT_FOLDER="$( pwd )"
+          export KEYVAL_RESOURCE=keyval
+          source "${ROOT_FOLDER}/tools/tasks/resource-utils.sh
+          exportKeyValProperties
+          echo "Version $PASSED_TAG_RELEASED_CREATED is ready to ship to Collaudo Consolidato!" >  ./email-text/email-subject.txt
+          echo "Version $PASSED_TAG_RELEASED_CREATED is ready to ship to Collaudo Consolidato! For details, see pipeline {{ BUILD_PIPELINE_NAME }}, build {{ BUILD_NAME }}, job {{ BUILD_JOB_NAME }}." >  ./email-text/email-body.txt
+  - put: send-email
+    params:
+      to: YOUR-EMAIL-GOES-HERE
+      subject: ./email-text/email-subject.txt
+      body: ./email-text/email-body.txt
 
 common-git-params: &common-git-params
   BUILD_OPTIONS: ((build-options))
