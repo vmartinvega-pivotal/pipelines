@@ -10,11 +10,11 @@ image_resource:
 inputs:
   - name: tools
   - name: repo
-  - name: config
+  - name: keyval
 
 outputs:
   - name: out
   - name: keyvalout
 
 run:
-  path: tools/tasks/deploy/deploy-streams/task.sh
+  path: tools/tasks/logical/soapui-tests/task.sh

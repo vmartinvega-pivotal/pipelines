@@ -9,12 +9,11 @@ image_resource:
 
 inputs:
   - name: tools
-  - name: repoput
-  - name: keyval
+  - name: repo
 
 outputs:
   - name: out
   - name: keyvalout
 
 run:
-  path: tools/tasks/deploy/deploy-to-collaudo/task.sh
+  path: tools/tasks/logical/do-nothing/task.sh

@@ -9,11 +9,13 @@ image_resource:
 
 inputs:
   - name: tools
-  - name: repo
+  - name: repoput1
+  - name: out-release-step1
+  - name: keyval
 
 outputs:
-  - name: out
   - name: keyvalout
+  - name: out
 
 run:
-  path: tools/tasks/deploy/do-nothing/task.sh
+  path: tools/tasks/logical/create-release-step2/task.sh

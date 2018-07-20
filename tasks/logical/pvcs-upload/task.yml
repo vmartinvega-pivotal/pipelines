@@ -17,4 +17,4 @@ outputs:
   - name: keyvalout
 
 run:
-  path: tools/tasks/smoke-test/task.sh
+  path: tools/tasks/logical/pvcs-upload/task.sh

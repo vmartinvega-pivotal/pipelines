@@ -17,4 +17,4 @@ outputs:
   - name: keyvalout
 
 run:
-  path: tools/tasks/deploy/settingup-environment/task.sh
+  path: tools/tasks/physical/smoke-test/task.sh

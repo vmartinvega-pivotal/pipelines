@@ -12,7 +12,7 @@ resources:
     ignore_paths:
     - app-descriptor.df
 
-- name: pipeline-tools
+- name: tools
   type: git
   source:
     uri: ((tools-scripts-url))
@@ -63,14 +63,16 @@ jobs:
 - name: deploy-streams
   public: true
   plan:
-  - get: pipeline-tools
+  - get: tools
   - get: repo-coll-evo
   - get: config-logical-micro
     trigger: true
   - task: deploy-streams
     privileged: true
-    file: tools/tasks/deploy/deploy-streams/task.yml
-    input_mapping: {repo-coll-evo: repo, config-logical-micro: config, pipeline-tools: tools}
+    file: tools/tasks/logical/deploy-streams/task.yml
+    input_mapping:
+      repo: repo-coll-evo
+      config: config-logical-micro
     params:
       <<: *common-git-params
       ENVIRONMENT_TO_DEPLOY: dev1
@@ -82,7 +84,7 @@ jobs:
   public: true
   plan:
   - aggregate:
-    - get: pipeline-tools
+    - get: tools
     - get: repo-coll-evo
     - get: keyval
       passed:
@@ -90,8 +92,8 @@ jobs:
       trigger: true
   - task: soapui-tests
     privileged: true
-    file: tools/tasks/deploy/do-nothing/task.yml
-    input_mapping: {repo: repo-coll-evo, tools: pipeline-tools}
+    file: tools/tasks/logical/do-nothing/task.yml
+    input_mapping: {repo: repo-coll-evo}
     params:
       <<: *common-git-params
   - put: keyval
@@ -102,7 +104,7 @@ jobs:
   public: true
   plan:
   - aggregate:
-    - get: pipeline-tools
+    - get: tools
     - get: repo-coll-evo
     - get: config-logical-micro
     - get: keyval
@@ -112,7 +114,7 @@ jobs:
   - task: prepare-release
     privileged: true
     file: tools/tasks/deploy/prepare-release/task.yml
-    input_mapping: {repo: repo-coll-evo, tools: pipeline-tools, config: config-logical-micro}
+    input_mapping: {repo: repo-coll-evo, config: config-logical-micro}
     params:
       <<: *common-git-params
       SONAR_BRANCH: ((sonar-branch))
@@ -126,8 +128,7 @@ jobs:
       repository: out
   - task: create-release-step1
     privileged: true
-    file: tools/tasks/deploy/create-release-step1/task.yml
-    input_mapping: {tools: pipeline-tools}
+    file: tools/tasks/logical/create-release-step1/task.yml
     params:
       <<: *common-git-params
       SONAR_BRANCH: ((sonar-branch))
@@ -141,8 +142,7 @@ jobs:
       repository: out
   - task: create-release-step2
     privileged: true
-    file: tools/tasks/deploy/create-release-step2/task.yml
-    input_mapping: {tools: pipeline-tools}
+    file: tools/tasks/logical/create-release-step2/task.yml
     params:
       <<: *common-git-params
       SONAR_BRANCH: ((sonar-branch))
@@ -159,7 +159,7 @@ jobs:
   public: true
   plan:
   - aggregate:
-    - get: pipeline-tools
+    - get: tools
     - get: repo-coll-evo
     - get: keyval
       passed:
@@ -167,8 +167,8 @@ jobs:
       trigger: true
   - task: pvcs-upload
     privileged: true
-    file: tools/tasks/deploy/pvcs-upload/task.yml
-    input_mapping: {repo: repo-coll-evo, tools: pipeline-tools}
+    file: tools/tasks/logical/pvcs-upload/task.yml
+    input_mapping: {repo: repo-coll-evo}
     params:
       <<: *common-git-params
       PVCS_URL: ((pvcs-url))

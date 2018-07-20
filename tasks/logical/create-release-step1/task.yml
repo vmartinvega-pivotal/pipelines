@@ -19,4 +19,4 @@ outputs:
   - name: keyvalout
 
 run:
-  path: tools/tasks/deploy/create-release-step1/task.sh
+  path: tools/tasks/logical/create-release-step1/task.sh

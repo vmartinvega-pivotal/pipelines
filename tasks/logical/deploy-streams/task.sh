@@ -18,6 +18,11 @@ export KEYVAL_RESOURCE=keyval
 export TRUST_STORE_FILE=${ROOT_FOLDER}/${TOOLS_RESOURCE}/truststore/${TRUSTSTORE}
 chmod 777 ${TRUST_STORE_FILE}
 
+if [[ ${PASSED_NEW_LOGICAL_RELEASE} = "true" ]]
+then
+echo "TODO:"
+fi
+
 # Source all usefull scripts
 source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/source-all.sh
 
@@ -31,8 +36,6 @@ cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 prepareScriptsToDeploy
 
 # DEPLOY STREAMS
-
-ENVIRONMENT_TO_DEPLOY="dev1"
 
 # DEPLOY STREAMS
 
