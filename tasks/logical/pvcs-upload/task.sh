@@ -14,9 +14,6 @@ export OUTPUT_RESOURCE=out
 export KEYVALOUTPUT_RESOURCE=keyvalout
 export KEYVAL_RESOURCE=keyval
 
-export TRUST_STORE_FILE=${ROOT_FOLDER}/${TOOLS_RESOURCE}/truststore/${TRUSTSTORE}
-chmod 777 ${TRUST_STORE_FILE}
-
 # Source all usefull scripts
 source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/source-all.sh
 
@@ -44,7 +41,6 @@ if [ -d ${FOLDER_TO_WORK_IN_PVCS} ]; then
 fi
 mkdir ${FOLDER_TO_WORK_IN_PVCS}
 cd ${FOLDER_TO_WORK_IN_PVCS}
-
 
 #TODO: COPIAR LO QUE CORRESPONDA, FUENTES  
 
