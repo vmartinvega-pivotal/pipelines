@@ -235,7 +235,7 @@ jobs:
         - |
           ROOT_FOLDER="$( pwd )"
           export KEYVAL_RESOURCE=keyval
-          source "${ROOT_FOLDER}/tools/tasks/resource-utils.sh
+          source ${ROOT_FOLDER}/tools/tasks/resource-utils.sh
           exportKeyValProperties
           echo "Version $PASSED_TAG_RELEASED_CREATED is ready to ship to Collaudo Consolidato!" >  ./email-text/email-subject.txt
           echo "Version $PASSED_TAG_RELEASED_CREATED is ready to ship to Collaudo Consolidato! For details, see pipeline {{ BUILD_PIPELINE_NAME }}, build {{ BUILD_NAME }}, job {{ BUILD_JOB_NAME }}." >  ./email-text/email-body.txt
