@@ -60,7 +60,7 @@ resources:
       host: smtp.gmail.com
       port: "587" # this must be a string
       username: vicente.martin.vega
-      password: M@r1n@yc@rl0S
+      password: 
     from: vicente.martin.vega@gmail.com
     to: [ "vicente.martin.vega@gmail.com" ]
 
@@ -113,7 +113,7 @@ jobs:
         - name: repo
         - name: config
       params:
-        ENVIRONMENT_TO_DEPLOY: collaudo-evolutivo
+        ENVIRONMENT_TO_DEPLOY: collaudo-consolidato
       run:
         path: sh
         args:
@@ -121,8 +121,7 @@ jobs:
         - |
           ROOT_FOLDER="$( pwd )"
           cd ${ROOT_FOLDER}/repo
-          ./microservice.sh ../config/${ENVIRONMENT_TO_DEPLOY}.env microservice.env script
-          #git checkout tags/v1.0.26
+          #./microservice.sh ../config/${ENVIRONMENT_TO_DEPLOY}.env microservice.env script
 - name: soapui-tests
   public: true
   plan:
@@ -245,10 +244,15 @@ jobs:
           exportKeyValProperties
           echo "Version $PASSED_TAG_RELEASED_CREATED is ready to ship to Collaudo Consolidato!" >  ./email-text/email-subject.txt
           echo "Version $PASSED_TAG_RELEASED_CREATED is ready to ship to Collaudo Consolidato!" >  ./email-text/email-body.txt
-  - put: send-email
+          passKeyValProperties
+  - put: keyval
     params:
-      subject: ./email-text/email-subject.txt
-      body: ./email-text/email-body.txt
+      file: keyvalout/keyval.properties
+
+  #- put: send-email
+  #  params:
+  #    subject: ./email-text/email-subject.txt
+  #    body: ./email-text/email-body.txt
 
   - task: update-ship-it-job-name
     config:
@@ -261,8 +265,53 @@ jobs:
       inputs:
         - name: keyval
         - name: tools
-      outputs:
-        - name: email-text
+      params:
+        CONCOURSE_URL: ((concourse-url))
+        CONCOURSE_TEAM: ((concourse-team))
+        CONCOURSE_USERNAME: ((concourse-username))
+        CONCOURSE_PASSWORD: ((concourse-password))
+        CONCOURSE_PIPELINE_NAME: ((concourse-pipeline-name))
+      run:
+        path: bash
+        args:
+        - -exc
+        - |
+          ROOT_FOLDER="$( pwd )"
+          export KEYVAL_RESOURCE=keyval
+          source ${ROOT_FOLDER}/tools/tasks/resource-utils.sh
+          exportKeyValProperties
+          fly -t local login -c $CONCOURSE_URL -n $CONCOURSE_TEAM -u $CONCOURSE_USERNAME -p $CONCOURSE_PASSWORD
+          fly -t local sync
+          fly -t local get-pipeline -p $CONCOURSE_PIPELINE_NAME > ./original-pipeline.yml
+          sed "s/Ship-version-Coll-Con-.*/Ship-version-Coll-Con-$PASSED_TAG_RELEASED_CREATED/" ./original-pipeline.yml > ./updated-pipeline.yml
+          fly -t local set-pipeline -p {{concourse-pipeline-name}} -c ./updated-pipeline.yml -n
+          passKeyValProperties
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+
+- name: Ship-version-Coll-Con-v0.0.0
+  plan:
+  - aggregate:
+    - get: tools
+    - get: repo-coll-evo
+    - get: config-logical-micro
+    - get: keyval
+      passed:
+        - pvcs-upload
+    trigger: false
+  - task: shipit-task-to-collaudo
+    privileged: true
+    input_mapping:
+      repo: repo-coll-evo
+      config: config-logical-micro
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: vmartinvega/concourse-tools-tim
+          tag: "latest"
       run:
         path: sh
         args:
@@ -272,11 +321,13 @@ jobs:
           export KEYVAL_RESOURCE=keyval
           source ${ROOT_FOLDER}/tools/tasks/resource-utils.sh
           exportKeyValProperties
-          fly -t local login -c {{concourse-url}} -n {{concourse-team}} #-u {{concourse-username}} -p {{concourse-password}}
-          fly -t local sync
-          fly -t local get-pipeline -p {{concourse-pipeline-name}} > ./original-pipeline.yml
-          sed "s/Ship-version-.*/Ship-version-$LATEST_GOOD_VERSION/" ./original-pipeline.yml > ./updated-pipeline.yml
-          ./fly -t local set-pipeline -p {{concourse-pipeline-name}} -c ./updated-pipeline.yml -n
+          echo "DEBUG: checking out the verson "${PASSED_TAG_RELEASED_CREATED}
+          git checkout tags/${PASSED_TAG_RELEASED_CREATED}
+          echo "Output of your manually triggered Ship-it task."
+          passKeyValProperties
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
 
 common-git-params: &common-git-params
   BUILD_OPTIONS: ((build-options))
