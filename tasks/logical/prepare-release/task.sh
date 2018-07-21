@@ -65,8 +65,6 @@ git add app-descriptor.df
 git add apps-version.env
 git add compiled/*
 
-exit 1
-
 git commit -m "[ci skip] Adding pom.xml for the current version, and all compiled files"
 
 echo "--- Prepare Release ---"
