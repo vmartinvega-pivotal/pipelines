@@ -7,6 +7,11 @@ RUN \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 
+# Install fly
+COPY fly /usr/local/bin
+
+RUN chmod +x /usr/local/bin/fly
+
 # Install SoapUI
 ENV SOAPUI_VERSION 5.4.0
 
