@@ -60,12 +60,10 @@ cp -r ${TMPDIR}/${REPO_RESOURCE}/compiled "${ROOT_FOLDER}/${REPO_RESOURCE}"/
 
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
-ls compiled/coll-evo
-
 git add pom.xml
 git add app-descriptor.df
 git add apps-version.env
-git add compiled/\*
+git add compiled/*
 
 exit 1
 
