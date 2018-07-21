@@ -53,16 +53,16 @@ resources:
 - name: keyval
   type: keyval
 
-- name: send-email
-  type: email
-  source:
-    smtp:
-      host: smtp.gmail.com
-      port: "587" # this must be a string
-      username: vicente.martin.vega
-      password: 
-    from: vicente.martin.vega@gmail.com
-    to: [ "vicente.martin.vega@gmail.com" ]
+#- name: send-email
+#  type: email
+#  source:
+#    smtp:
+#      host: smtp.gmail.com
+#      port: "587" # this must be a string
+#      username: vicente.martin.vega
+#      password: 
+#    from: vicente.martin.vega@gmail.com
+#    to: [ "vicente.martin.vega@gmail.com" ]
 
 resource_types:
   - name: keyval
@@ -70,10 +70,10 @@ resource_types:
     source:
       repository: swce/keyval-resource
   
-  - name: email
-    type: docker-image
-    source:
-      repository: mdomke/concourse-email-resource
+#  - name: email
+#    type: docker-image
+#    source:
+#      repository: mdomke/concourse-email-resource
 
 jobs:
 - name: deploy-streams
