@@ -73,7 +73,7 @@ resource_types:
   - name: email
     type: docker-image
     source:
-      repository: pcfseceng/email-resource
+      repository: mdomke/concourse-email-resource
 
 jobs:
 - name: deploy-streams
