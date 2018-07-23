@@ -122,7 +122,7 @@ jobs:
         - name: repo
         - name: config
       params:
-        ENVIRONMENT_TO_DEPLOY: collaudo-consolidato
+        ENVIRONMENT_TO_DEPLOY: dev4
       run:
         path: sh
         args:
@@ -130,7 +130,7 @@ jobs:
         - |
           ROOT_FOLDER="$( pwd )"
           cd ${ROOT_FOLDER}/repo
-          #./microservice.sh ../config/${ENVIRONMENT_TO_DEPLOY}.env microservice.env script
+          ./microservice.sh ../config/${ENVIRONMENT_TO_DEPLOY}.env microservice.env deploy
 - name: soapui-tests
   public: true
   plan:
