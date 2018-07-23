@@ -130,7 +130,7 @@ jobs:
         - |
           ROOT_FOLDER="$( pwd )"
           cd ${ROOT_FOLDER}/repo
-          ./microservice.sh ../config/${ENVIRONMENT_TO_DEPLOY}.env microservice.env deploy
+          ./microservice.sh ../config/${ENVIRONMENT_TO_DEPLOY}.env microservice.env script
 - name: soapui-tests
   public: true
   plan:
