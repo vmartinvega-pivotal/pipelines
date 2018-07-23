@@ -47,7 +47,6 @@ mkdir ${FOLDER_TO_WORK_IN_PVCS}
 cp "${ROOT_FOLDER}/${REPO_RESOURCE}"/pom.xml ${FOLDER_TO_WORK_IN_PVCS} 
 
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
-
 # Get all sources
 # Get all physical microservices pom.xml files and jar files
 mvn -f pom.xml dependency:copy-dependencies -DexcludeTransitive=true -Dmdep.copyPom=true -DoutputDirectory=target/poms -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
@@ -70,6 +69,8 @@ mkdir ${FOLDER_TO_WORK_IN_PVCS}/micros-binaries
 cp target/poms/*.jar ${FOLDER_TO_WORK_IN_PVCS}/micros-binaries
 
 svn add --force ${FOLDER_TO_WORK_IN_PVCS}
+
+cd ${PVCS_PATH}/${PVCS_CHECKOUTDIR}
 
 svn commit -m "Logical microservice version ${PASSED_TAG_RELEASED_CREATED}" --username=${PVCS_USERNAME} --password=${PVCS_PASSWORD}
 
