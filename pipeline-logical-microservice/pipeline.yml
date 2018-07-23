@@ -12,6 +12,15 @@ resources:
     ignore_paths:
     - app-descriptor.df
 
+- name: soap-ui-tests
+  type: git
+  source:
+    uri: ((soap-ui-tests-url))
+    branch: ((soap-ui-tests-branch))
+    username: ((github-username))
+    password: ((github-password))
+    skip_ssl_verification: true
+
 - name: tools
   type: git
   source:
@@ -128,14 +137,15 @@ jobs:
   - aggregate:
     - get: tools
     - get: repo-coll-evo
+    - get: soap-ui-tests
     - get: keyval
       passed:
       - deploy-streams
       trigger: true
   - task: soapui-tests
     privileged: true
-    file: tools/tasks/logical/do-nothing/task.yml
-    input_mapping: {repo: repo-coll-evo}
+    file: tools/tasks/logical/soapui-tests/task.yml
+    input_mapping: {repo: repo-coll-evo, tests: soap-ui-tests}
     params:
       <<: *common-git-params
   - put: keyval

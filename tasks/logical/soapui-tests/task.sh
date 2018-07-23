@@ -10,6 +10,7 @@ export ROOT_FOLDER
 ROOT_FOLDER="$( pwd )"
 export REPO_RESOURCE=repo
 export TOOLS_RESOURCE=tools
+export TESTS_RESOURCE=tests
 export OUTPUT_RESOURCE=out
 export KEYVALOUTPUT_RESOURCE=keyvalout
 export KEYVAL_RESOURCE=keyval
@@ -20,12 +21,11 @@ source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/source-all.sh
 # Add properties as environment variables
 exportKeyValProperties
 
-cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
-
-# TODO: Can be the latest version in the git repository or configured!!
-export PASSED_TAG_VERSION_DEPLOYING="V1.0.2"
+cd "${ROOT_FOLDER}/${TESTS_RESOURCE}" || exit
 
 echo "-- Running SaopUI tests"
+
+testrunner
 
 echo "-- Running SaopUI tests"
 
