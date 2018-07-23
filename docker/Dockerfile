@@ -7,6 +7,22 @@ RUN \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 
+# Install ruamel.yaml
+RUN \
+  apt-get update \
+  && apt-get install software-properties-common -y
+
+RUN \
+  apt-add-repository universe -y
+
+RUN \
+  apt-get update \
+  && apt-get install python-pip -y
+
+RUN pip install -U pip setuptools wheel
+
+RUN pip install ruamel.yaml
+
 # Install fly
 COPY fly /usr/local/bin
 
