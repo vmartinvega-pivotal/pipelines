@@ -47,10 +47,11 @@ cp -r ${ROOT_FOLDER}/${REPO_RESOURCE} ${TMPDIR}
 cp -r ${ROOT_FOLDER}/${CONFIG_RESOURCE} ${TMPDIR}
 cd ${TMPDIR}/${REPO_RESOURCE}
 
+
 prepareScriptsToDeploy
 
 echo "after prepared..."
-ls ${TMPDIR}/${REPO_RESOURCE}"/
+ls ${TMPDIR}/${REPO_RESOURCE}/
 
 # Move all compiled files to the repo
 mv ${TMPDIR}/${REPO_RESOURCE}/app-descriptor.df "${ROOT_FOLDER}/${REPO_RESOURCE}"/app-descriptor.df
