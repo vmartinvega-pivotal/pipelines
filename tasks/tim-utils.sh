@@ -47,7 +47,7 @@ function prepareScriptsToDeploy(){
   fi
 
   # Source all environments
-  for ENV_FILE in `ls *.env`
+  for ENV_FILE in `ls ../${CONFIG_RESOURCE}/*.env`
   do
     echo "DEBUG: creating compiled files for: ${ENV_FILE}"
     ./microservice.sh ../${CONFIG_RESOURCE}/${ENV_FILE} microservice.env script
