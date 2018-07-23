@@ -23,7 +23,7 @@ function prepareScriptsToDeploy(){
     rm apps-version.env
   fi
 
-  if [ -f compiled ]; then
+  if [ -d compiled ]; then
     rm -Rf compiled
   fi
 
