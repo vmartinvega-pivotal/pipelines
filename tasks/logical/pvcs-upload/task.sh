@@ -60,13 +60,13 @@ do
 done
 #cp -r target/micros-sources ${FOLDER_TO_WORK_IN_PVCS}/micros-sources
 
-cp -r compiled/ ${FOLDER_TO_WORK_IN_PVCS}
-mv ${FOLDER_TO_WORK_IN_PVCS}/compiled ${FOLDER_TO_WORK_IN_PVCS}/compiled-files
-cp app-descriptor.df ${FOLDER_TO_WORK_IN_PVCS}/compiled-files
-cp apps-version.env ${FOLDER_TO_WORK_IN_PVCS}/compiled-files
+#cp -r compiled/ ${FOLDER_TO_WORK_IN_PVCS}
+#mv ${FOLDER_TO_WORK_IN_PVCS}/compiled ${FOLDER_TO_WORK_IN_PVCS}/compiled-files
+#cp app-descriptor.df ${FOLDER_TO_WORK_IN_PVCS}/compiled-files
+#cp apps-version.env ${FOLDER_TO_WORK_IN_PVCS}/compiled-files
 
 mkdir ${FOLDER_TO_WORK_IN_PVCS}/micros-binaries
-cp target/poms/*.jar ${FOLDER_TO_WORK_IN_PVCS}/micros-binaries
+#cp target/poms/*.jar ${FOLDER_TO_WORK_IN_PVCS}/micros-binaries
 
 svn add --force ${FOLDER_TO_WORK_IN_PVCS}
 
