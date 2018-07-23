@@ -58,7 +58,7 @@ do
   
   #mvn -f ${FILE}  -DcheckoutDirectory=target/micros-sources/${ARTIFACTID} -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
 done
-cp -r target/micros-sources ${FOLDER_TO_WORK_IN_PVCS}/micros-sources
+#cp -r target/micros-sources ${FOLDER_TO_WORK_IN_PVCS}/micros-sources
 
 cp -r compiled/ ${FOLDER_TO_WORK_IN_PVCS}
 mv ${FOLDER_TO_WORK_IN_PVCS}/compiled ${FOLDER_TO_WORK_IN_PVCS}/compiled-files
