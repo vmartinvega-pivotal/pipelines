@@ -295,7 +295,8 @@ jobs:
           fly -t local get-pipeline -p $CONCOURSE_PIPELINE_NAME > ./original-pipeline.yml
           sed "s/- name: Ship-Version-Coll-Con-.*/- name: Ship-Version-Coll-Con-$PASSED_TAG_RELEASED_CREATED/" ./original-pipeline.yml > ./updated-pipeline.yml
           sed "s/- name: Ship-Version-Prod-.*/- name: Ship-Version-Prod-$PASSED_TAG_RELEASED_CREATED/" ./updated-pipeline.yml > ./updated-pipeline1.yml
-          fly -t local set-pipeline -p {{concourse-pipeline-name}} -c ./updated-pipeline1.yml -n
+          sed "s/- Ship-Version-Coll-Con-.*/- Ship-Version-Coll-Con-$PASSED_TAG_RELEASED_CREATED/" ./updated-pipeline1.yml > ./updated-pipeline2.yml
+          fly -t local set-pipeline -p {{concourse-pipeline-name}} -c ./updated-pipeline2.yml -n
           passKeyValProperties
   - put: keyval
     params:
