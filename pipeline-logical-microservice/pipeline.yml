@@ -324,8 +324,17 @@ jobs:
         source:
           repository: vmartinvega/concourse-tools-tim
           tag: "latest"
+      inputs:
+        - name: keyval
+        - name: tools
+        - name: repo
+        - name: config
+      outputs:
+        - name: keyvalout
+      params:
+        ENVIRONMENT_TO_DEPLOY: dev4
       run:
-        path: sh
+        path: bash
         args:
         - -exc
         - |
@@ -335,6 +344,7 @@ jobs:
           exportKeyValProperties
           echo "DEBUG: checking out the verson "${PASSED_TAG_RELEASED_CREATED}
           git checkout tags/${PASSED_TAG_RELEASED_CREATED}
+          ./microservice.sh ../config/${ENVIRONMENT_TO_DEPLOY}.env microservice.env script
           echo "Output of your manually triggered Ship-it task."
           passKeyValProperties
   - put: keyval
@@ -363,8 +373,17 @@ jobs:
         source:
           repository: vmartinvega/concourse-tools-tim
           tag: "latest"
+      inputs:
+        - name: keyval
+        - name: tools
+        - name: repo
+        - name: config
+      outputs:
+        - name: keyvalout
+      params:
+        ENVIRONMENT_TO_DEPLOY: dev4
       run:
-        path: sh
+        path: bash
         args:
         - -exc
         - |
@@ -374,6 +393,7 @@ jobs:
           exportKeyValProperties
           echo "DEBUG: checking out the verson "${PASSED_TAG_RELEASED_CREATED}
           git checkout tags/${PASSED_TAG_RELEASED_CREATED}
+          ./microservice.sh ../config/${ENVIRONMENT_TO_DEPLOY}.env microservice.env script
           echo "Output of your manually triggered Ship-it task."
           passKeyValProperties
   - put: keyval
