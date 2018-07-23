@@ -62,6 +62,9 @@ if [ -d ${ROOT_FOLDER}/${REPO_RESOURCE}/compiled ]; then
 fi 
 cp -r ${TMPDIR}/${REPO_RESOURCE}/compiled "${ROOT_FOLDER}/${REPO_RESOURCE}"/
 
+echo "debug"
+ls ${ROOT_FOLDER}/${REPO_RESOURCE}"/
+
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
 git add pom.xml
