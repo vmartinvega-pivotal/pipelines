@@ -47,23 +47,16 @@ cp -r ${ROOT_FOLDER}/${REPO_RESOURCE} ${TMPDIR}
 cp -r ${ROOT_FOLDER}/${CONFIG_RESOURCE} ${TMPDIR}
 cd ${TMPDIR}/${REPO_RESOURCE}
 
-
 prepareScriptsToDeploy
-
-echo "after prepared..."
-ls ${TMPDIR}/${REPO_RESOURCE}/
 
 # Move all compiled files to the repo
 mv ${TMPDIR}/${REPO_RESOURCE}/app-descriptor.df "${ROOT_FOLDER}/${REPO_RESOURCE}"/app-descriptor.df
 mv ${TMPDIR}/${REPO_RESOURCE}/apps-version.env "${ROOT_FOLDER}/${REPO_RESOURCE}"/apps-version.env
 
 if [ -d ${ROOT_FOLDER}/${REPO_RESOURCE}/compiled ]; then
-    rm -Rf compiled
+    rm -Rf ${ROOT_FOLDER}/${REPO_RESOURCE}/compiled
 fi 
 cp -r ${TMPDIR}/${REPO_RESOURCE}/compiled "${ROOT_FOLDER}/${REPO_RESOURCE}"/
-
-echo "debug"
-ls ${ROOT_FOLDER}/${REPO_RESOURCE}"/
 
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 

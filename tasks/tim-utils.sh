@@ -46,31 +46,18 @@ function prepareScriptsToDeploy(){
     exit 1
   fi
 
+  # Source all environments
+  for ENV_FILE in `ls *.env`
+  do
+    echo "DEBUG: creating compiled files for: ${ENV_FILE}"
+    ./microservice.sh ../${CONFIG_RESOURCE}/${ENV_FILE} microservice.env script
+  done
+
   echo "DEBUG: app-descriptor created..."
   cat app-descriptor.df
 
   echo "DEBUG: apps-version.env created..."
   cat apps-version.env
-
-  echo ""
-  echo "--- CREATING COMPILED FILES FOR COLLAUDO EVOLUTIVO"
-  ./microservice.sh ../${CONFIG_RESOURCE}/collaudo-evolutivo.env microservice.env script
-
-  echo ""
-  echo "--- CREATING COMPILED FILES FOR COLLAUDO CONSOLIDATO"
-  #./microservice.sh ../${CONFIG_RESOURCE}/collaudo-consolidato.env microservice.env script
-
-  echo ""
-  echo "--- CREATING COMPILED FILES FOR PROD"
-  #./microservice.sh ../${CONFIG_RESOURCE}/prod.env microservice.env script
-
-  echo ""
-  echo "--- CREATING COMPILED FILES FOR DEV1"
-  #./microservice.sh ../${CONFIG_RESOURCE}//dev1.env microservice.env script
-
-  echo ""
-  echo "--- CREATING COMPILED FILES FOR DEV4"
-  ./microservice.sh ../${CONFIG_RESOURCE}/dev4.env microservice.env script
 }
 
 function checkDiferenciesForFilesAndCopyIfNeeded(){
