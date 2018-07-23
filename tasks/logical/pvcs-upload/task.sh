@@ -43,9 +43,10 @@ if [ -d ${FOLDER_TO_WORK_IN_PVCS} ]; then
   rm -Rf ${FOLDER_TO_WORK_IN_PVCS}
 fi
 mkdir ${FOLDER_TO_WORK_IN_PVCS}
-cd ${FOLDER_TO_WORK_IN_PVCS}
 
 cp "${ROOT_FOLDER}/${REPO_RESOURCE}"/pom.xml ${FOLDER_TO_WORK_IN_PVCS} 
+
+cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
 # Get all sources
 # Get all physical microservices pom.xml files and jar files
