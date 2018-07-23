@@ -25,7 +25,7 @@ cd "${ROOT_FOLDER}/${TESTS_RESOURCE}" || exit
 
 echo "-- Running SaopUI tests"
 
-/opt/SoapUI/bin/testrunner.sh
+#/opt/SoapUI/bin/testrunner.sh
 
 echo "-- Running SaopUI tests"
 

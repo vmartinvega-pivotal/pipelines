@@ -340,12 +340,13 @@ jobs:
         - |
           ROOT_FOLDER="$( pwd )"
           export KEYVAL_RESOURCE=keyval
+          export KEYVALOUTPUT_RESOURCE=keyvalout
           source ${ROOT_FOLDER}/tools/tasks/resource-utils.sh
           exportKeyValProperties
+          cd ${ROOT_FOLDER}/repo
           echo "DEBUG: checking out the verson "${PASSED_TAG_RELEASED_CREATED}
           git checkout tags/${PASSED_TAG_RELEASED_CREATED}
           ./microservice.sh ../config/${ENVIRONMENT_TO_DEPLOY}.env microservice.env script
-          echo "Output of your manually triggered Ship-it task."
           passKeyValProperties
   - put: keyval
     params:
@@ -389,12 +390,13 @@ jobs:
         - |
           ROOT_FOLDER="$( pwd )"
           export KEYVAL_RESOURCE=keyval
+          export KEYVALOUTPUT_RESOURCE=keyvalout
           source ${ROOT_FOLDER}/tools/tasks/resource-utils.sh
           exportKeyValProperties
+          cd ${ROOT_FOLDER}/repo
           echo "DEBUG: checking out the verson "${PASSED_TAG_RELEASED_CREATED}
           git checkout tags/${PASSED_TAG_RELEASED_CREATED}
           ./microservice.sh ../config/${ENVIRONMENT_TO_DEPLOY}.env microservice.env script
-          echo "Output of your manually triggered Ship-it task."
           passKeyValProperties
   - put: keyval
     params:
