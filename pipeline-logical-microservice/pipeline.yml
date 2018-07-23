@@ -53,16 +53,16 @@ resources:
 - name: keyval
   type: keyval
 
-- name: send-email
-  type: email
-  source:
-    smtp:
-      host: smtp.gmail.com
-      port: "587" # this must be a string
-      username: vicente.martin.vega
-      password: 
-    from: vicente.martin.vega@gmail.com
-    to: [ "vicente.martin.vega@gmail.com" ]
+#- name: send-email
+#  type: email
+#  source:
+#    smtp:
+#      host: ((smtp-host))
+#      port: ((smtp-port)) # this must be a string
+#      username: ((smtp-username))
+#      password: ((smtp-password))
+#    from: vicente.martin.vega@gmail.com
+#    to: [ "vicente.martin.vega@gmail.com" ]
 
 resource_types:
   - name: keyval
@@ -70,10 +70,10 @@ resource_types:
     source:
       repository: swce/keyval-resource
   
-  - name: email
-    type: docker-image
-    source:
-      repository: pcfseceng/email-resource
+#  - name: email
+#    type: docker-image
+#    source:
+#      repository: pcfseceng/email-resource
       
 jobs:
 - name: deploy-streams
@@ -249,10 +249,10 @@ jobs:
     params:
       file: keyvalout/keyval.properties
 
-  - put: send-email
-    params:
-      subject: ./email-text/email-subject.txt
-      body: ./email-text/email-body.txt
+#  - put: send-email
+#    params:
+#      subject: ./email-text/email-subject.txt
+#      body: ./email-text/email-body.txt
 
   - task: update-ship-it-job-name
     config:
@@ -283,14 +283,15 @@ jobs:
           fly -t local login -c $CONCOURSE_URL -n $CONCOURSE_TEAM -u $CONCOURSE_USERNAME -p $CONCOURSE_PASSWORD
           fly -t local sync
           fly -t local get-pipeline -p $CONCOURSE_PIPELINE_NAME > ./original-pipeline.yml
-          sed "s/Ship-version-Coll-Con-.*/Ship-version-Coll-Con-$PASSED_TAG_RELEASED_CREATED/" ./original-pipeline.yml > ./updated-pipeline.yml
+          sed "s/- name: Ship-Version-Coll-Con-.*/- name: Ship-Version-Coll-Con-$PASSED_TAG_RELEASED_CREATED/" ./original-pipeline.yml > ./updated-pipeline.yml
+          sed "s/- name: Ship-Version-Prod-.*/- name: Ship-Version-Prod-$PASSED_TAG_RELEASED_CREATED/" ./original-pipeline.yml > ./updated-pipeline.yml
           fly -t local set-pipeline -p {{concourse-pipeline-name}} -c ./updated-pipeline.yml -n
           passKeyValProperties
   - put: keyval
     params:
       file: keyvalout/keyval.properties
 
-- name: Ship-version-Coll-Con-v0.0.0
+- name: Ship-Version-Coll-Con-v0.0.0
   plan:
   - aggregate:
     - get: tools
@@ -301,6 +302,45 @@ jobs:
         - pvcs-upload
     trigger: false
   - task: shipit-task-to-collaudo
+    privileged: true
+    input_mapping:
+      repo: repo-coll-evo
+      config: config-logical-micro
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: vmartinvega/concourse-tools-tim
+          tag: "latest"
+      run:
+        path: sh
+        args:
+        - -exc
+        - |
+          ROOT_FOLDER="$( pwd )"
+          export KEYVAL_RESOURCE=keyval
+          source ${ROOT_FOLDER}/tools/tasks/resource-utils.sh
+          exportKeyValProperties
+          echo "DEBUG: checking out the verson "${PASSED_TAG_RELEASED_CREATED}
+          git checkout tags/${PASSED_TAG_RELEASED_CREATED}
+          echo "Output of your manually triggered Ship-it task."
+          passKeyValProperties
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+
+- name: Ship-Version-Prod-v0.0.0
+  plan:
+  - aggregate:
+    - get: tools
+    - get: repo-coll-evo
+    - get: config-logical-micro
+    - get: keyval
+      passed:
+        - Ship-Version-Coll-Con-v0.0.0
+    trigger: false
+  - task: shipit-task-to-production
     privileged: true
     input_mapping:
       repo: repo-coll-evo
