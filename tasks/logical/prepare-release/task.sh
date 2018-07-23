@@ -47,6 +47,10 @@ cp -r ${ROOT_FOLDER}/${REPO_RESOURCE} ${TMPDIR}
 cp -r ${ROOT_FOLDER}/${CONFIG_RESOURCE} ${TMPDIR}
 cd ${TMPDIR}/${REPO_RESOURCE}
 
+if [ -d ${TMPDIR}/${REPO_RESOURCE}/compiled ]; then
+    rm -Rf compiled
+fi 
+
 prepareScriptsToDeploy
 
 # Move all compiled files to the repo
