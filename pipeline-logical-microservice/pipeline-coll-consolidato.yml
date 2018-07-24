@@ -1,6 +1,6 @@
 ---
 resources:
-- name: repo-coll-evo
+- name: repo-coll-con
   type: git
   source:
     uri: ((app-url))
@@ -88,14 +88,14 @@ jobs:
   plan:
   - aggregate:
     - get: tools
-    - get: repo-coll-evo
+    - get: repo-coll-con
     - get: config-logical-micro
       trigger: true
   - task: compile-logical-microservice
     privileged: true
     file: tools/tasks/logical/compile-logical/task.yml
     input_mapping:
-      repo: repo-coll-evo
+      repo: repo-coll-con
       config: config-logical-micro
     output_mapping:
       out: logical_compiled_files
@@ -134,7 +134,7 @@ jobs:
   plan:
   - aggregate:
     - get: tools
-    - get: repo-coll-evo
+    - get: repo-coll-con
     - get: soap-ui-tests
     - get: keyval
       passed:
@@ -143,7 +143,7 @@ jobs:
   - task: soapui-tests
     privileged: true
     file: tools/tasks/logical/soapui-tests/task.yml
-    input_mapping: {repo: repo-coll-evo, tests: soap-ui-tests}
+    input_mapping: {repo: repo-coll-con, tests: soap-ui-tests}
     params:
       <<: *common-git-params
   - put: keyval
@@ -155,7 +155,7 @@ jobs:
   plan:
   - aggregate:
     - get: tools
-    - get: repo-coll-evo
+    - get: repo-coll-con
     - get: config-logical-micro
     - get: keyval
       passed:
@@ -164,7 +164,7 @@ jobs:
   - task: prepare-release
     privileged: true
     file: tools/tasks/logical/prepare-release/task.yml
-    input_mapping: {repo: repo-coll-evo, config: config-logical-micro}
+    input_mapping: {repo: repo-coll-con, config: config-logical-micro}
     params:
       <<: *common-git-params
       SONAR_BRANCH: ((sonar-branch))
@@ -201,7 +201,7 @@ jobs:
   - put: keyval
     params:
       file: keyvalout/keyval.properties
-  - put: repo-coll-evo
+  - put: repo-coll-con
     params:
       repository: out
 
@@ -210,7 +210,7 @@ jobs:
   plan:
   - aggregate:
     - get: tools
-    - get: repo-coll-evo
+    - get: repo-coll-con
     - get: keyval
       passed:
       - create-release
@@ -218,7 +218,7 @@ jobs:
   - task: pvcs-upload
     privileged: true
     file: tools/tasks/logical/pvcs-upload/task.yml
-    input_mapping: {repo: repo-coll-evo}
+    input_mapping: {repo: repo-coll-con}
     params:
       <<: *common-git-params
       PVCS_URL: ((pvcs-url))
@@ -304,7 +304,7 @@ jobs:
   plan:
   - aggregate:
     - get: tools
-    - get: repo-coll-evo
+    - get: repo-coll-con
     - get: config-logical-micro
     - get: keyval
       passed:
@@ -313,7 +313,7 @@ jobs:
   - task: shipit-task-to-collaudo
     privileged: true
     input_mapping:
-      repo: repo-coll-evo
+      repo: repo-coll-con
       config: config-logical-micro
     config:
       platform: linux
@@ -354,7 +354,7 @@ jobs:
   plan:
   - aggregate:
     - get: tools
-    - get: repo-coll-evo
+    - get: repo-coll-con
     - get: config-logical-micro
     - get: keyval
       passed:
@@ -363,7 +363,7 @@ jobs:
   - task: shipit-task-to-production
     privileged: true
     input_mapping:
-      repo: repo-coll-evo
+      repo: repo-coll-con
       config: config-logical-micro
     config:
       platform: linux
@@ -417,4 +417,3 @@ common-git-params: &common-git-params
   M2_SETTINGS_REPO_GIT_SERVER_URL: ((gitlab-server-url))
   M2_SETTINGS_REPO_SONAR_URL: ((sonar-host-url))
   M2_SETTINGS_REPO_SONAR_TOKEN: ((sonar-login-key))
-

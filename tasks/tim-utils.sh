@@ -162,6 +162,10 @@ function getArtifactId(){
   echo $(python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/parse-pom.py $1 "artifact")
 }
 
+function increaseBranch(){
+  echo $(python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/increase-branch.py $1)
+}
+
 function randomName(){
   echo $(python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/random.py)
 }
