@@ -8,7 +8,7 @@ set -o pipefail
 
 export ROOT_FOLDER
 ROOT_FOLDER="$( pwd )"
-export REPO_RESOURCE=repoput
+export REPO_RESOURCE=repo
 export FILES_FROM_PREPARE_RELEASE=out-preprare-release
 export TOOLS_RESOURCE=tools
 export OUTPUT_RESOURCE=out
