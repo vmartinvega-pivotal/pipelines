@@ -204,6 +204,12 @@ jobs:
   - put: repo-coll-con
     params:
       repository: out
+  - put: repoput
+    params:
+      repository: out
+  - put: repoput1
+    params:
+      repository: out
 
 - name: pvcs-upload
   public: true
