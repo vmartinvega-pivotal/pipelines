@@ -486,7 +486,6 @@ jobs:
           NEW_BRANCH_DECREASED=$(decreaseBranch ${CURRENT_BRANCH})
           sed "s/CURRENT_BRANCH: \"${NEW_BRANCH_DECREASED}\"/CURRENT_BRANCH: \"${CURRENT_BRANCH}\"/" original-pipeline-consolidato.yml > updated-pipeline-consolidato.yml
           python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/modify-yaml.py updated-pipeline-consolidato.yml ${CURRENT_BRANCH} repo-coll-evo-put,repo-coll-evo-put1,repo-coll-evo updated-pipeline-consolidato1.yml
-          cat updated-pipeline-evolutivo1.yml
           fly -t local set-pipeline -p ${CONCOURSE_PIPELINE_NAME} -c ./updated-pipeline-evolutivo1.yml -n
           fly -t local set-pipeline -p ${CONCOURSE_PIPELINE_NAME_CONSOLIDATO} -c ./updated-pipeline-consolidato1.yml -n
           passKeyValProperties

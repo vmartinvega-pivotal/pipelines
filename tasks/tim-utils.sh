@@ -163,11 +163,11 @@ function getArtifactId(){
 }
 
 function increaseBranch(){
-  echo $(python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/increase-branch.py $1 "increase")
+  echo $(python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/modify-branch.py $1 "increase")
 }
 
 function decreaseBranch(){
-  echo $(python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/increase-branch.py $1 "decrease")
+  echo $(python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/modify-branch.py $1 "decrease")
 }
 
 function randomName(){
