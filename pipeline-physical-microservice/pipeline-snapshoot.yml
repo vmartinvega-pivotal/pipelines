@@ -155,6 +155,9 @@ jobs:
   - put: keyval
     params:
       file: keyvalout/keyval.properties
+  - put: repo
+    params:
+      file: out
 
 common-params: &common-params
   BUILD_OPTIONS: ((build-options))

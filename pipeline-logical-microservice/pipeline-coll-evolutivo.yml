@@ -165,6 +165,7 @@ jobs:
     privileged: true
     file: tools/tasks/logical/prepare-release/task.yml
     input_mapping: {repo: repo-coll-evo, config: config-logical-micro}
+    output_mapping: {filesout: prepare-release-files }
     params:
       <<: *common-git-params
       SONAR_BRANCH: ((sonar-branch))
@@ -179,7 +180,8 @@ jobs:
   - task: create-release-step1
     privileged: true
     file: tools/tasks/logical/create-release-step1/task.yml
-    input_mapping: {repo: repo-coll-con-put}
+    input_mapping: {repo: repo-coll-evo-put, files: prepare-release-files}
+    output_mapping: {filesout: create-release-step1-files }
     params:
       <<: *common-git-params
       SONAR_BRANCH: ((sonar-branch))
@@ -194,7 +196,7 @@ jobs:
   - task: create-release-step2
     privileged: true
     file: tools/tasks/logical/create-release-step2/task.yml
-    input_mapping: {repo: repo-coll-con-put1}
+    input_mapping: {repo: repo-coll-evo-put1, files: create-release-step1-files}
     params:
       <<: *common-git-params
       SONAR_BRANCH: ((sonar-branch))
@@ -299,12 +301,9 @@ jobs:
 #          fly -t local login -c $CONCOURSE_URL -n $CONCOURSE_TEAM -u $CONCOURSE_USERNAME -p $CONCOURSE_PASSWORD
 #          fly -t local sync
 #          fly -t local get-pipeline -p $CONCOURSE_PIPELINE_NAME > ./original-pipeline.yml
-#          sed "s/- name: Ship-Version-Coll-Evo-.*/- name: Ship-Version-Coll-Evo-$PASSED_TAG_RELEASED_CREATED/" ./original-pipeline.yml > ./updated-pipeline.yml
-#          sed "s/- name: Ship-Version-Prod-.*/- name: Ship-Version-Prod-$PASSED_TAG_RELEASED_CREATED/" ./updated-pipeline.yml > ./updated-pipeline1.yml
-#          sed "s/- Ship-Version-Coll-Evo-.*/- Ship-Version-Coll-Evo-$PASSED_TAG_RELEASED_CREATED/" ./updated-pipeline1.yml > ./updated-pipeline2.yml
-#          sed "s/- Ship-Version-Coll-Con-.*/- Ship-Version-Coll-Con-$PASSED_TAG_RELEASED_CREATED/" ./updated-pipeline1.yml > ./updated-pipeline2.yml
-#          sed "s/- Ship-Version-Prod-.*/- Ship-Version-Prod-$PASSED_TAG_RELEASED_CREATED/" ./updated-pipeline1.yml > ./updated-pipeline2.yml
 #          sed "s/- name: Ship-Version-Coll-Con-.*/- name: Ship-Version-Coll-Con-$PASSED_TAG_RELEASED_CREATED/" ./original-pipeline.yml > ./updated-pipeline.yml
+#          sed "s/- name: Ship-Version-Prod-.*/- name: Ship-Version-Prod-$PASSED_TAG_RELEASED_CREATED/" ./updated-pipeline.yml > ./updated-pipeline1.yml
+#          sed "s/- Ship-Version-Coll-Con-.*/- Ship-Version-Coll-Con-$PASSED_TAG_RELEASED_CREATED/" ./updated-pipeline1.yml > ./updated-pipeline2.yml
 #          fly -t local set-pipeline -p {{concourse-pipeline-name}} -c ./updated-pipeline2.yml -n
 #          passKeyValProperties
 #  - put: keyval
@@ -421,7 +420,7 @@ jobs:
       passed:
         - Ship-Production
     trigger: true
-  - task: shipit-task-to-production
+  - task: shipit-task-to-collaudo-consolidato
     privileged: true
     input_mapping:
       repo: repo-coll-evo
@@ -540,4 +539,3 @@ common-git-params: &common-git-params
   M2_SETTINGS_REPO_GIT_SERVER_URL: ((gitlab-server-url))
   M2_SETTINGS_REPO_SONAR_URL: ((sonar-host-url))
   M2_SETTINGS_REPO_SONAR_TOKEN: ((sonar-login-key))
-
