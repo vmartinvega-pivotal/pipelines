@@ -165,7 +165,7 @@ jobs:
     privileged: true
     file: tools/tasks/logical/prepare-release/task.yml
     input_mapping: {repo: repo-coll-con, config: config-logical-micro}
-    output_mapping: {filesoout: prepare-release-files }
+    output_mapping: {filesout: prepare-release-files }
     params:
       <<: *common-git-params
       SONAR_BRANCH: ((sonar-branch))
