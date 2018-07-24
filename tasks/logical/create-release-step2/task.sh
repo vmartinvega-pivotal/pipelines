@@ -26,7 +26,7 @@ exportKeyValProperties
 
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
-echo "--- Create Release ---"
+echo "--- Create Release Step2---"
 
 git config --global http.sslKey "${HOME}/.gitprivatekey/privatekey"
 git config --global http.sslVerify false
@@ -43,7 +43,7 @@ mvn --batch-mode release:perform -Dusername=${USERNAME} -Dpassword=${PASSWORD} -
 RELEASED_VERSION=$(git describe --abbrev=0 --tags)
 export PASSED_TAG_RELEASED_CREATED=${RELEASED_VERSION}
 
-echo "--- Create Release ---"
+echo "--- Create Release Step2---"
 echo ""
 
 # Adding values to the next job
