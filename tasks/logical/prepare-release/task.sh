@@ -34,6 +34,8 @@ git config --global http.sslVerify false
 git config --global user.name "${GIT_NAME}"
 git config --global user.email "${GIT_EMAIL}"
 
+git checkout -f ${CURRENT_BRANCH}
+
 mvn --batch-mode release:clean release:prepare -DdryRun=true -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Drelease.arguments=" -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}" -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
 
 cp pom.xml.next pom.xml.backup
