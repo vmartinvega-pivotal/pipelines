@@ -37,7 +37,7 @@ resources:
     password: ((github-password))
     skip_ssl_verification: true
 
-- name: repoput
+- name: repo-coll-con-put
   type: git
   source:
     uri: ((app-url))
@@ -47,7 +47,7 @@ resources:
     skip_ssl_verification: true
     disable_ci_skip: false
 
-- name: repoput1
+- name: repo-coll-con-put1
   type: git
   source:
     uri: ((app-url))
@@ -173,7 +173,7 @@ jobs:
   - put: keyval
     params:
       file: keyvalout/keyval.properties
-  - put: repoput
+  - put: repo-coll-con-put
     params:
       repository: out
   - task: create-release-step1
@@ -187,7 +187,7 @@ jobs:
   - put: keyval
     params:
       file: keyvalout/keyval.properties
-  - put: repoput1
+  - put: repo-coll-con-put1
     params:
       repository: out
   - task: create-release-step2
@@ -204,10 +204,10 @@ jobs:
   - put: repo-coll-con
     params:
       repository: out
-  - put: repoput
+  - put: repo-coll-con-put
     params:
       repository: out
-  - put: repoput1
+  - put: repo-coll-con-put1
     params:
       repository: out
 

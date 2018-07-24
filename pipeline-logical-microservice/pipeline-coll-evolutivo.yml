@@ -37,7 +37,7 @@ resources:
     password: ((github-password))
     skip_ssl_verification: true
 
-- name: repoput
+- name: repo-coll-evo-put
   type: git
   source:
     uri: ((app-url))
@@ -47,7 +47,7 @@ resources:
     skip_ssl_verification: true
     disable_ci_skip: false
 
-- name: repoput1
+- name: repo-coll-evo-put1
   type: git
   source:
     uri: ((app-url))
@@ -173,7 +173,7 @@ jobs:
   - put: keyval
     params:
       file: keyvalout/keyval.properties
-  - put: repoput
+  - put: repo-coll-evo-put
     params:
       repository: out
   - task: create-release-step1
@@ -187,7 +187,7 @@ jobs:
   - put: keyval
     params:
       file: keyvalout/keyval.properties
-  - put: repoput1
+  - put: repo-coll-evo-put1
     params:
       repository: out
   - task: create-release-step2
@@ -204,10 +204,10 @@ jobs:
   - put: repo-coll-evo
     params:
       repository: out
-  - put: repoput
+  - put: repo-coll-evo-put
     params:
       repository: out
-  - put: repoput1
+  - put: repo-coll-evo-put1
     params:
       repository: out
 
@@ -513,8 +513,8 @@ jobs:
           fly -t local get-pipeline -p $CONCOURSE_PIPELINE_NAME > ./original-pipeline-evolutivo.yml
           fly -t local get-pipeline -p $CONCOURSE_PIPELINE_NAME_CONSOLIDATO > ./original-pipeline-consolidato.yml
           NEW_BRANCH=$(increaseBranch ${CURRENT_BRANCH})
-          python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/modify-yaml.py original-pipeline-evolutivo.yml ${NEW_BRANCH} repoput,repoput1,repo-coll-evo >> updated-pipeline-evolutivo.yml
-          python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/modify-yaml.py original-pipeline-consolidato.yml ${CURRENT_BRANCH} repoput,repoput1,repo-coll-evo >> updated-pipeline-consolidato.yml
+          python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/modify-yaml.py original-pipeline-evolutivo.yml ${NEW_BRANCH} repo-coll-evo-put,repo-coll-evo-put1,repo-coll-evo >> updated-pipeline-evolutivo.yml
+          python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/modify-yaml.py original-pipeline-consolidato.yml ${CURRENT_BRANCH} repo-coll-evo-put,repo-coll-evo-put1,repo-coll-evo >> updated-pipeline-consolidato.yml
           fly -t local set-pipeline -p ${CONCOURSE_PIPELINE_NAME} -c ./updated-pipeline-evolutivo.yml -n
           fly -t local set-pipeline -p ${CONCOURSE_PIPELINE_NAME_CONSOLIDATO} -c ./updated-pipeline-consolidato.yml -n
           passKeyValProperties
