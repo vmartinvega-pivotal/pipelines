@@ -281,8 +281,8 @@ jobs:
     - get: config-logical-micro
     - get: keyval
       passed:
-        - pvcs-upload
-    trigger: false
+      - pvcs-upload
+      trigger: false
   - task: shipit-task-to-collaudo
     privileged: true
     input_mapping:
@@ -332,8 +332,8 @@ jobs:
     - get: config-logical-micro
     - get: keyval
       passed:
-        - Ship-Collaudo-Con
-    trigger: false
+      - Ship-Collaudo-Con
+      trigger: false
   - task: shipit-task-to-production
     privileged: true
     input_mapping:

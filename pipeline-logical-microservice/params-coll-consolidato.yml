@@ -40,14 +40,6 @@ smtp-port: "587"
 smtp-username: vicente
 smtp-password: hola
 
-
-# Concourse Configuration
-concourse-url: http://10.56.253.197:8080 # e.g. http://192.168.100.4:8080/
-concourse-team: main  # e.g. main
-concourse-username: admin  # e.g. admin
-concourse-password: e8apq0ezgu5g6ck0kogc
-concourse-pipeline-name: release-consistenze-id20-coll-con
-
 # PVCS configuration
 pvcs-url: http://pvcs.telecomitalia.local:8080/cmbridge/CORSO/AGILE/STR1
 pvcs-username: X1017391
