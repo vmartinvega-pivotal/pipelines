@@ -10,7 +10,7 @@ if __name__ == "__main__":
   new_branch = str(sys.argv[2])
   repo_names = str(sys.argv[3]).split(',')
   output_file = str(sys.argv[4])
-
+  
   config, ind, bsi = load_yaml_guess_indent(open(file_name))
   resources = config['resources']
   for resource in resources:
