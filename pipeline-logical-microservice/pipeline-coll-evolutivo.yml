@@ -128,7 +128,8 @@ jobs:
         - |
           ROOT_FOLDER="$( pwd )"
           cd ${ROOT_FOLDER}/repo
-          ./microservice.sh ../config/${ENVIRONMENT_TO_DEPLOY}.env microservice.env script
+          echo "DEBUG: Deploying to ${ENVIRONMENT_TO_DEPLOY}"
+          #./microservice.sh ../config/${ENVIRONMENT_TO_DEPLOY}.env microservice.env deploy
 - name: soapui-tests
   public: true
   plan:
@@ -272,44 +273,6 @@ jobs:
 #      subject: ./email-text/email-subject.txt
 #      body: ./email-text/email-body.txt
 
-#  - task: update-ship-it-job-name
-#    config:
-#      platform: linux
-#      image_resource:
-#        type: docker-image
-#        source:
-#          repository: vmartinvega/concourse-tools-tim
-#          tag: "latest"
-#      inputs:
-#        - name: keyval
-#        - name: tools
-#      params:
-#        CONCOURSE_URL: ((concourse-url))
-#        CONCOURSE_TEAM: ((concourse-team))
-#        CONCOURSE_USERNAME: ((concourse-username))
-#        CONCOURSE_PASSWORD: ((concourse-password))
-#        CONCOURSE_PIPELINE_NAME: ((concourse-pipeline-name))
-#      run:
-#        path: bash
-#        args:
-#        - -exc
-#        - |
-#          ROOT_FOLDER="$( pwd )"
-#          export KEYVAL_RESOURCE=keyval
-#          source ${ROOT_FOLDER}/tools/tasks/resource-utils.sh
-#          exportKeyValProperties
-#          fly -t local login -c $CONCOURSE_URL -n $CONCOURSE_TEAM -u $CONCOURSE_USERNAME -p $CONCOURSE_PASSWORD
-#          fly -t local sync
-#          fly -t local get-pipeline -p $CONCOURSE_PIPELINE_NAME > ./original-pipeline.yml
-#          sed "s/- name: Ship-Version-Coll-Con-.*/- name: Ship-Version-Coll-Con-$PASSED_TAG_RELEASED_CREATED/" ./original-pipeline.yml > ./updated-pipeline.yml
-#          sed "s/- name: Ship-Version-Prod-.*/- name: Ship-Version-Prod-$PASSED_TAG_RELEASED_CREATED/" ./updated-pipeline.yml > ./updated-pipeline1.yml
-#          sed "s/- Ship-Version-Coll-Con-.*/- Ship-Version-Coll-Con-$PASSED_TAG_RELEASED_CREATED/" ./updated-pipeline1.yml > ./updated-pipeline2.yml
-#          fly -t local set-pipeline -p {{concourse-pipeline-name}} -c ./updated-pipeline2.yml -n
-#          passKeyValProperties
-#  - put: keyval
-#    params:
-#      file: keyvalout/keyval.properties
-
 - name: Ship-Collaudo-Evo
   plan:
   - aggregate:
@@ -340,7 +303,7 @@ jobs:
       outputs:
         - name: keyvalout
       params:
-        ENVIRONMENT_TO_DEPLOY: dev4
+        ENVIRONMENT_TO_DEPLOY: collaudo-evolutivo
       run:
         path: bash
         args:
@@ -354,7 +317,8 @@ jobs:
           cd ${ROOT_FOLDER}/repo
           echo "DEBUG: checking out the verson "${PASSED_TAG_RELEASED_CREATED}
           git checkout tags/${PASSED_TAG_RELEASED_CREATED}
-          ./microservice.sh ../config/${ENVIRONMENT_TO_DEPLOY}.env microservice.env script
+          echo "DEBUG: Deploying to ${ENVIRONMENT_TO_DEPLOY}"
+          #./microservice.sh ../config/${ENVIRONMENT_TO_DEPLOY}.env microservice.env deploy
           passKeyValProperties
   - put: keyval
     params:
@@ -390,7 +354,7 @@ jobs:
       outputs:
         - name: keyvalout
       params:
-        ENVIRONMENT_TO_DEPLOY: dev4
+        ENVIRONMENT_TO_DEPLOY: prod
       run:
         path: bash
         args:
@@ -404,7 +368,8 @@ jobs:
           cd ${ROOT_FOLDER}/repo
           echo "DEBUG: checking out the verson "${PASSED_TAG_RELEASED_CREATED}
           git checkout tags/${PASSED_TAG_RELEASED_CREATED}
-          ./microservice.sh ../config/${ENVIRONMENT_TO_DEPLOY}.env microservice.env script
+          echo "DEBUG: Deploying to ${ENVIRONMENT_TO_DEPLOY}"
+          #./microservice.sh ../config/${ENVIRONMENT_TO_DEPLOY}.env microservice.env deploy
           passKeyValProperties
   - put: keyval
     params:
@@ -440,7 +405,7 @@ jobs:
       outputs:
         - name: keyvalout
       params:
-        ENVIRONMENT_TO_DEPLOY: dev4
+        ENVIRONMENT_TO_DEPLOY: collaudo-consolidato
       run:
         path: bash
         args:
@@ -454,7 +419,8 @@ jobs:
           cd ${ROOT_FOLDER}/repo
           echo "DEBUG: checking out the verson "${PASSED_TAG_RELEASED_CREATED}
           git checkout tags/${PASSED_TAG_RELEASED_CREATED}
-          ./microservice.sh ../config/${ENVIRONMENT_TO_DEPLOY}.env microservice.env script
+          echo "DEBUG: Deploying to ${ENVIRONMENT_TO_DEPLOY}"
+          #./microservice.sh ../config/${ENVIRONMENT_TO_DEPLOY}.env microservice.env deploy
           passKeyValProperties
   - put: keyval
     params:

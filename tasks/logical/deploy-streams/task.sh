@@ -10,8 +10,8 @@ export ROOT_FOLDER
 ROOT_FOLDER="$( pwd )"
 export REPO_RESOURCE=repo
 export TOOLS_RESOURCE=tools
-export CONFIG_RESOURCE=config
 export OUTPUT_RESOURCE=out
+export CONFIG_RESOURCE=config
 export KEYVALOUTPUT_RESOURCE=keyvalout
 export KEYVAL_RESOURCE=keyval
 
@@ -21,10 +21,14 @@ source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/source-all.sh
 # Add properties as environment variables
 exportKeyValProperties
 
-cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
-
 echo "--- Deploy Streams ---"
 
+cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
+
+echo "DEBUG: checking out the verson "${PASSED_TAG_RELEASED_CREATED}
+git checkout tags/${PASSED_TAG_RELEASED_CREATED}
+echo "Deploying to ${ENVIRONMENT_TO_DEPLOY}"
+#./microservice.sh ../config/${ENVIRONMENT_TO_DEPLOY}.env microservice.env deploy
 
 echo "--- Deploy Streams ---"
 echo ""
