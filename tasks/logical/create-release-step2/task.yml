@@ -10,7 +10,7 @@ image_resource:
 inputs:
   - name: tools
   - name: repo
-  - name: out-release-step1
+  - name: files
   - name: keyval
 
 outputs:

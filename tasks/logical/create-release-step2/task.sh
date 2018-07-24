@@ -11,7 +11,7 @@ ROOT_FOLDER="$( pwd )"
 export REPO_RESOURCE=repo
 export TOOLS_RESOURCE=tools
 export OUTPUT_RESOURCE=out
-export FILES_FROM_STEP1=out-release-step1
+export FILES_RESOURCE=files
 export KEYVALOUTPUT_RESOURCE=keyvalout
 export KEYVAL_RESOURCE=keyval
 
@@ -33,8 +33,8 @@ git config --global http.sslVerify false
 git config --global user.name "${GIT_NAME}"
 git config --global user.email "${GIT_EMAIL}"
 
-cp ${ROOT_FOLDER}/${FILES_FROM_STEP1}/pom.xml.releaseBackup .
-cp ${ROOT_FOLDER}/${FILES_FROM_STEP1}/release.properties .
+cp ${ROOT_FOLDER}/${FILES_RESOURCE}/pom.xml.releaseBackup .
+cp ${ROOT_FOLDER}/${FILES_RESOURCE}/release.properties .
 
 git checkout -f ${CURRENT_BRANCH}
 

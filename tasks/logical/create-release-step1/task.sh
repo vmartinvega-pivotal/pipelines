@@ -9,10 +9,10 @@ set -o pipefail
 export ROOT_FOLDER
 ROOT_FOLDER="$( pwd )"
 export REPO_RESOURCE=repo
-export FILES_FROM_PREPARE_RELEASE=out-preprare-release
+export FILES_RESOURCE=files
 export TOOLS_RESOURCE=tools
 export OUTPUT_RESOURCE=out
-export FILES=out-release-step1
+export FILESOUTPUT_RESOURCE=filesout
 export KEYVALOUTPUT_RESOURCE=keyvalout
 export KEYVAL_RESOURCE=keyval
 
@@ -38,7 +38,7 @@ git checkout -f ${CURRENT_BRANCH}
 
 mvn --batch-mode release:clean release:prepare -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Drelease.arguments="-Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}" -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}  -DscmCommentPrefix="[ci skip]" 
 
-mv ${ROOT_FOLDER}/${FILES_FROM_PREPARE_RELEASE}/pom.xml.backup pom.xml
+mv ${ROOT_FOLDER}/${FILES_RESOURCE}/pom.xml.backup pom.xml
 
 git add pom.xml
 
@@ -52,6 +52,6 @@ passKeyValProperties
 
 cp -r "${ROOT_FOLDER}/${REPO_RESOURCE}"/. "${ROOT_FOLDER}/${OUTPUT_RESOURCE}/"
 
-cp -r "${ROOT_FOLDER}/${REPO_RESOURCE}"/. "${ROOT_FOLDER}/${FILES}/"
+cp -r "${ROOT_FOLDER}/${REPO_RESOURCE}"/. "${ROOT_FOLDER}/${FILESOUTPUT_RESOURCE}/"
 
 echo "Done!!"

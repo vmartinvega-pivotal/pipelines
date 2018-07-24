@@ -14,7 +14,7 @@ export CONFIG_RESOURCE=config
 export OUTPUT_RESOURCE=out
 export KEYVALOUTPUT_RESOURCE=keyvalout
 export KEYVAL_RESOURCE=keyval
-export FILES=out-preprare-release
+export FILESOUTPUT_RESOURCE=filesout
 
 export TRUST_STORE_FILE=${ROOT_FOLDER}/${TOOLS_RESOURCE}/truststore/${TRUSTSTORE}
 chmod 777 ${TRUST_STORE_FILE}
@@ -77,6 +77,6 @@ passKeyValProperties
 
 cp -r "${ROOT_FOLDER}/${REPO_RESOURCE}"/. "${ROOT_FOLDER}/${OUTPUT_RESOURCE}/"
 
-cp -r "${ROOT_FOLDER}/${REPO_RESOURCE}"/. "${ROOT_FOLDER}/${FILES}/"
+cp -r "${ROOT_FOLDER}/${REPO_RESOURCE}"/. "${ROOT_FOLDER}/${FILESOUTPUT_RESOURCE}/"
 
 echo "Done!!"

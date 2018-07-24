@@ -11,10 +11,10 @@ inputs:
   - name: tools
   - name: repo
   - name: keyval
-  - name: out-preprare-release
+  - name: files
 
 outputs:
-  - name: out-release-step1
+  - name: filesout
   - name: out
   - name: keyvalout
 
