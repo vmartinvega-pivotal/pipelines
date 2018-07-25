@@ -1,7 +1,7 @@
 github-private-key
 maven-command
 pipeline-logical-microservice/params-coll-evolutivo.yml
-pipeline-logical-microservice/params-coll-consolidato.yml
+pipeline-logical-microservice/params-coll-consolidato-id20.yml
 pipeline-physical-microservice/params-snapshoot.yml
 pipeline-physical-microservice/params-build.yml
 settings.xml
