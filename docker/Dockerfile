@@ -7,6 +7,16 @@ RUN \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 
+# Install unzip
+RUN \
+  apt-get update \
+  && apt-get install unzip -y
+
+# Install groovy
+RUN \
+  apt-get update \
+  && apt-get install groovy -y
+
 # Install ruamel.yaml
 RUN \
   apt-get update \
@@ -29,7 +39,7 @@ COPY fly /usr/local/bin
 RUN chmod +x /usr/local/bin/fly
 
 # Install SoapUI
-ENV SOAPUI_VERSION 5.4.0
+ENV SOAPUI_VERSION 5.3.0
 
 COPY SoapUI-${SOAPUI_VERSION}-linux-bin.tar.gz /tmp/SoapUI-${SOAPUI_VERSION}-linux-bin.tar.gz
 
@@ -42,6 +52,15 @@ RUN ln -s /opt/SoapUI-${SOAPUI_VERSION} /opt/SoapUI
 ENV PATH ${PATH}:/opt/SoapUI/bin
 
 RUN rm -f /tmp/SoapUI-${SOAPUI_VERSION}-linux-bin.tar.gz
+
+# Add common jar libraries to SoapUI
+COPY SoapUI-ext-common-libraries.zip /tmp/SoapUI-ext-common-libraries.zip
+
+RUN \
+  unzip /tmp/SoapUI-ext-common-libraries.zip -d /opt/SoapUI/bin
+
+RUN rm -f /tmp/SoapUI-ext-common-libraries.zip
+  
 
 # Install Subversion
 RUN \

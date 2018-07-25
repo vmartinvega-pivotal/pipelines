@@ -10,7 +10,7 @@ export ROOT_FOLDER
 ROOT_FOLDER="$( pwd )"
 export REPO_RESOURCE=repo
 export TOOLS_RESOURCE=tools
-export TESTS_RESOURCE=tests
+export SOAPUI_RESOURCE=soap-ui-tests
 export OUTPUT_RESOURCE=out
 export KEYVALOUTPUT_RESOURCE=keyvalout
 export KEYVAL_RESOURCE=keyval
@@ -21,11 +21,13 @@ source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/source-all.sh
 # Add properties as environment variables
 exportKeyValProperties
 
-cd "${ROOT_FOLDER}/${TESTS_RESOURCE}" || exit
+cd "${ROOT_FOLDER}/${SOAPUI_RESOURCE}" || exit
 
 echo "-- Running SaopUI tests"
 
-#/opt/SoapUI/bin/testrunner.sh
+cd Projects/consistenze
+
+/opt/SoapUI/bin/testrunner.sh -s"consistenze TestSuite" -r -a -j -J -f./Reports ./ID_20_Consistenze-soapui-project.xml
 
 echo "-- Running SaopUI tests"
 
