@@ -1,6 +1,6 @@
 # LOGICAL MICROSERVICE RESPOSITORY 
 app-url: https://gitlab-sdp.telecomitalia.local/demodevops/consistenze-id20.git
-app-branch: "1.1"
+app-branch: 1.1
 github-username: andrea.lambruschini
 github-password: zxcdsa01!
 github-private-key: |

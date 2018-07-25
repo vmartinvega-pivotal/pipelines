@@ -1,0 +1,20 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source:
+    repository: vmartinvega/concourse-tools-tim
+    tag: "latest"
+
+inputs:
+  - name: repo
+  - name: keyval
+  - name: reports
+
+outputs:
+  - name: out
+  - name: keyvalout
+
+run:
+  path: tools/tasks/logical/soapui-tests-reports/task.sh
