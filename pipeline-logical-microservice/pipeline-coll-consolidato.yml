@@ -304,7 +304,7 @@ common-git-params: &common-git-params
   M2_SETTINGS_REPO_SONAR_TOKEN: ((sonar-login-key))
 
 somar-params: &sonar-params
-  SONAR_BRANCH: ((sonar-branch))
+  SONAR_BRANCH: ((app-branch))
   USERNAME: ((github-username))
   PASSWORD: ((github-password))
 

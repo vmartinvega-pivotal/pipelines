@@ -365,7 +365,7 @@ jobs:
           NEW_BRANCH_INCREASED=$(increaseBranch ${CURRENT_BRANCH})
 
           sed "s/CURRENT_BRANCH: \"${CURRENT_BRANCH}\"/CURRENT_BRANCH: \"${NEW_BRANCH_INCREASED}\"/" original-pipeline-evolutivo.yml > updated-pipeline-evolutivo.yml
-          sed "s/CURRENT_BRANCH: \"${SONAR_BRANCH}\"/SONAR_BRANCH: \"${NEW_BRANCH_INCREASED}\"/" updated-pipeline-evolutivo.yml > updated-pipeline-evolutivo1.yml
+          sed "s/SONAR_BRANCH: \"${CURRENT_BRANCH}\"/SONAR_BRANCH: \"${NEW_BRANCH_INCREASED}\"/" updated-pipeline-evolutivo.yml > updated-pipeline-evolutivo1.yml
           python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/modify-yaml.py updated-pipeline-evolutivo1.yml ${NEW_BRANCH_INCREASED} repo-coll-evo-put,repo-coll-evo-put1,repo-coll-evo updated-pipeline-evolutivo2.yml
           NEW_BRANCH_DECREASED=$(decreaseBranch ${CURRENT_BRANCH})
           sed "s/CURRENT_BRANCH: \"${NEW_BRANCH_DECREASED}\"/CURRENT_BRANCH: \"${CURRENT_BRANCH}\"/" original-pipeline-consolidato.yml > updated-pipeline-consolidato.yml
@@ -397,7 +397,7 @@ common-git-params: &common-git-params
   M2_SETTINGS_REPO_SONAR_TOKEN: ((sonar-login-key))
 
 somar-params: &sonar-params
-  SONAR_BRANCH: ((sonar-branch))
+  SONAR_BRANCH: ((app-branch))
   USERNAME: ((github-username))
   PASSWORD: ((github-password))
 

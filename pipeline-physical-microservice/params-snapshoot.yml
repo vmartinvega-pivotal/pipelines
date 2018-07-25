@@ -54,7 +54,6 @@ github-tools-password: zxcdsa01!
 build-options: "-Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true -Dmaven.wagon.http.ssl.ignore.validity.dates=true"
 maven-settings: "maven-settings.xml"
 truststore: "concourse-truststore.jks"
-sonar-branch: "master"
 
 # Artifactory / Nexus credentials (defaults are for Artifactory)
 m2-settings-repo-id: nexus

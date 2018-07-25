@@ -130,7 +130,7 @@ jobs:
     file: tools/tasks/physical/sonarqube/task.yml
     params:
       <<: *common-params
-      SONAR_BRANCH: ((sonar-branch))
+      <<: *sonar-params
   - put: keyval
     params:
       file: keyvalout/keyval.properties
@@ -176,3 +176,8 @@ common-params: &common-params
   M2_SETTINGS_REPO_GIT_SERVER_URL: ((gitlab-server-url))
   M2_SETTINGS_REPO_SONAR_URL: ((sonar-host-url))
   M2_SETTINGS_REPO_SONAR_TOKEN: ((sonar-login-key))
+
+somar-params: &sonar-params
+  SONAR_BRANCH: ((app-branch))
+  USERNAME: ((github-username))
+  PASSWORD: ((github-password))
