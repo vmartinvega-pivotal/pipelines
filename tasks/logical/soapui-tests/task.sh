@@ -26,7 +26,8 @@ cd "${ROOT_FOLDER}/${TESTS_RESOURCE}" || exit
 
 echo "-- Running SaopUI tests"
 
-nohup /opt/SoapUI/bin/testrunner.sh -s"consistenze TestSuite" -r -a -j -J -GAmbiente=COLLEVO -f./Reports ./ID_20_Consistenze-soapui-project.xml &
+#nohup /opt/SoapUI/bin/testrunner.sh -s"consistenze TestSuite" -r -a -j -J -GAmbiente=COLLEVO -f./Reports ./ID_20_Consistenze-soapui-project.xml &
+/opt/SoapUI/bin/testrunner.sh -s"consistenze TestSuite" -r -a -j -J -GAmbiente=COLLEVO -f./Reports ./ID_20_Consistenze-soapui-project.xml
 PROC_ID=$!
 
 while kill -0 "$PROC_ID" >/dev/null 2>&1; do

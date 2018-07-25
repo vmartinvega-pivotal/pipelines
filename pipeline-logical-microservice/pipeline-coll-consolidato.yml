@@ -126,7 +126,7 @@ jobs:
     privileged: true
     file: tools/tasks/logical/soapui-tests/task.yml
     input_mapping: {repo: repo-coll-con, tests: soap-ui-tests}
-    output_maping: {outtests: soap-ui-reports}
+    output_mapping: {outtests: soap-ui-reports}
     params:
       <<: *common-git-params
     on_failure:
