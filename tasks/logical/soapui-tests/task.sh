@@ -46,8 +46,13 @@ else
   cp "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/ant/build.xml .
 
   ant
+  
+  POM_VERSION=$(getPomVersion ${ROOT_FOLDER}/${TESTS_RESOURCE}/pom.xml)
+  ARTIFACT_ID=$(getArtifactId ${ROOT_FOLDER}/${TESTS_RESOURCE}/pom.xml)
 
-  find Reports/html -type f -exec curl -v --insecure -u devops-sdp:zxcdsa011 -T {} https://nexus-sdp.telecomitalia.local/nexus/repository/site/com.tim.sdp.vicente.test/{} \;
+  mv Reports/html/unit-noframes.html Reports/html/${POM_VERSION}.html 
+  
+  find Reports/html -type f -exec curl -v --insecure -u devops-sdp:zxcdsa011 -T {} https://nexus-sdp.telecomitalia.local/nexus/repository/site/com.tim.sdp.${ARTIFACT_ID}/{} \;
   exit 1
 fi
 
