@@ -11,6 +11,7 @@ inputs:
   - name: tools
   - name: repo
   - name: config
+  - name: keyval
 
 outputs:
   - name: out

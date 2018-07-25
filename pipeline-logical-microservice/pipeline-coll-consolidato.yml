@@ -94,11 +94,8 @@ jobs:
   - task: compile-logical-microservice
     privileged: true
     file: tools/tasks/logical/compile-logical/task.yml
-    input_mapping:
-      repo: repo-coll-con
-      config: config-logical-micro
-    output_mapping:
-      out: logical_compiled_files
+    input_mapping: {repo: repo-coll-con, config: config-logical-micro}
+    output_mapping: {out: logical_compiled_files}
     params:
       <<: *common-git-params
   - put: keyval
@@ -106,30 +103,14 @@ jobs:
       file: keyvalout/keyval.properties
   - task: deploy-streams
     privileged: true
-    input_mapping:
-      repo: logical_compiled_files
-      config: config-logical-micro
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: vmartinvega/concourse-tools-tim
-          tag: "latest"
-      inputs:
-        - name: repo
-        - name: config
-      params:
-        ENVIRONMENT_TO_DEPLOY: dev4
-      run:
-        path: sh
-        args:
-        - -exc
-        - |
-          ROOT_FOLDER="$( pwd )"
-          cd ${ROOT_FOLDER}/repo
-          echo "DEBUG: Deploying to ${ENVIRONMENT_TO_DEPLOY}"
-          #./microservice.sh ../config/${ENVIRONMENT_TO_DEPLOY}.env microservice.env deploy
+    file: tools/tasks/logical/deploy-streams/task.yml
+    input_mapping: {repo: logical_compiled_files, config: config-logical-micro}
+    params:
+      ENVIRONMENT_TO_DEPLOY: dev4
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+
 - name: soapui-tests
   public: true
   plan:
@@ -169,9 +150,7 @@ jobs:
     output_mapping: {filesout: prepare-release-files }
     params:
       <<: *common-git-params
-      SONAR_BRANCH: ((sonar-branch))
-      USERNAME: ((github-username))
-      PASSWORD: ((github-password))
+      <<: *sonar-params
   - put: keyval
     params:
       file: keyvalout/keyval.properties
@@ -185,9 +164,7 @@ jobs:
     output_mapping: {filesout: create-release-step1-files }
     params:
       <<: *common-git-params
-      SONAR_BRANCH: ((sonar-branch))
-      USERNAME: ((github-username))
-      PASSWORD: ((github-password))
+      <<: *sonar-params
   - put: keyval
     params:
       file: keyvalout/keyval.properties
@@ -200,9 +177,7 @@ jobs:
     input_mapping: {repo: repo-coll-con-put1, files: create-release-step1-files}
     params:
       <<: *common-git-params
-      SONAR_BRANCH: ((sonar-branch))
-      USERNAME: ((github-username))
-      PASSWORD: ((github-password))
+      <<: *sonar-params
   - put: keyval
     params:
       file: keyvalout/keyval.properties
@@ -231,11 +206,7 @@ jobs:
     file: tools/tasks/logical/pvcs-upload/task.yml
     input_mapping: {repo: repo-coll-con}
     params:
-      <<: *common-git-params
-      PVCS_URL: ((pvcs-url))
-      PVCS_USERNAME: ((pvcs-username))
-      PVCS_PASSWORD: ((pvcs-password))
-      PVCS_CHECKOUTDIR: ((pvcs-checkoutdir))
+      <<: *pvcs-params
   - put: keyval
     params:
       file: keyvalout/keyval.properties
@@ -285,45 +256,14 @@ jobs:
       trigger: false
   - task: shipit-task-to-collaudo
     privileged: true
-    input_mapping:
-      repo: repo-coll-con
-      config: config-logical-micro
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: vmartinvega/concourse-tools-tim
-          tag: "latest"
-      inputs:
-        - name: keyval
-        - name: tools
-        - name: repo
-        - name: config
-      outputs:
-        - name: keyvalout
-      params:
-        ENVIRONMENT_TO_DEPLOY: collaudo-consolidato
-      run:
-        path: bash
-        args:
-        - -exc
-        - |
-          ROOT_FOLDER="$( pwd )"
-          export KEYVAL_RESOURCE=keyval
-          export KEYVALOUTPUT_RESOURCE=keyvalout
-          source ${ROOT_FOLDER}/tools/tasks/resource-utils.sh
-          exportKeyValProperties
-          cd ${ROOT_FOLDER}/repo
-          echo "DEBUG: checking out the verson "${PASSED_TAG_RELEASED_CREATED}
-          git checkout tags/${PASSED_TAG_RELEASED_CREATED}
-          echo "Deploying to ${ENVIRONMENT_TO_DEPLOY}"
-          #./microservice.sh ../config/${ENVIRONMENT_TO_DEPLOY}.env microservice.env deploy
-          passKeyValProperties
+    file: tools/tasks/logical/deploy-streams/task.yml
+    input_mapping: {repo: repo-coll-con, config: config-logical-micro}
+    params:
+      ENVIRONMENT_TO_DEPLOY: collaudo-consolidato
   - put: keyval
     params:
       file: keyvalout/keyval.properties
-
+    
 - name: Ship-Production
   plan:
   - aggregate:
@@ -336,41 +276,10 @@ jobs:
       trigger: false
   - task: shipit-task-to-production
     privileged: true
-    input_mapping:
-      repo: repo-coll-con
-      config: config-logical-micro
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: vmartinvega/concourse-tools-tim
-          tag: "latest"
-      inputs:
-        - name: keyval
-        - name: tools
-        - name: repo
-        - name: config
-      outputs:
-        - name: keyvalout
-      params:
-        ENVIRONMENT_TO_DEPLOY: prod
-      run:
-        path: bash
-        args:
-        - -exc
-        - |
-          ROOT_FOLDER="$( pwd )"
-          export KEYVAL_RESOURCE=keyval
-          export KEYVALOUTPUT_RESOURCE=keyvalout
-          source ${ROOT_FOLDER}/tools/tasks/resource-utils.sh
-          exportKeyValProperties
-          cd ${ROOT_FOLDER}/repo
-          echo "DEBUG: checking out the verson "${PASSED_TAG_RELEASED_CREATED}
-          git checkout tags/${PASSED_TAG_RELEASED_CREATED}
-          echo "Deploying to ${ENVIRONMENT_TO_DEPLOY}"
-          #./microservice.sh ../config/${ENVIRONMENT_TO_DEPLOY}.env microservice.env deploy
-          passKeyValProperties
+    file: tools/tasks/logical/deploy-streams/task.yml
+    input_mapping: {repo: repo-coll-con, config: config-logical-micro}
+    params:
+      ENVIRONMENT_TO_DEPLOY: prod
   - put: keyval
     params:
       file: keyvalout/keyval.properties
@@ -392,3 +301,14 @@ common-git-params: &common-git-params
   M2_SETTINGS_REPO_GIT_SERVER_URL: ((gitlab-server-url))
   M2_SETTINGS_REPO_SONAR_URL: ((sonar-host-url))
   M2_SETTINGS_REPO_SONAR_TOKEN: ((sonar-login-key))
+
+somar-params: &sonar-params
+  SONAR_BRANCH: ((sonar-branch))
+  USERNAME: ((github-username))
+  PASSWORD: ((github-password))
+
+pvcs-params: &pvcs-params
+  PVCS_URL: ((pvcs-url))
+  PVCS_USERNAME: ((pvcs-username))
+  PVCS_PASSWORD: ((pvcs-password))
+  PVCS_CHECKOUTDIR: ((pvcs-checkoutdir))

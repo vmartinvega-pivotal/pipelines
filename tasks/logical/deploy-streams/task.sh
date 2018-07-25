@@ -25,8 +25,16 @@ echo "--- Deploy Streams ---"
 
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
-echo "DEBUG: checking out the verson "${PASSED_TAG_RELEASED_CREATED}
-git checkout tags/${PASSED_TAG_RELEASED_CREATED}
+if [[ ! -v PASSED_TAG_RELEASED_CREATED ]]; then
+  echo "DEBUG: PASSED_TAG_RELEASED_CREATED is not set, skipping"
+elif [[ -z "$PASSED_TAG_RELEASED_CREATED" ]]; then
+  echo "PASSED_TAG_RELEASED_CREATED is set to the empty string, skipping"
+else
+  echo "PASSED_TAG_RELEASED_CREATED has the value: $PASSED_TAG_RELEASED_CREATED"
+  echo "DEBUG: checking out the verson "${PASSED_TAG_RELEASED_CREATED}
+  git checkout tags/${PASSED_TAG_RELEASED_CREATED}
+fi
+
 echo "Deploying to ${ENVIRONMENT_TO_DEPLOY}"
 #./microservice.sh ../config/${ENVIRONMENT_TO_DEPLOY}.env microservice.env deploy
 

@@ -106,30 +106,14 @@ jobs:
       file: keyvalout/keyval.properties
   - task: deploy-streams
     privileged: true
-    input_mapping:
-      repo: logical_compiled_files
-      config: config-logical-micro
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: vmartinvega/concourse-tools-tim
-          tag: "latest"
-      inputs:
-        - name: repo
-        - name: config
-      params:
-        ENVIRONMENT_TO_DEPLOY: dev4
-      run:
-        path: sh
-        args:
-        - -exc
-        - |
-          ROOT_FOLDER="$( pwd )"
-          cd ${ROOT_FOLDER}/repo
-          echo "DEBUG: Deploying to ${ENVIRONMENT_TO_DEPLOY}"
-          #./microservice.sh ../config/${ENVIRONMENT_TO_DEPLOY}.env microservice.env deploy
+    file: tools/tasks/logical/deploy-streams/task.yml
+    input_mapping: {repo: logical_compiled_files, config: config-logical-micro}
+    params:
+      ENVIRONMENT_TO_DEPLOY: dev4
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+   
 - name: soapui-tests
   public: true
   plan:
@@ -169,9 +153,7 @@ jobs:
     output_mapping: {filesout: prepare-release-files }
     params:
       <<: *common-git-params
-      SONAR_BRANCH: ((sonar-branch))
-      USERNAME: ((github-username))
-      PASSWORD: ((github-password))
+      <<: *sonar-params
   - put: keyval
     params:
       file: keyvalout/keyval.properties
@@ -185,9 +167,7 @@ jobs:
     output_mapping: {filesout: create-release-step1-files }
     params:
       <<: *common-git-params
-      SONAR_BRANCH: ((sonar-branch))
-      USERNAME: ((github-username))
-      PASSWORD: ((github-password))
+      <<: *sonar-params
   - put: keyval
     params:
       file: keyvalout/keyval.properties
@@ -200,9 +180,7 @@ jobs:
     input_mapping: {repo: repo-coll-evo-put1, files: create-release-step1-files}
     params:
       <<: *common-git-params
-      SONAR_BRANCH: ((sonar-branch))
-      USERNAME: ((github-username))
-      PASSWORD: ((github-password))
+      <<: *sonar-params
   - put: keyval
     params:
       file: keyvalout/keyval.properties
@@ -231,11 +209,7 @@ jobs:
     file: tools/tasks/logical/pvcs-upload/task.yml
     input_mapping: {repo: repo-coll-evo}
     params:
-      <<: *common-git-params
-      PVCS_URL: ((pvcs-url))
-      PVCS_USERNAME: ((pvcs-username))
-      PVCS_PASSWORD: ((pvcs-password))
-      PVCS_CHECKOUTDIR: ((pvcs-checkoutdir))
+      <<: *pvcs-params
   - put: keyval
     params:
       file: keyvalout/keyval.properties
@@ -285,41 +259,10 @@ jobs:
       trigger: false
   - task: shipit-task-to-collaudo
     privileged: true
-    input_mapping:
-      repo: repo-coll-evo
-      config: config-logical-micro
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: vmartinvega/concourse-tools-tim
-          tag: "latest"
-      inputs:
-        - name: keyval
-        - name: tools
-        - name: repo
-        - name: config
-      outputs:
-        - name: keyvalout
-      params:
-        ENVIRONMENT_TO_DEPLOY: collaudo-evolutivo
-      run:
-        path: bash
-        args:
-        - -exc
-        - |
-          ROOT_FOLDER="$( pwd )"
-          export KEYVAL_RESOURCE=keyval
-          export KEYVALOUTPUT_RESOURCE=keyvalout
-          source ${ROOT_FOLDER}/tools/tasks/resource-utils.sh
-          exportKeyValProperties
-          cd ${ROOT_FOLDER}/repo
-          echo "DEBUG: checking out the verson "${PASSED_TAG_RELEASED_CREATED}
-          git checkout tags/${PASSED_TAG_RELEASED_CREATED}
-          echo "DEBUG: Deploying to ${ENVIRONMENT_TO_DEPLOY}"
-          #./microservice.sh ../config/${ENVIRONMENT_TO_DEPLOY}.env microservice.env deploy
-          passKeyValProperties
+    file: tools/tasks/logical/deploy-streams/task.yml
+    input_mapping: {repo: repo-coll-evo, config: config-logical-micro}
+    params:
+      ENVIRONMENT_TO_DEPLOY: collaudo-evolutivo
   - put: keyval
     params:
       file: keyvalout/keyval.properties
@@ -336,41 +279,10 @@ jobs:
       trigger: false
   - task: shipit-task-to-production
     privileged: true
-    input_mapping:
-      repo: repo-coll-evo
-      config: config-logical-micro
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: vmartinvega/concourse-tools-tim
-          tag: "latest"
-      inputs:
-        - name: keyval
-        - name: tools
-        - name: repo
-        - name: config
-      outputs:
-        - name: keyvalout
-      params:
-        ENVIRONMENT_TO_DEPLOY: prod
-      run:
-        path: bash
-        args:
-        - -exc
-        - |
-          ROOT_FOLDER="$( pwd )"
-          export KEYVAL_RESOURCE=keyval
-          export KEYVALOUTPUT_RESOURCE=keyvalout
-          source ${ROOT_FOLDER}/tools/tasks/resource-utils.sh
-          exportKeyValProperties
-          cd ${ROOT_FOLDER}/repo
-          echo "DEBUG: checking out the verson "${PASSED_TAG_RELEASED_CREATED}
-          git checkout tags/${PASSED_TAG_RELEASED_CREATED}
-          echo "DEBUG: Deploying to ${ENVIRONMENT_TO_DEPLOY}"
-          #./microservice.sh ../config/${ENVIRONMENT_TO_DEPLOY}.env microservice.env deploy
-          passKeyValProperties
+    file: tools/tasks/logical/deploy-streams/task.yml
+    input_mapping: {repo: repo-coll-evo, config: config-logical-micro}
+    params:
+      ENVIRONMENT_TO_DEPLOY: prod
   - put: keyval
     params:
       file: keyvalout/keyval.properties
@@ -387,41 +299,10 @@ jobs:
       trigger: true
   - task: shipit-task-to-collaudo-consolidato
     privileged: true
-    input_mapping:
-      repo: repo-coll-evo
-      config: config-logical-micro
-    config:
-      platform: linux
-      image_resource:
-        type: docker-image
-        source:
-          repository: vmartinvega/concourse-tools-tim
-          tag: "latest"
-      inputs:
-        - name: keyval
-        - name: tools
-        - name: repo
-        - name: config
-      outputs:
-        - name: keyvalout
-      params:
-        ENVIRONMENT_TO_DEPLOY: collaudo-consolidato
-      run:
-        path: bash
-        args:
-        - -exc
-        - |
-          ROOT_FOLDER="$( pwd )"
-          export KEYVAL_RESOURCE=keyval
-          export KEYVALOUTPUT_RESOURCE=keyvalout
-          source ${ROOT_FOLDER}/tools/tasks/resource-utils.sh
-          exportKeyValProperties
-          cd ${ROOT_FOLDER}/repo
-          echo "DEBUG: checking out the verson "${PASSED_TAG_RELEASED_CREATED}
-          git checkout tags/${PASSED_TAG_RELEASED_CREATED}
-          echo "DEBUG: Deploying to ${ENVIRONMENT_TO_DEPLOY}"
-          #./microservice.sh ../config/${ENVIRONMENT_TO_DEPLOY}.env microservice.env deploy
-          passKeyValProperties
+    file: tools/tasks/logical/deploy-streams/task.yml
+    input_mapping: {repo: repo-coll-evo, config: config-logical-micro}
+    params:
+      ENVIRONMENT_TO_DEPLOY: collaudo-consolidato
   - put: keyval
     params:
       file: keyvalout/keyval.properties
@@ -481,13 +362,16 @@ jobs:
           fly -t local get-pipeline -p $CONCOURSE_PIPELINE_NAME > ./original-pipeline-evolutivo.yml
           fly -t local get-pipeline -p $CONCOURSE_PIPELINE_NAME_CONSOLIDATO > ./original-pipeline-consolidato.yml
           NEW_BRANCH_INCREASED=$(increaseBranch ${CURRENT_BRANCH})
+
           sed "s/CURRENT_BRANCH: \"${CURRENT_BRANCH}\"/CURRENT_BRANCH: \"${NEW_BRANCH_INCREASED}\"/" original-pipeline-evolutivo.yml > updated-pipeline-evolutivo.yml
-          python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/modify-yaml.py updated-pipeline-evolutivo.yml ${NEW_BRANCH_INCREASED} repo-coll-evo-put,repo-coll-evo-put1,repo-coll-evo updated-pipeline-evolutivo1.yml
+          sed "s/CURRENT_BRANCH: \"${SONAR_BRANCH}\"/SONAR_BRANCH: \"${NEW_BRANCH_INCREASED}\"/" updated-pipeline-evolutivo.yml > updated-pipeline-evolutivo1.yml
+          python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/modify-yaml.py updated-pipeline-evolutivo1.yml ${NEW_BRANCH_INCREASED} repo-coll-evo-put,repo-coll-evo-put1,repo-coll-evo updated-pipeline-evolutivo2.yml
           NEW_BRANCH_DECREASED=$(decreaseBranch ${CURRENT_BRANCH})
           sed "s/CURRENT_BRANCH: \"${NEW_BRANCH_DECREASED}\"/CURRENT_BRANCH: \"${CURRENT_BRANCH}\"/" original-pipeline-consolidato.yml > updated-pipeline-consolidato.yml
-          python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/modify-yaml.py updated-pipeline-consolidato.yml ${CURRENT_BRANCH} repo-coll-evo-put,repo-coll-evo-put1,repo-coll-evo updated-pipeline-consolidato1.yml
-          fly -t local set-pipeline -p ${CONCOURSE_PIPELINE_NAME} -c ./updated-pipeline-evolutivo1.yml -n
-          fly -t local set-pipeline -p ${CONCOURSE_PIPELINE_NAME_CONSOLIDATO} -c ./updated-pipeline-consolidato1.yml -n
+          sed "s/SONAR_BRANCH: \"${NEW_BRANCH_DECREASED}\"/SONAR_BRANCH: \"${CURRENT_BRANCH}\"/" updated-pipeline-consolidato.yml > updated-pipeline-consolidato1.yml
+          python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/modify-yaml.py updated-pipeline-consolidato1.yml ${CURRENT_BRANCH} repo-coll-evo-put,repo-coll-evo-put1,repo-coll-evo updated-pipeline-consolidato2.yml
+          fly -t local set-pipeline -p ${CONCOURSE_PIPELINE_NAME} -c ./updated-pipeline-evolutivo2.yml -n
+          fly -t local set-pipeline -p ${CONCOURSE_PIPELINE_NAME_CONSOLIDATO} -c ./updated-pipeline-consolidato2.yml -n
           passKeyValProperties
   - put: keyval
     params:
@@ -510,3 +394,14 @@ common-git-params: &common-git-params
   M2_SETTINGS_REPO_GIT_SERVER_URL: ((gitlab-server-url))
   M2_SETTINGS_REPO_SONAR_URL: ((sonar-host-url))
   M2_SETTINGS_REPO_SONAR_TOKEN: ((sonar-login-key))
+
+somar-params: &sonar-params
+  SONAR_BRANCH: ((sonar-branch))
+  USERNAME: ((github-username))
+  PASSWORD: ((github-password))
+
+pvcs-params: &pvcs-params
+  PVCS_URL: ((pvcs-url))
+  PVCS_USERNAME: ((pvcs-username))
+  PVCS_PASSWORD: ((pvcs-password))
+  PVCS_CHECKOUTDIR: ((pvcs-checkoutdir))
