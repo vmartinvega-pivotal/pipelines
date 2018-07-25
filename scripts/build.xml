@@ -3,7 +3,7 @@
     <property name="reports" location="Reports" />
     <target name="test" >
         <junitreport todir="${reports}">
-            <fileset dir="${reports}/raw/">
+            <fileset dir="${reports}/">
                 <include name="TEST-*.xml" />
             </fileset>
             <report format="noframes" todir="${reports}\html\" />
