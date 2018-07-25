@@ -15,7 +15,19 @@ RUN \
 # Install groovy
 RUN \
   apt-get update \
+  && apt-get install tar \
   && apt-get install groovy -y
+
+# Installs Ant
+COPY apache-ant-1.10.4-bin.tar.gz /tmp/apache-ant-1.10.4-bin.tar.gz
+
+RUN \
+    cd /tmp \
+    && tar -xzf apache-ant-1.10.4-bin.tar.gz \
+    && mv apache-ant-1.10.4 /opt/ant \
+    && rm apache-ant-1.10.4-bin.tar.gz
+ENV ANT_HOME /opt/ant
+ENV PATH ${PATH}:/opt/ant/bin
 
 # Install ruamel.yaml
 RUN \

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Ant Example" default="test" basedir=".">
+    <property name="reports" location="Reports" />
+    <target name="test" >
+        <junitreport todir="${reports}">
+            <fileset dir="${reports}/raw/">
+                <include name="TEST-*.xml" />
+            </fileset>
+            <report format="noframes" todir="${reports}\html\" />
+        </junitreport>
+    </target>
+</project>

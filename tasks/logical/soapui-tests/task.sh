@@ -42,7 +42,10 @@ then
   echo "Success!!"
 else
   echo "Failure!!"
-  find Reports/ -type f -exec curl -v --insecure -u devops-sdp:zxcdsa011 -T {} https://nexus-sdp.telecomitalia.local/nexus/repository/site/com.tim.sdp.vicente.test/{} \;
+  
+
+
+  #find Reports -type f -exec curl -v --insecure -u devops-sdp:zxcdsa011 -T {} https://nexus-sdp.telecomitalia.local/nexus/repository/site/com.tim.sdp.vicente.test/{} \;
   exit 1
 fi
 
