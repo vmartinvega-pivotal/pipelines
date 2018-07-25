@@ -206,6 +206,7 @@ jobs:
     file: tools/tasks/logical/pvcs-upload/task.yml
     input_mapping: {repo: repo-coll-con}
     params:
+      <<: *common-git-params
       <<: *pvcs-params
   - put: keyval
     params:
