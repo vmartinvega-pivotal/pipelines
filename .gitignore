@@ -1,5 +1,3 @@
-credentials-build.yml
-credentials-build-tim.yml
 github-private-key
 maven-command
 pipeline-logical-microservice/params-coll-evolutivo.yml
@@ -8,4 +6,4 @@ pipeline-physical-microservice/params-snapshoot.yml
 pipeline-physical-microservice/params-build.yml
 settings.xml
 concourse/keys/
-nexus/
+nexus
