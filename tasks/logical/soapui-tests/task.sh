@@ -29,6 +29,8 @@ cd Projects/consistenze
 
 /opt/SoapUI/bin/testrunner.sh -s"consistenze TestSuite" -r -a -j -J -f./Reports ./ID_20_Consistenze-soapui-project.xml
 
+ls ./Reports
+
 echo "-- Running SaopUI tests"
 
 # Adding values to keyvalout
