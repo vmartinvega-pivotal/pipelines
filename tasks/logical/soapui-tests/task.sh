@@ -12,7 +12,6 @@ export REPO_RESOURCE=repo
 export TOOLS_RESOURCE=tools
 export TESTS_RESOURCE=tests
 export OUTPUT_RESOURCE=out
-export OUTPUT_TESTS=outtests
 export KEYVALOUTPUT_RESOURCE=keyvalout
 export KEYVAL_RESOURCE=keyval
 
@@ -37,14 +36,13 @@ while kill -0 "$PROC_ID" >/dev/null 2>&1; do
 done
 echo "Tests finished!!"
 
-cp -r Reports/. "${ROOT_FOLDER}/${OUTPUT_TESTS}/"
-
 echo RESULT=$(ls ./Reports/ | grep FAILED | wc -l)
 if [[ $RESULT = "0" ]]
 then
   echo "Success!!"
 else
   echo "Failure!!"
+  find Reports/ -type f -exec curl -v --insecure -u devops-sdp:zxcdsa011 -T {} https://nexus-sdp.telecomitalia.local/nexus/repository/site/com.tim.sdp.vicente.test/{} \;
   exit 1
 fi
 

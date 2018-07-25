@@ -126,13 +126,8 @@ jobs:
     privileged: true
     file: tools/tasks/logical/soapui-tests/task.yml
     input_mapping: {repo: repo-coll-con, tests: soap-ui-tests}
-    output_mapping: {outtests: soap-ui-reports}
     params:
       <<: *common-git-params
-    on_failure:
-      task: soap-ui-test-failure
-      file: tools/tasks/logical/soapui-tests-reports/task.yml
-      input_mapping: {repo: repo-coll-con, reports: soap-ui-reports}
   - put: keyval
     params:
       file: keyvalout/keyval.properties
