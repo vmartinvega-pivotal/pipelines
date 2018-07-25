@@ -43,7 +43,11 @@ then
 else
   echo "Failure!!"
   
+  cp "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/scripts/build.xml .
 
+  ant
+
+  ls Reports/html
 
   #find Reports -type f -exec curl -v --insecure -u devops-sdp:zxcdsa011 -T {} https://nexus-sdp.telecomitalia.local/nexus/repository/site/com.tim.sdp.vicente.test/{} \;
   exit 1
