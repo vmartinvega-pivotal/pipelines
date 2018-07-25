@@ -36,6 +36,8 @@ while kill -0 "$PROC_ID" >/dev/null 2>&1; do
 done
 echo "Tests finished!!"
 
+ls "${ROOT_FOLDER}/${TESTS_RESOURCE}"/Projects/consistenze/Reports/
+
 cp -r "${ROOT_FOLDER}/${TESTS_RESOURCE}"/Projects/consistenze/Reports/. "${ROOT_FOLDER}/${OUTPUT_TESTS}/"
 
 echo RESULT=$(ls ./Reports/ | grep FAILED | wc -l)
