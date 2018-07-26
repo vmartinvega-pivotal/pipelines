@@ -27,10 +27,28 @@ echo "-- Running SaopUI tests"
 
 cd Projects
 
+# Copy file
+${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/ID_20-Consistenze/ConfPipeline/fileDeiComandiDiEsecuzioneTest.bat ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/commands.sh
+
+# Remove first line of the file
+tail -n +2 ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/commands.sh > ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/salida
+mv ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/salida ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/commands.sh
+
+sed "s/CALL testrunner.bat/testrunner.sh/" ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/commands.sh > ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/salida
+mv ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/salida ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/commands.sh
+
+cd Projects
+
 while IFS= read -r line
 do
-  echo "line: ${line}"
-done < "${ROOT_FOLDER}/${TOOLS_RESOURCE}/test/consistence"
+  echo "echo ${line}" >> ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/salida
+done < "${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/commands.sh"
+mv ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/salida ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/commands.sh
+chmod +x ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/commands.sh
+${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/commands.sh COLLEVO > ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/salida
+mv ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/salida ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/commands.sh
+cat ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/commands.sh
+
 
 nohup /opt/SoapUI/bin/testrunner.sh -s"bucket - TestSuite (v1)" -r -a -j -J -GAmbiente=COLLEVO -f./Reports ./bucket-soapui-project.xml &
 PROC_ID=$!
