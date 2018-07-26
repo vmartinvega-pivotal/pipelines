@@ -28,7 +28,7 @@ echo "-- Running SaopUI tests"
 cd Projects
 
 # Copy file
-${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/ID_20-Consistenze/ConfPipeline/fileDeiComandiDiEsecuzioneTest.bat ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/commands.sh
+cp ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/ID_20-Consistenze/ConfPipeline/fileDeiComandiDiEsecuzioneTest.bat ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/commands.sh
 
 # Remove first line of the file
 tail -n +2 ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/commands.sh > ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/salida
@@ -43,6 +43,7 @@ while IFS= read -r line
 do
   echo "echo ${line}" >> ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/salida
 done < "${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/commands.sh"
+
 mv ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/salida ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/commands.sh
 chmod +x ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/commands.sh
 ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/commands.sh COLLEVO > ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/salida
