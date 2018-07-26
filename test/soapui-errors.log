@@ -1,0 +1,40 @@
+2018-07-26 02:39:15,404 ERROR [errorlog] java.net.MalformedURLException: no protocol: ./ID_20-Consistenze/ID_20_Consistenze-soapui-project.xml
+java.net.MalformedURLException: no protocol: ./ID_20-Consistenze/ID_20_Consistenze-soapui-project.xml
+	at java.net.URL.<init>(URL.java:593)
+	at java.net.URL.<init>(URL.java:490)
+	at java.net.URL.<init>(URL.java:439)
+	at com.eviware.soapui.impl.wsdl.WsdlProject.<init>(WsdlProject.java:227)
+	at com.eviware.soapui.impl.wsdl.WsdlProjectFactory.createNew(WsdlProjectFactory.java:41)
+	at com.eviware.soapui.impl.wsdl.WsdlProjectFactory.createNew(WsdlProjectFactory.java:28)
+	at com.eviware.soapui.tools.SoapUITestCaseRunner.runRunner(SoapUITestCaseRunner.java:349)
+	at com.eviware.soapui.tools.AbstractSoapUIRunner.run(AbstractSoapUIRunner.java:202)
+	at com.eviware.soapui.tools.AbstractSoapUIRunner.run(AbstractSoapUIRunner.java:137)
+	at com.eviware.soapui.tools.AbstractSoapUIRunner.runFromCommandLine(AbstractSoapUIRunner.java:112)
+	at com.eviware.soapui.tools.SoapUITestCaseRunner.main(SoapUITestCaseRunner.java:122)
+2018-07-26 02:39:15,530 ERROR [errorlog] java.lang.Exception: Failed to load SoapUI project file [./ID_20-Consistenze/ID_20_Consistenze-soapui-project.xml]
+java.lang.Exception: Failed to load SoapUI project file [./ID_20-Consistenze/ID_20_Consistenze-soapui-project.xml]
+	at com.eviware.soapui.tools.SoapUITestCaseRunner.runRunner(SoapUITestCaseRunner.java:353)
+	at com.eviware.soapui.tools.AbstractSoapUIRunner.run(AbstractSoapUIRunner.java:202)
+	at com.eviware.soapui.tools.AbstractSoapUIRunner.run(AbstractSoapUIRunner.java:137)
+	at com.eviware.soapui.tools.AbstractSoapUIRunner.runFromCommandLine(AbstractSoapUIRunner.java:112)
+	at com.eviware.soapui.tools.SoapUITestCaseRunner.main(SoapUITestCaseRunner.java:122)
+2018-07-26 02:39:43,888 ERROR [errorlog] java.net.MalformedURLException: no protocol: ./ID_20-Consistenze/ID_20_Consistenze-soapui-project.xml
+java.net.MalformedURLException: no protocol: ./ID_20-Consistenze/ID_20_Consistenze-soapui-project.xml
+	at java.net.URL.<init>(URL.java:593)
+	at java.net.URL.<init>(URL.java:490)
+	at java.net.URL.<init>(URL.java:439)
+	at com.eviware.soapui.impl.wsdl.WsdlProject.<init>(WsdlProject.java:227)
+	at com.eviware.soapui.impl.wsdl.WsdlProjectFactory.createNew(WsdlProjectFactory.java:41)
+	at com.eviware.soapui.impl.wsdl.WsdlProjectFactory.createNew(WsdlProjectFactory.java:28)
+	at com.eviware.soapui.tools.SoapUITestCaseRunner.runRunner(SoapUITestCaseRunner.java:349)
+	at com.eviware.soapui.tools.AbstractSoapUIRunner.run(AbstractSoapUIRunner.java:202)
+	at com.eviware.soapui.tools.AbstractSoapUIRunner.run(AbstractSoapUIRunner.java:137)
+	at com.eviware.soapui.tools.AbstractSoapUIRunner.runFromCommandLine(AbstractSoapUIRunner.java:112)
+	at com.eviware.soapui.tools.SoapUITestCaseRunner.main(SoapUITestCaseRunner.java:122)
+2018-07-26 02:39:43,990 ERROR [errorlog] java.lang.Exception: Failed to load SoapUI project file [./ID_20-Consistenze/ID_20_Consistenze-soapui-project.xml]
+java.lang.Exception: Failed to load SoapUI project file [./ID_20-Consistenze/ID_20_Consistenze-soapui-project.xml]
+	at com.eviware.soapui.tools.SoapUITestCaseRunner.runRunner(SoapUITestCaseRunner.java:353)
+	at com.eviware.soapui.tools.AbstractSoapUIRunner.run(AbstractSoapUIRunner.java:202)
+	at com.eviware.soapui.tools.AbstractSoapUIRunner.run(AbstractSoapUIRunner.java:137)
+	at com.eviware.soapui.tools.AbstractSoapUIRunner.runFromCommandLine(AbstractSoapUIRunner.java:112)
+	at com.eviware.soapui.tools.SoapUITestCaseRunner.main(SoapUITestCaseRunner.java:122)

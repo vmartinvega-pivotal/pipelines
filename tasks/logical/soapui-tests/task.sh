@@ -25,7 +25,12 @@ cd "${ROOT_FOLDER}/${TESTS_RESOURCE}" || exit
 
 echo "-- Running SaopUI tests"
 
-cd Projects/ID_20-Consistenze
+cd Projects
+
+while IFS= read -r line
+do
+  echo "line: ${line}"
+done < "${ROOT_FOLDER}/${TOOLS_RESOURCE}/test/consistence"
 
 nohup /opt/SoapUI/bin/testrunner.sh -s"bucket - TestSuite (v1)" -r -a -j -J -GAmbiente=COLLEVO -f./Reports ./bucket-soapui-project.xml &
 PROC_ID=$!
