@@ -25,8 +25,6 @@ cd "${ROOT_FOLDER}/${TESTS_RESOURCE}" || exit
 
 echo "-- Running SaopUI tests"
 
-cd Projects
-
 # Copy file
 cp ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/ID_20-Consistenze/ConfPipeline/fileDeiComandiDiEsecuzioneTest.bat ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/commands.sh
 
