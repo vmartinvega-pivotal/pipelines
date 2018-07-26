@@ -60,7 +60,7 @@ else
   # Upload  the files to nexus
   find Reports/html -type f -exec curl -v --insecure -u ${M2_SETTINGS_REPO_USERNAME}:${M2_SETTINGS_REPO_PASSWORD} -T {} https://${M2_SETTINGS_REPO_SITE_URL}/${GROUP_ID}.${ARTIFACT_ID}/{} \;
   
-  echo $BUILD_NAME
+  echo "build name:"$BUILD_NAME
 
   exit 1
 fi
