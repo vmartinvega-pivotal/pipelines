@@ -27,7 +27,9 @@ cd "${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects" || exit
 
 while IFS= read -r line
 do
-  echo eval "nohup ${line} &"
+  command=( ${line} )
+  echo "starting service"
+  "${command[@]}" 2> /dev/null &
   PROC_ID=$!
   while kill -0 "$PROC_ID" >/dev/null 2>&1; do
     echo "Tests running ..."
@@ -36,7 +38,7 @@ do
   echo "Tests finished!!"
 done < ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/ID_20-Consistenze/ConfPipeline/run-collevo.sh
 
-echo RESULT=$(ls ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/ID_20-Consistenze/Reports/ | grep FAILED | wc -l)
+echo RESULT=$(ls ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/ID_20_Consistenze/Reports/ | grep FAILED | wc -l)
 if [[ $RESULT = "0" ]]
 then
   echo "Success!!"

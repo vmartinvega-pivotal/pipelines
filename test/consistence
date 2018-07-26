@@ -1,1 +1,0 @@
-testrunner.sh -s "ID_20_Consistenze" -c "SB API - Post semplice" -G Ambiente=COLLEVO -f ./ID_20-Consistenze/Reports/ -r -j -J -A ./ID_20-Consistenze/ID_20_Consistenze-soapui-project.xml
