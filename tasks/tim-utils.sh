@@ -162,6 +162,10 @@ function getArtifactId(){
   echo $(python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/parse-pom.py $1 "artifact")
 }
 
+function getGroupId(){
+  echo $(python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/parse-pom.py $1 "group")
+}
+
 function increaseBranch(){
   echo $(python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/modify-branch.py $1 "increase")
 }
