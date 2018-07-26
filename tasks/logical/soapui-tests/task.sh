@@ -21,44 +21,22 @@ source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/source-all.sh
 # Add properties as environment variables
 exportKeyValProperties
 
-cd "${ROOT_FOLDER}/${TESTS_RESOURCE}" || exit
-
 echo "-- Running SaopUI tests"
 
-# Copy file
-cp ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/ID_20-Consistenze/ConfPipeline/fileDeiComandiDiEsecuzioneTest.bat ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/commands.sh
-
-# Remove first line of the file
-tail -n +2 ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/commands.sh > ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/salida
-mv ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/salida ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/commands.sh
-
-sed "s/CALL testrunner.bat/testrunner.sh/" ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/commands.sh > ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/salida
-mv ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/salida ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/commands.sh
-
-cd Projects
+cd "${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects" || exit
 
 while IFS= read -r line
 do
-  echo "echo ${line}" >> ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/salida
-done < "${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/commands.sh"
-
-mv ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/salida ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/commands.sh
-chmod +x ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/commands.sh
-${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/commands.sh COLLEVO > ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/salida
-mv ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/salida ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/commands.sh
-cat ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/commands.sh
-
-
-nohup /opt/SoapUI/bin/testrunner.sh -s"bucket - TestSuite (v1)" -r -a -j -J -GAmbiente=COLLEVO -f./Reports ./bucket-soapui-project.xml &
-PROC_ID=$!
-
-while kill -0 "$PROC_ID" >/dev/null 2>&1; do
+  echo eval "nohup ${line} &"
+  PROC_ID=$!
+  while kill -0 "$PROC_ID" >/dev/null 2>&1; do
     echo "Tests running ..."
     sleep 5
-done
-echo "Tests finished!!"
+  done
+  echo "Tests finished!!"
+done < ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/ID_20-Consistenze/ConfPipeline/run-collevo.sh
 
-echo RESULT=$(ls ./Reports/ | grep FAILED | wc -l)
+echo RESULT=$(ls ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/ID_20-Consistenze/Reports/ | grep FAILED | wc -l)
 if [[ $RESULT = "0" ]]
 then
   echo "Success!!"
