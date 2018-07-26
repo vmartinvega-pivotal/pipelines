@@ -25,7 +25,7 @@ cd "${ROOT_FOLDER}/${TESTS_RESOURCE}" || exit
 
 echo "-- Running SaopUI tests"
 
-cd Projects/bucket
+cd Projects/ID_20-Consistenze
 
 nohup /opt/SoapUI/bin/testrunner.sh -s"bucket - TestSuite (v1)" -r -a -j -J -GAmbiente=COLLEVO -f./Reports ./bucket-soapui-project.xml &
 PROC_ID=$!
@@ -59,8 +59,6 @@ else
   
   # Upload  the files to nexus
   find Reports/html -type f -exec curl -v --insecure -u ${M2_SETTINGS_REPO_USERNAME}:${M2_SETTINGS_REPO_PASSWORD} -T {} https://${M2_SETTINGS_REPO_SITE_URL}/${GROUP_ID}.${ARTIFACT_ID}/{} \;
-  
-  echo "build name:"$BUILD_NAME
 
   exit 1
 fi
