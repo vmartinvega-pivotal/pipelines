@@ -49,12 +49,16 @@ do
   do
     RANDOM_VALUE=$(python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/random.py)
     mv ${file} FinalReports/${RANDOM_VALUE}.xml
+    echo "DEBUG: Moved file ${file} to FinalReports/${RANDOM_VALUE}.xml"
   done
 
 done < ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/${LOGICAL_NAME}/ConfPipeline/run-collevo.sh
 
 # Build file to create the html file from the xml file with ant
 cp "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/ant/build.xml .
+
+ant 
+
 # Rename the file created by ant
 mv FinalReports/junit-noframes.html FinalReports/result.html
 
