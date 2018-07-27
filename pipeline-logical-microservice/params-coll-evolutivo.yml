@@ -28,6 +28,9 @@ pvcs-username:
 pvcs-password: 
 pvcs-checkoutdir: STR1
 
+# SOAP Ui Conf
+nexus-site-server-url: https://nexus-sdp.telecomitalia.local/nexus/repository/site
+
 # TOOLS REPOSITORY
 tools-scripts-url: https://gitlab-sdp.telecomitalia.local/demodevops/pipelines.git
 tools-branch: master

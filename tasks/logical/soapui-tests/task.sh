@@ -76,7 +76,7 @@ else
   echo "Failed!!"
   
   # Upload  the files to nexus
-  find FinalReports/html -type f -exec curl -v --insecure -u ${M2_SETTINGS_REPO_USERNAME}:${M2_SETTINGS_REPO_PASSWORD} -T {} https://${M2_SETTINGS_REPO_SITE_URL}/${GROUP_ID}.${ARTIFACT_ID}/{} \;
+  find FinalReports/html -type f -exec curl -v --insecure -u ${M2_SETTINGS_REPO_USERNAME}:${M2_SETTINGS_REPO_PASSWORD} -T {} ${NEXUS_SITE_SERVER_URL}/${GROUP_ID}.${ARTIFACT_ID}/{} \;
 
   exit 1
 fi

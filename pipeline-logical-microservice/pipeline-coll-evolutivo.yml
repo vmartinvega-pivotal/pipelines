@@ -137,6 +137,7 @@ jobs:
     input_mapping: {repo: repo-coll-evo, tests: soap-ui-tests}
     params:
       <<: *common-git-params
+      NEXUS_SITE_SERVER_URL: ((nexus-site-server-url))
   - put: keyval
     params:
       file: keyvalout/keyval.properties

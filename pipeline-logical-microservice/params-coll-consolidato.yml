@@ -13,6 +13,9 @@ smtp-port: "587"
 smtp-username: 
 smtp-password: 
 
+# SOAP Ui Conf
+nexus-site-server-url: https://nexus-sdp.telecomitalia.local/nexus/repository/site
+
 # PVCS configuration
 pvcs-url: http://pvcs.telecomitalia.local:8080/cmbridge/CORSO/AGILE/STR1
 pvcs-username: 
