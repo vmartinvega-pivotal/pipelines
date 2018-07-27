@@ -60,7 +60,11 @@ cp "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/ant/build.xml .
 ant 
 
 # Rename the file created by ant
-mv FinalReports/junit-noframes.html FinalReports/result.html
+mv FinalReports/html/junit-noframes.html FinalReports/html/report.html
+
+POM_VERSION=$(getPomVersion ${ROOT_FOLDER}/${REPO_RESOURCE}/pom.xml)
+ARTIFACT_ID=$(getArtifactId ${ROOT_FOLDER}/${REPO_RESOURCE}/pom.xml)
+GROUP_ID=$(getGroupId ${ROOT_FOLDER}/${REPO_RESOURCE}/pom.xml)
 
 # Checks if there is some FAILED test
 echo RESULT=$(ls ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/${LOGICAL_NAME}/Reports/ | grep FAILED | wc -l)
@@ -71,21 +75,8 @@ else
   # Upload the reports to nexus site and exit
   echo "Failed!!"
   
-  # Build file to create the html file from the xml file with ant
-  cp "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/ant/build.xml .
-
-  # Run ant to create the html file
-  ant
-  
-  POM_VERSION=$(getPomVersion ${ROOT_FOLDER}/${REPO_RESOURCE}/pom.xml)
-  ARTIFACT_ID=$(getArtifactId ${ROOT_FOLDER}/${REPO_RESOURCE}/pom.xml)
-  GROUP_ID=$(getGroupId ${ROOT_FOLDER}/${REPO_RESOURCE}/pom.xml)
-
-  # Rename the file created by ant
-  mv Reports/html/junit-noframes.html Reports/html/${POM_VERSION}.html 
-  
   # Upload  the files to nexus
-  find Reports/html -type f -exec curl -v --insecure -u ${M2_SETTINGS_REPO_USERNAME}:${M2_SETTINGS_REPO_PASSWORD} -T {} https://${M2_SETTINGS_REPO_SITE_URL}/${GROUP_ID}.${ARTIFACT_ID}/{} \;
+  find FinalReports/html -type f -exec curl -v --insecure -u ${M2_SETTINGS_REPO_USERNAME}:${M2_SETTINGS_REPO_PASSWORD} -T {} https://${M2_SETTINGS_REPO_SITE_URL}/${GROUP_ID}.${ARTIFACT_ID}/{} \;
 
   exit 1
 fi

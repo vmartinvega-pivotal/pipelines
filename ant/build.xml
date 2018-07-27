@@ -6,7 +6,7 @@
             <fileset dir="${reports}/">
                 <include name="*.xml" />
             </fileset>
-            <report format="noframes" todir="${reports}\" />
+            <report format="noframes" todir="${reports}\html\" />
         </junitreport>
     </target>
 </project>
