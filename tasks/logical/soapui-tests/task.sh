@@ -62,7 +62,7 @@ cp "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/ant/build.xml .
 ant 
 
 # Rename the file created by ant
-mv FinalReports/html/junit-noframes.html FinalReports/html/soapui-report.html
+mv FinalReports/html/junit-noframes.html FinalReports/html/soapui-${ENVIRONMENT_TO_TEST}-report.html
 
 POM_VERSION=$(getPomVersion ${ROOT_FOLDER}/${REPO_RESOURCE}/pom.xml)
 ARTIFACT_ID=$(getArtifactId ${ROOT_FOLDER}/${REPO_RESOURCE}/pom.xml)
@@ -74,6 +74,9 @@ echo RESULT=$(find ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/${LOGICAL_NAME}/Rep
 if [[ $RESULT = "0" ]]
 then
   echo "Success!!"
+
+  # Upload  the files to nexus
+  find FinalReports/html -type f -exec curl -v --insecure -u ${M2_SETTINGS_REPO_USERNAME}:${M2_SETTINGS_REPO_PASSWORD} -T {} ${NEXUS_SITE_SERVER_URL}/${GROUP_ID}.${ARTIFACT_ID}.${RELEASE_VERSION}/{} \;
 else
   # Upload the reports to nexus site and exit
   echo "Failed!!"
