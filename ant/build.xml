@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="Ant Example" default="test" basedir=".">
-    <property name="reports" location="Reports" />
+<project name="RunnerTest" default="test" basedir=".">
+    <property name="reports" location="FinalReports" />
     <target name="test" >
         <junitreport todir="${reports}">
             <fileset dir="${reports}/">
-                <include name="TEST-*.xml" />
+                <include name="*.xml" />
             </fileset>
-            <report format="noframes" todir="${reports}\html\" />
+            <report format="noframes" todir="${reports}\" />
         </junitreport>
     </target>
 </project>

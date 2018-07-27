@@ -146,6 +146,18 @@ function getUrlArtifact(){
   echo ${RESULT}
 }
 
+#Params 
+# 1 - output file name
+function soapUItestrunnerWorkaround(){
+  OUTPUT=$1 
+  echo "nohup "${line}" &" >> ${OUTPUT}
+  echo "PROC_ID=\$!" >> ${OUTPUT}
+  echo "while kill -0 \"\$PROC_ID\" >/dev/null 2>&1; do" >> ${OUTPUT}
+  echo "echo \"Tests running ...\"" >> ${OUTPUT}
+  echo "sleep 5" >> ${OUTPUT}
+  echo "done" >> ${OUTPUT}
+  echo "echo \"Tests finished!!\"" >> ${OUTPUT}
+}
 
 # Converts a string to lower case
 function toLowerCase() {

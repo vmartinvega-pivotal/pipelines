@@ -23,28 +23,49 @@ exportKeyValProperties
 
 echo "-- Running SaopUI tests"
 
+# To run de scripts needs to be in this folder, will change in the future
 cd "${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects" || exit
+
+# Creates a folder to store all xml files produced by testrunner
+mkdir FinalReports
+
+LOGICAL_NAME="ID_20_Consistenze"
 
 while IFS= read -r line
 do
-  command=( ${line} )
-  echo "starting service"
-  "${command[@]}" 2> /dev/null &
-  PROC_ID=$!
-  while kill -0 "$PROC_ID" >/dev/null 2>&1; do
-    echo "Tests running ..."
-    sleep 5
-  done
-  echo "Tests finished!!"
-done < ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/ID_20-Consistenze/ConfPipeline/run-collevo.sh
+  # Randon file name
+  RANDOM_VALUE=$(python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/random.py)
+  RANDOM_FILE="salida${RANDOM_VALUE}"
 
-echo RESULT=$(ls ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/ID_20_Consistenze/Reports/ | grep FAILED | wc -l)
+  # Creates the file to execute the tests #WORKAROUND#
+  soapUItestrunnerWorkaround ${RANDOM_FILE} 
+
+  chmod +x ${RANDOM_FILE}
+  
+  ./${RANDOM_FILE}
+
+  # Move all xml files in Report folder to a new location to create a unique html file, all files have to have different names
+  for file in `ls ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/${LOGICAL_NAME}/Reports/*.xml`
+  do
+    RANDOM_VALUE=$(python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/random.py)
+    mv ${file} FinalReports/${RANDOM_VALUE}.xml
+  done
+
+done < ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/${LOGICAL_NAME}/ConfPipeline/run-collevo.sh
+
+# Build file to create the html file from the xml file with ant
+cp "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/ant/build.xml .
+# Rename the file created by ant
+mv FinalReports/junit-noframes.html FinalReports/result.html
+
+# Checks if there is some FAILED test
+echo RESULT=$(ls ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/${LOGICAL_NAME}/Reports/ | grep FAILED | wc -l)
 if [[ $RESULT = "0" ]]
 then
   echo "Success!!"
 else
   # Upload the reports to nexus site and exit
-  echo "Failure!!"
+  echo "Failed!!"
   
   # Build file to create the html file from the xml file with ant
   cp "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/ant/build.xml .
