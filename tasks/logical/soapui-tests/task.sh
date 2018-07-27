@@ -54,7 +54,7 @@ do
     echo "DEBUG: Moved file ${file} to FinalReports/${RANDOM_VALUE}.xml"
   done
 
-done < ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/${LOGICAL_NAME}/ConfPipeline/run-collevo.sh
+done < ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/${LOGICAL_NAME}/ConfPipeline/run-${ENVIRONMENT_TO_TEST}.sh
 
 # Build file to create the html file from the xml file with ant
 cp "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/ant/build.xml .
@@ -67,9 +67,10 @@ mv FinalReports/html/junit-noframes.html FinalReports/html/soapui-report.html
 POM_VERSION=$(getPomVersion ${ROOT_FOLDER}/${REPO_RESOURCE}/pom.xml)
 ARTIFACT_ID=$(getArtifactId ${ROOT_FOLDER}/${REPO_RESOURCE}/pom.xml)
 GROUP_ID=$(getGroupId ${ROOT_FOLDER}/${REPO_RESOURCE}/pom.xml)
+RELEASE_VERSION=$(echo $POM_VERSION| cut -d'-' -f 1)
 
 # Checks if there is some FAILED test
-echo RESULT=$(ls ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/${LOGICAL_NAME}/Reports/ | grep FAILED | wc -l)
+echo RESULT=$(find ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/${LOGICAL_NAME}/Reports/ | grep FAILED | wc -l)
 if [[ $RESULT = "0" ]]
 then
   echo "Success!!"

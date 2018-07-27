@@ -135,6 +135,7 @@ jobs:
     params:
       <<: *common-git-params
       NEXUS_SITE_SERVER_URL: ((nexus-site-server-url))
+      ENVIRONMENT_TO_TEST: collevo
   - put: keyval
     params:
       file: keyvalout/keyval.properties
