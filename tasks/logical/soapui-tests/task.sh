@@ -29,7 +29,7 @@ cd "${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects" || exit
 # Creates a folder to store all xml files produced by testrunner
 mkdir FinalReports
 
-LOGICAL_NAME="ID_20_Consistenze"
+LOGICAL_NAME="ID_20-Consistenze"
 
 while IFS= read -r line
 do
