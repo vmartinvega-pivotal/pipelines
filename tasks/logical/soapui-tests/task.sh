@@ -33,7 +33,9 @@ LOGICAL_NAME="ID_20-Consistenze"
 
 while IFS= read -r line
 do
-  # Randon file name
+  echo "DEBUG: Read line: ${line}"
+
+  # Randon file name for the workaround
   RANDOM_VALUE=$(python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/random.py)
   RANDOM_FILE="salida${RANDOM_VALUE}"
 
@@ -60,7 +62,7 @@ cp "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/ant/build.xml .
 ant 
 
 # Rename the file created by ant
-mv FinalReports/html/junit-noframes.html FinalReports/html/report.html
+mv FinalReports/html/junit-noframes.html FinalReports/html/soapui-report.html
 
 POM_VERSION=$(getPomVersion ${ROOT_FOLDER}/${REPO_RESOURCE}/pom.xml)
 ARTIFACT_ID=$(getArtifactId ${ROOT_FOLDER}/${REPO_RESOURCE}/pom.xml)
