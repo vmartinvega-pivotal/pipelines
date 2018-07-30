@@ -40,13 +40,6 @@ function prepareScriptsToDeploy(){
   sed -e 's|["'\'']||g' app-descriptor-aux1.df > app-descriptor.df
   rm app-descriptor-aux1.df
 
-  TAG_VERSION_APP_DESCRIPTOR=$(python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/check_file_version.py app-descriptor.df)
-  if [[ $TAG_VERSION_APP_DESCRIPTOR = "true" ]]
-  then
-    echo "Some physical microservices where not resolved in app-descriptor.df !! Existing ..."
-    exit 1
-  fi
-
   # Source all environments
   for ENV_FILE in `ls ../${CONFIG_RESOURCE}/*.env`
   do

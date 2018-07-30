@@ -24,6 +24,13 @@ source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/source-all.sh
 # Add properties as environment variables
 exportKeyValProperties
 
+TAG_VERSION_APP_DESCRIPTOR=$(python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/check_file_version.py app-descriptor.df)
+if [[ $TAG_VERSION_APP_DESCRIPTOR = "true" ]]
+then
+  echo "Some physical microservices where not resolved in app-descriptor.df !! Existing ..."
+  exit 1
+fi
+
 echo "--- Compile Logical ---"
 
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
