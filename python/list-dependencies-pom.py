@@ -19,6 +19,6 @@ if __name__ == "__main__":
     artifactId = dependency.find("{%s}artifactId" % ns).text
     version = dependency.find("{%s}version" % ns).text
     with open(outfile, 'a') as outputfile:
-      outputfile.write(groupId + "." + artifactId + ":jar:" + version + ":compile" + '\n')
+      outputfile.write(groupId + ":" + artifactId + ":jar:" + version + ":compile" + '\n')
     
     
