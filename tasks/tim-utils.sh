@@ -11,9 +11,10 @@ function prepareScriptsToDeploy(){
   # Resolve ranges for the dependencies
   mvn versions:resolve-ranges -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
 
-  # Get the dependencies for the logical microservice
-  mvn dependency:list -DexcludeTransitive=true -DoutputFile=dependencies.list -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
-
+  # Get the dependencies for the logical microservice from the compiled pom.xml
+  #mvn dependency:list -DexcludeTransitive=true -DoutputFile=dependencies.list -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
+  python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/list-dependencies-pom.py pom.xml dependencies.list 
+ 
   # Generate the app-descriptor for the microservice from the template
   if [ -f app-descriptor.df ]; then
     rm app-descriptor.df
