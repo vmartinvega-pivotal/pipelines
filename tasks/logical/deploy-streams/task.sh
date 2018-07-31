@@ -36,7 +36,7 @@ else
 fi
 
 echo "Deploying to ${ENVIRONMENT_TO_DEPLOY}"
-./microservice.sh ../config/${ENVIRONMENT_TO_DEPLOY}.env microservice.env deploy
+#./microservice.sh ../config/${ENVIRONMENT_TO_DEPLOY}.env microservice.env deploy
 
 echo "--- Deploy Streams ---"
 echo ""
