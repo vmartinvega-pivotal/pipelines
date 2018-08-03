@@ -39,14 +39,17 @@ do
   RANDOM_VALUE=$(python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/random.py)
   RANDOM_FILE="salida${RANDOM_VALUE}"
 
-  # Creates the file to execute the tests #WORKAROUND#
+  # Creates the file to execute the tests #WORKAROUND#. It creates a file that executes the tests in background and waits for it to finish
   soapUItestrunnerWorkaround ${RANDOM_FILE} 
 
+  # Execution permissions
   chmod +x ${RANDOM_FILE}
   
+  # Executes the tests
   ./${RANDOM_FILE}
 
-  # Move all xml files in Report folder to a new location to create a unique html file, all files have to have different names
+  # Move all xml files in Report folder to a new location to create a unique html file, all files have to have different names,
+  # and the tests produced the same xml file name, that is why it is moved to a new location
   for file in `ls ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/${LOGICAL_NAME}/Reports/*.xml`
   do
     RANDOM_VALUE=$(python "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/python/random.py)
@@ -59,6 +62,7 @@ done < ${ROOT_FOLDER}/${TESTS_RESOURCE}/Projects/${LOGICAL_NAME}/ConfPipeline/ru
 # Build file to create the html file from the xml file with ant
 cp "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/ant/build.xml .
 
+# creates the html file with ant
 ant 
 
 # Rename the file created by ant
