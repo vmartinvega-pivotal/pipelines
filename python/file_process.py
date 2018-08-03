@@ -28,7 +28,7 @@ if __name__ == "__main__":
                # Search and match valid Regex line
                line_tf_match = re.search('(.+?)\.(.+?)=maven://(.+?):(.+?):#VERSION#', line)
                if line_tf_match:
-                    template_line = "(.+?):" + line_tf_match.group(4) + ":jar:(.+?):compile" 
+                    template_line = line_tf_match.group(3) + ":" + line_tf_match.group(4) + ":jar:(.+?):compile" 
                     app_name = line_tf_match.group(1).upper() + "_" + line_tf_match.group(2).upper().replace('-', '_') + "_VERSION" 
                     
                     #print("Dependency line found: " + line)
@@ -39,7 +39,7 @@ if __name__ == "__main__":
                          for line_lf in lf:
                              line_lf_match = re.search(template_line, line_lf)
                              if line_lf_match: 
-                                 version = line_lf_match.group(2)
+                                 version = line_lf_match.group(1)
                      
                                  with open(resultfile, 'a') as outputfile:
                                       outputfile.write(line_tf_match.group(1) + "." + line_tf_match.group(2) + "=maven://" + line_tf_match.group(3) + ":" + line_tf_match.group(4) + ":" + "${" + app_name + "}" + '\n')
