@@ -65,7 +65,6 @@ then
 
     #TODO: SI Branch release (number.number) releaese se ejecuta maven release, en otro caso se ejecuta maven deploy
     #mvn --batch-mode release:clean release:prepare release:perform -Drelease.arguments="-Dmaven.javadoc.skip=true -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE} -Dsonar.branch=${SONAR_BRANCH}" -Dresume=false -Dusername=${USERNAME} -Dpassword=${PASSWORD} -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE} -DscmCommentPrefix="[ci skip]" -Dmaven.javadoc.skip=true
-    
 else
     POM_VERSION="$(getPomVersion $POM_FILE)"
     echo "ERROR: Pom Version ${POM_VERSION} does not match release name ${CURRENT_BRANCH}"
