@@ -1,6 +1,6 @@
 ---
 resources:
-- name: repo-coll-con
+- name: repo
   type: git
   source:
     uri: ((app-url))
@@ -31,17 +31,6 @@ resources:
 - name: keyval
   type: keyval
 
-#- name: send-email
-#  type: email
-#  source:
-#    smtp:
-#      host: ((smtp-host))
-#      port: ((smtp-port)) # this must be a string
-#      username: ((smtp-username))
-#      password: ((smtp-password))
-#    from: vicente.martin.vega@gmail.com
-#    to: [ "vicente.martin.vega@gmail.com" ]
-
 resource_types:
   - name: keyval
     type: docker-image
@@ -54,20 +43,35 @@ jobs:
   plan:
   - aggregate:
     - get: tools
-    - get: repo-coll-con
+    - get: repo
     - get: config-logical-micro
       trigger: true
   - task: compile-logical-microservice
     privileged: true
     file: tools/tasks/logical/compile-logical/task.yml
-    input_mapping: {repo: repo-coll-con, config: config-logical-micro}
+    input_mapping: {repo: repo, config: config-logical-micro}
     output_mapping: {out: logical_compiled_files}
     params:
       <<: *common-git-params
-  - put: keyval
+  - task: deploy-streams-dev1
+    privileged: true
+    file: tools/tasks/logical/deploy-streams/task.yml
+    input_mapping: {repo: logical_compiled_files, config: config-logical-micro}
     params:
-      file: keyvalout/keyval.properties
-  - task: deploy-streams
+      ENVIRONMENT_TO_DEPLOY: dev1
+  - task: deploy-streams-dev2
+    privileged: true
+    file: tools/tasks/logical/deploy-streams/task.yml
+    input_mapping: {repo: logical_compiled_files, config: config-logical-micro}
+    params:
+      ENVIRONMENT_TO_DEPLOY: dev2
+  - task: deploy-streams-dev3
+    privileged: true
+    file: tools/tasks/logical/deploy-streams/task.yml
+    input_mapping: {repo: logical_compiled_files, config: config-logical-micro}
+    params:
+      ENVIRONMENT_TO_DEPLOY: dev3
+  - task: deploy-streams-dev4
     privileged: true
     file: tools/tasks/logical/deploy-streams/task.yml
     input_mapping: {repo: logical_compiled_files, config: config-logical-micro}
