@@ -26,11 +26,14 @@ if __name__ == "__main__":
       with open(templatefile) as tf:
            for line in tf:
                # Search and match valid Regex line
+               #print line
                line_tf_match = re.search('(.+?)\.(.+?)=maven://(.+?):(.+?):#VERSION#', line)
                if line_tf_match:
                     template_line = line_tf_match.group(3) + ":" + line_tf_match.group(4) + ":jar:(.+?):compile" 
                     app_name = line_tf_match.group(1).upper() + "_" + line_tf_match.group(2).upper().replace('-', '_') + "_VERSION" 
                     
+                    #print app_name
+
                     #print("Dependency line found: " + line)
 
                     with open(listfile) as lf:

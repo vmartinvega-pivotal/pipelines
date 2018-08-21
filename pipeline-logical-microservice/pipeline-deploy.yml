@@ -1,0 +1,97 @@
+---
+resources:
+- name: repo-coll-con
+  type: git
+  source:
+    uri: ((app-url))
+    branch: ((app-branch))
+    username: ((github-username))
+    password: ((github-password))
+    skip_ssl_verification: true
+    disable_ci_skip: false
+
+- name: tools
+  type: git
+  source:
+    uri: ((tools-scripts-url))
+    branch: ((tools-branch))
+    username: ((github-username))
+    password: ((github-password))
+    skip_ssl_verification: true
+
+- name: config-logical-micro
+  type: git
+  source:
+    uri: ((config-scripts-url))
+    branch: ((tools-branch))
+    username: ((github-username))
+    password: ((github-password))
+    skip_ssl_verification: true
+
+- name: keyval
+  type: keyval
+
+#- name: send-email
+#  type: email
+#  source:
+#    smtp:
+#      host: ((smtp-host))
+#      port: ((smtp-port)) # this must be a string
+#      username: ((smtp-username))
+#      password: ((smtp-password))
+#    from: vicente.martin.vega@gmail.com
+#    to: [ "vicente.martin.vega@gmail.com" ]
+
+resource_types:
+  - name: keyval
+    type: docker-image
+    source:
+      repository: swce/keyval-resource
+  
+jobs:
+- name: deploy-streams
+  public: true
+  plan:
+  - aggregate:
+    - get: tools
+    - get: repo-coll-con
+    - get: config-logical-micro
+      trigger: true
+  - task: compile-logical-microservice
+    privileged: true
+    file: tools/tasks/logical/compile-logical/task.yml
+    input_mapping: {repo: repo-coll-con, config: config-logical-micro}
+    output_mapping: {out: logical_compiled_files}
+    params:
+      <<: *common-git-params
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+  - task: deploy-streams
+    privileged: true
+    file: tools/tasks/logical/deploy-streams/task.yml
+    input_mapping: {repo: logical_compiled_files, config: config-logical-micro}
+    params:
+      ENVIRONMENT_TO_DEPLOY: dev4
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+
+common-git-params: &common-git-params
+  BUILD_OPTIONS: ((build-options))
+  GIT_EMAIL: ((git-email))
+  GIT_NAME: ((git-name))
+  CURRENT_BRANCH: ((app-branch))
+  TRUSTSTORE: ((truststore))
+  GITHUB_PRIVATE_KEY: ((github-private-key))
+  M2_SETTINGS_REPO_ID: ((m2-settings-repo-id))
+  M2_SETTINGS_REPO_PASSWORD: ((m2-settings-repo-password))
+  M2_SETTINGS_REPO_USERNAME: ((m2-settings-repo-username))
+  M2_SETTINGS_REPO_MIRROR_URL: ((repo-with-binaries))
+  M2_SETTINGS_REPO_SITE_URL: ((repo-with-site))
+  M2_SETTINGS_REPO_RELEASE_URL: ((repo-with-binaries-for-upload))
+  M2_SETTINGS_REPO_SNAPSHOTS_URL: ((repo-with-binaries-snapshots))
+  M2_SETTINGS_REPO_GIT_SERVER_URL: ((gitlab-server-url))
+  M2_SETTINGS_REPO_SONAR_URL: ((sonar-host-url))
+  M2_SETTINGS_REPO_SONAR_TOKEN: ((sonar-login-key))
+

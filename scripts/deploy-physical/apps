@@ -1,1 +1,5 @@
 business-object-rest-api
+entity-event-bulk-loader-standalone
+entity-event-bus-service
+entity-event-cache-service
+entity-event-eventbus-loader-standalone
