@@ -36,6 +36,8 @@ getPCFUrls ${PWS_ORG} ${PWS_SPACE}
 # Find the jar to be deployed
 ARTIFACT_ID=$(getArtifactId "pom.xml")
 echo "DEBUG: Artifact Id: ${ARTIFACT_ID}"
+cat pom.xml
+exit
 ARTIFACT_VERSION=$(getPomVersion "pom.xml")
 echo "DEBUG: Artifact Version: ${ARTIFACT_VERSION}"
 export PASSED_JAR_FILE=$(find ../ -name "${ARTIFACT_ID}-${ARTIFACT_VERSION}.jar")

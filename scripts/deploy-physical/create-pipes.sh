@@ -9,7 +9,7 @@ do
   if [ -f params-build-${app}.yml ]; then
     rm params-build-${app}.yml
   fi
-  sed "s/app-url: #APPS-URL#/app-url: https://gitlab-sdp.telecomitalia.local/factory-apps/${app}.git/" params-build-template.yml > params-build-${app}.yml
+  sed "s/app-url: #APPS-URL#/app-url: https:\/\/gitlab-sdp.telecomitalia.local\/factory-apps\/${app}.git/" params-build-template.yml > params-build-${app}.yml
   fly -t automate login -c $CONCOURSE_URL -n $CONCOURSE_TEAM -u $CONCOURSE_USERNAME -p $CONCOURSE_PASSWORD
   fly -t automate sync
   fly -t automate sp -p release-${app} -c "${PIPELINE_YML}" -l params-build-${app}.yml -n
