@@ -36,7 +36,10 @@ else
 fi
 
 echo "Deploying to ${ENVIRONMENT_TO_DEPLOY}"
-./microservice.sh ../config/${ENVIRONMENT_TO_DEPLOY}.env microservice.env deploy
+
+chmod +x ${ROOT_FOLDER}/${CONFIG_RESOURCE}/NFS-bind.sh
+  
+./microservice.sh ../${CONFIG_RESOURCE}/${ENVIRONMENT_TO_DEPLOY}.env microservice.env deploy
 
 echo "--- Deploy Streams ---"
 echo ""
