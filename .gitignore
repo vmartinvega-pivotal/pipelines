@@ -5,6 +5,7 @@ pipeline-logical-microservice/params-coll-consolidato-id20.yml
 pipeline-physical-microservice/params-snapshoot-dispositiva-processor.yml
 pipeline-physical-microservice/params-build-dispositiva-processor.yml
 pipeline-logical-microservice/params-deploy-id22.yml
+pipeline-logical-microservice/params-deploy-id20.yml
 settings.xml
 concourse/keys/
 nexus

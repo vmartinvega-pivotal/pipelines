@@ -38,7 +38,7 @@ resource_types:
       repository: swce/keyval-resource
   
 jobs:
-- name: deploy-dev1
+- name: deploy-to-dev-environments
   public: true
   plan:
   - aggregate:
@@ -53,30 +53,6 @@ jobs:
     output_mapping: {out: logical_compiled_files}
     params:
       <<: *common-git-params
-  - task: deploy-streams-dev1
-    privileged: true
-    file: tools/tasks/logical/deploy-streams/task.yml
-    input_mapping: {repo: logical_compiled_files, config: config-logical-micro}
-    params:
-      ENVIRONMENT_TO_DEPLOY: dev1
-  - task: deploy-streams-dev2
-    privileged: true
-    file: tools/tasks/logical/deploy-streams/task.yml
-    input_mapping: {repo: logical_compiled_files, config: config-logical-micro}
-    params:
-      ENVIRONMENT_TO_DEPLOY: dev2
-  - task: deploy-streams-dev3
-    privileged: true
-    file: tools/tasks/logical/deploy-streams/task.yml
-    input_mapping: {repo: logical_compiled_files, config: config-logical-micro}
-    params:
-      ENVIRONMENT_TO_DEPLOY: dev3
-  - task: deploy-streams-dev4
-    privileged: true
-    file: tools/tasks/logical/deploy-streams/task.yml
-    input_mapping: {repo: logical_compiled_files, config: config-logical-micro}
-    params:
-      ENVIRONMENT_TO_DEPLOY: dev4
   - put: keyval
     params:
       file: keyvalout/keyval.properties
