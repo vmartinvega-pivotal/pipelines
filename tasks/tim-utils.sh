@@ -58,7 +58,8 @@ function prepareScriptsToDeploy(){
     rm -Rf compiled
   done
   mv compiled_aux compiled
-  ls compiled
+
+  chmod +x ${ROOT_FOLDER}/${CONFIG_RESOURCE}/NFS-bind.sh
   
   echo "DEBUG: apps-version.env created..."
   cat apps-version.env

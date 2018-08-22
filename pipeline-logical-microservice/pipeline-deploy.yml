@@ -56,6 +56,15 @@ jobs:
   - put: keyval
     params:
       file: keyvalout/keyval.properties
+  - task: deploy-streams-dev4
+    privileged: true
+    file: tools/tasks/logical/deploy-streams/task.yml
+    input_mapping: {repo: logical_compiled_files, config: config-logical-micro}
+    params:
+      ENVIRONMENT_TO_DEPLOY: dev4
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
 
 common-git-params: &common-git-params
   BUILD_OPTIONS: ((build-options))
