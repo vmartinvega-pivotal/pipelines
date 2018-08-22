@@ -38,7 +38,7 @@ resource_types:
       repository: swce/keyval-resource
   
 jobs:
-- name: deploy-streams
+- name: deploy-dev1
   public: true
   plan:
   - aggregate:

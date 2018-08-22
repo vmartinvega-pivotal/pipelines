@@ -28,28 +28,36 @@ function prepareScriptsToDeploy(){
     rm -Rf compiled
   fi
 
-  python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/file_process.py dependencies.list app-descriptor-template.df app-descriptor-aux.df apps-version-template.env apps-version.env
+  python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/file_process.py dependencies.list app-descriptor-template.df app-descriptor.df apps-version-template.env apps-version.env
 
-  chmod +x apps-version.env
-  exportKeyValPropertiesForDeploying apps-version.env
+  #chmod +x apps-version.env
+  #exportKeyValPropertiesForDeploying apps-version.env
 
-  envsubst < app-descriptor-aux.df > app-descriptor-aux1.df
-  rm app-descriptor-aux.df
+  #envsubst < app-descriptor-aux.df > app-descriptor-aux1.df
+  #rm app-descriptor-aux.df
 
   # Remove comillas 
-  sed -e 's|["'\'']||g' app-descriptor-aux1.df > app-descriptor.df
-  rm app-descriptor-aux1.df
+  #sed -e 's|["'\'']||g' app-descriptor-aux1.df > app-descriptor.df
+  #rm app-descriptor-aux1.df
 
-  # Source all environments
-  for ENV_FILE in `ls ../${CONFIG_RESOURCE}/*.env`
+  echo "echo \"\\" >> microservice.env
+  cat app-descriptor.df >> microservice.env
+  echo "\" \\" >> microservice.env
+  echo "> \${COMPILED_DIR}/app-descriptor.df" >> microservice.env
+  
+  # Source all environments and stores all compiled info 
+  mkdir compiled_aux
+    for ENV_FILE in `ls ../${CONFIG_RESOURCE}/*.env`
   do
     echo "DEBUG: creating compiled files for: ${ENV_FILE}"
     ./microservice.sh ../${CONFIG_RESOURCE}/${ENV_FILE} microservice.env script
+    COMPILED_ENV_NAME=$(echo ${ENV_FILE} | awk -F"." '{print $1}')
+    mkdir compiled_aux/${COMPILED_ENV_NAME}
+    mv compiled/* compiled_aux/${COMPILED_ENV_NAME}
+    rm -Rf compiled
   done
-
-  echo "DEBUG: app-descriptor created..."
-  cat app-descriptor.df
-
+  mv 
+  
   echo "DEBUG: apps-version.env created..."
   cat apps-version.env
 }
