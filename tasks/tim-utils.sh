@@ -50,7 +50,6 @@ function prepareScriptsToDeploy(){
   for ENV_FILE in `ls ../${CONFIG_RESOURCE}/*.env`
   do
     echo "DEBUG: creating compiled files for: ${ENV_FILE}"
-    awk
     ./microservice.sh ../${CONFIG_RESOURCE}/${ENV_FILE} microservice.env script
     COMPILED_ENV_NAME_AUX=$(echo ${ENV_FILE} | awk -F"/" '{print $3}')
     COMPILED_ENV_NAME=$(echo ${COMPILED_ENV_NAME_AUX} | awk -F"." '{print $1}')
@@ -58,7 +57,8 @@ function prepareScriptsToDeploy(){
     mv compiled/* compiled_aux/${COMPILED_ENV_NAME}
     rm -Rf compiled
   done
-  mv 
+  mv compiled_aux compiled
+  ls compiled
   
   echo "DEBUG: apps-version.env created..."
   cat apps-version.env
