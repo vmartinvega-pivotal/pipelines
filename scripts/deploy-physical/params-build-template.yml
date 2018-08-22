@@ -37,8 +37,8 @@ git-name: devops-sdp
 # PCF
 pws-user: admin
 pws-pwd: XWMhEBXV8Zn7LxT1HqiulUQ7aSYGq4b_
-pws-org: vicente-test
-pws-space: development
+pws-org: factory
+pws-space: dev1
 pws-api: api.system.sdpcollaudo.telecomitalia.local
 app-memory-limit: 2GB
 app-disk-limit: 1GB

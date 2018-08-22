@@ -1,0 +1,11 @@
+cf login -a api.system.sdpcollaudo.telecomitalia.local --skip-ssl-validation -u admin -p XWMhEBXV8Zn7LxT1HqiulUQ7aSYGq4b_ -o factory -s dev4
+
+#DEV4
+SCDF_URI="https://dataflow-6f30cd3f-6a2a-4f89-8d5e-bc3383e96342.sdpcollaudo.telecomitalia.local"
+
+java \
+  -jar spring-cloud-dataflow-shell-1.5.1.RELEASE.jar \
+  --dataflow.uri="$SCDF_URI" \
+  --dataflow.credentials-provider-command="cf oauth-token" \
+  --dataflow.skip-ssl-validation=true \
+  --dataflow.mode=skipper

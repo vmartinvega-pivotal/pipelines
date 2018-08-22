@@ -1,5 +1,9 @@
-business-object-rest-api
-entity-event-bulk-loader-standalone
-entity-event-bus-service
-entity-event-cache-service
-entity-event-eventbus-loader-standalone
+fastdata-source
+fastdata-processor
+fastdata-sink-mongodb
+informativa-processor-apigw
+informativa-processor-mongodb
+informativa-processor-legacy
+json-projection
+informativa-splitter
+mongodb-bulk-import-sink
