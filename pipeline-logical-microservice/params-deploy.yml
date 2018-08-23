@@ -7,6 +7,9 @@ github-private-key:
 git-email: 
 git-name: 
 
+# Environment to deploy
+environment-to-deploy: 
+
 # TOOLS REPOSITORY
 tools-scripts-url: https://gitlab-sdp.telecomitalia.local/demodevops/pipelines.git
 tools-branch: master

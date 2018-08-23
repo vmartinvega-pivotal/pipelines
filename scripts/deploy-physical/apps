@@ -1,9 +1,0 @@
-fastdata-source
-fastdata-processor
-fastdata-sink-mongodb
-informativa-processor-apigw
-informativa-processor-mongodb
-informativa-processor-legacy
-json-projection
-informativa-splitter
-mongodb-bulk-import-sink

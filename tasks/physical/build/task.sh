@@ -17,16 +17,13 @@ export KEYVAL_RESOURCE=keyval
 # Source all usefull scripts
 source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/source-all.sh
 
-export TRUST_STORE_FILE=${ROOT_FOLDER}/${TOOLS_RESOURCE}/truststore/${TRUSTSTORE}
-chmod 777 ${TRUST_STORE_FILE}
-
 # Add properties as environment variables
 exportKeyValProperties
 
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
 echo "--- Build ---"
-mvn -X clean install -DskipTests=true -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE} 
+mvn -X clean install -DskipTests=true ${BUILD_OPTIONS} 
 echo "--- Build ---"
 echo ""
 

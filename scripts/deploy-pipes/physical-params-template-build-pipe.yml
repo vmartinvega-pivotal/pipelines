@@ -1,6 +1,6 @@
 # PHYSICAL MICROSERVICE RESPOSITORY 
 app-url: #APPS-URL#
-app-branch: master
+app-branch: #APPS_BRANCH#
 github-username: andrea.lambruschini
 github-password: zxcdsa01!
 github-private-key: |

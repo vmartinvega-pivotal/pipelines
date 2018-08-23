@@ -38,7 +38,7 @@ resource_types:
       repository: swce/keyval-resource
   
 jobs:
-- name: deploy-to-dev-environments
+- name: deploy-to-environment
   public: true
   plan:
   - aggregate:
@@ -56,12 +56,12 @@ jobs:
   - put: keyval
     params:
       file: keyvalout/keyval.properties
-  - task: deploy-streams-dev4
+  - task: deploy-streams
     privileged: true
     file: tools/tasks/logical/deploy-streams/task.yml
     input_mapping: {repo: logical_compiled_files, config: config-logical-micro}
     params:
-      ENVIRONMENT_TO_DEPLOY: dev4
+      ENVIRONMENT_TO_DEPLOY: ((environment-to-deploy))
   - put: keyval
     params:
       file: keyvalout/keyval.properties
@@ -83,4 +83,3 @@ common-git-params: &common-git-params
   M2_SETTINGS_REPO_GIT_SERVER_URL: ((gitlab-server-url))
   M2_SETTINGS_REPO_SONAR_URL: ((sonar-host-url))
   M2_SETTINGS_REPO_SONAR_TOKEN: ((sonar-login-key))
-
