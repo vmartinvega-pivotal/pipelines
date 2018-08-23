@@ -1,7 +1,7 @@
-CONCOURSE_URL=http://10.56.253.197:8080
-CONCOURSE_TEAM=main
-CONCOURSE_USERNAME=admin
-CONCOURSE_PASSWORD=e8apq0ezgu5g6ck0kogc
+#!/bin/bash
+
+source ./concourse-physical-params.sh
+
 PIPELINE_YML=../../pipeline-physical-microservice/pipeline-build.yml
 
 while IFS= read -r app
@@ -13,7 +13,10 @@ do
   sed "s/app-branch: #APPS_BRANCH#/app-branch: ${APP_BRANCH}/" params-build-1-${APP_NAME}.yml > params-build-${APP_NAME}.yml
   fly -t automate login -c $CONCOURSE_URL -n $CONCOURSE_TEAM -u $CONCOURSE_USERNAME -p $CONCOURSE_PASSWORD
   fly -t automate sync
-  fly -t automate sp -p release-${APP_NAME} -c "${PIPELINE_YML}" -l params-build-${APP_NAME}.yml -n
+ 
+  PIPELINE_NAME=release-${APP_NAME}
+
+  fly -t automate sp -p ${PIPELINE_NAME} -c "${PIPELINE_YML}" -l params-build-${APP_NAME}.yml -n
   rm params-build-${APP_NAME}.yml
   rm params-build-1-${APP_NAME}.yml
 done < "physical-apps"

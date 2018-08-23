@@ -1,0 +1,283 @@
+---
+resources:
+- name: repo-coll-con
+  type: git
+  source:
+    uri: ((app-url))
+    branch: ((app-branch))
+    username: ((github-username))
+    password: ((github-password))
+    skip_ssl_verification: true
+    disable_ci_skip: false
+
+- name: soap-ui-tests
+  type: git
+  source:
+    uri: ((soap-ui-tests-url))
+    branch: ((soap-ui-tests-branch))
+    username: ((github-username))
+    password: ((github-password))
+    skip_ssl_verification: true
+
+- name: tools
+  type: git
+  source:
+    uri: ((tools-scripts-url))
+    branch: ((tools-branch))
+    username: ((github-username))
+    password: ((github-password))
+    skip_ssl_verification: true
+
+- name: config-logical-micro
+  type: git
+  source:
+    uri: ((config-scripts-url))
+    branch: ((tools-branch))
+    username: ((github-username))
+    password: ((github-password))
+    skip_ssl_verification: true
+
+- name: repo-coll-con-put
+  type: git
+  source:
+    uri: ((app-url))
+    branch: ((app-branch))
+    username: ((github-username))
+    password: ((github-password))
+    skip_ssl_verification: true
+    disable_ci_skip: false
+
+- name: repo-coll-con-put1
+  type: git
+  source:
+    uri: ((app-url))
+    branch: ((app-branch))
+    username: ((github-username))
+    password: ((github-password))
+    skip_ssl_verification: true
+    disable_ci_skip: false
+
+- name: keyval
+  type: keyval
+
+#- name: send-email
+#  type: email
+#  source:
+#    smtp:
+#      host: ((smtp-host))
+#      port: ((smtp-port)) # this must be a string
+#      username: ((smtp-username))
+#      password: ((smtp-password))
+#    from: vicente.martin.vega@gmail.com
+#    to: [ "vicente.martin.vega@gmail.com" ]
+
+resource_types:
+  - name: keyval
+    type: docker-image
+    source:
+      repository: swce/keyval-resource
+  
+  - name: email
+    type: docker-image
+    source:
+      repository: pcfseceng/email-resource
+
+  - name: slack-notification
+    type: docker-image
+    source:
+      repository: cfcommunity/slack-notification-resource
+      tag: latest
+      
+jobs:
+- name: deploy-streams
+  public: true
+  plan:
+  - aggregate:
+    - get: tools
+    - get: repo-coll-con
+    - get: config-logical-micro
+      trigger: true
+  - task: compile-logical-microservice
+    privileged: true
+    file: tools/tasks/logical/compile-logical/task.yml
+    input_mapping: {repo: repo-coll-con, config: config-logical-micro}
+    output_mapping: {out: logical_compiled_files}
+    params:
+      <<: *common-git-params
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+  - task: deploy-streams
+    privileged: true
+    file: tools/tasks/logical/deploy-streams/task.yml
+    input_mapping: {repo: logical_compiled_files, config: config-logical-micro}
+    params:
+      ENVIRONMENT_TO_DEPLOY: dev4
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+
+- name: soapui-tests
+  public: true
+  plan:
+  - aggregate:
+    - get: tools
+    - get: repo-coll-con
+    - get: soap-ui-tests
+    - get: keyval
+      passed:
+      - deploy-streams
+      trigger: true
+  - task: soapui-tests
+    privileged: true
+    file: tools/tasks/logical/soapui-tests/task.yml
+    input_mapping: {repo: repo-coll-con, tests: soap-ui-tests}
+    params:
+      <<: *common-git-params
+      NEXUS_SITE_SERVER_URL: ((nexus-site-server-url))
+      ENVIRONMENT_TO_TEST: collevo
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+
+- name: create-release
+  public: true
+  plan:
+  - aggregate:
+    - get: tools
+    - get: repo-coll-con
+    - get: config-logical-micro
+    - get: keyval
+      passed:
+      - soapui-tests
+      trigger: true
+  - task: prepare-release
+    privileged: true
+    file: tools/tasks/logical/prepare-release/task.yml
+    input_mapping: {repo: repo-coll-con, config: config-logical-micro}
+    output_mapping: {filesout: prepare-release-files }
+    params:
+      <<: *common-git-params
+      <<: *sonar-params
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+  - put: repo-coll-con-put
+    params:
+      repository: out
+  - task: create-release-step1
+    privileged: true
+    file: tools/tasks/logical/create-release-step1/task.yml
+    input_mapping: {repo: repo-coll-con-put, files: prepare-release-files}
+    output_mapping: {filesout: create-release-step1-files }
+    params:
+      <<: *common-git-params
+      <<: *sonar-params
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+  - put: repo-coll-con-put1
+    params:
+      repository: out
+  - task: create-release-step2
+    privileged: true
+    file: tools/tasks/logical/create-release-step2/task.yml
+    input_mapping: {repo: repo-coll-con-put1, files: create-release-step1-files}
+    params:
+      <<: *common-git-params
+      <<: *sonar-params
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+  - put: repo-coll-con
+    params:
+      repository: out
+  - put: repo-coll-con-put
+    params:
+      repository: out
+  - put: repo-coll-con-put1
+    params:
+      repository: out
+
+- name: pvcs-upload
+  public: true
+  plan:
+  - aggregate:
+    - get: tools
+    - get: repo-coll-con
+    - get: keyval
+      passed:
+      - create-release
+      trigger: true
+  - task: pvcs-upload
+    privileged: true
+    file: tools/tasks/logical/pvcs-upload/task.yml
+    input_mapping: {repo: repo-coll-con}
+    params:
+      <<: *common-git-params
+      <<: *pvcs-params
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+  - task: prepare-email-text
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: vmartinvega/concourse-tools-tim
+          tag: "latest"
+      inputs:
+        - name: keyval
+        - name: tools
+      outputs:
+        - name: email-text
+      run:
+        path: bash
+        args:
+        - -exc
+        - |
+          ROOT_FOLDER="$( pwd )"
+          export KEYVAL_RESOURCE=keyval
+          source ${ROOT_FOLDER}/tools/tasks/resource-utils.sh
+          exportKeyValProperties
+          echo "Version $PASSED_TAG_RELEASED_CREATED is ready to ship to Collaudo Consolidato!" >  ./email-text/email-subject.txt
+          echo "Version $PASSED_TAG_RELEASED_CREATED is ready to ship to Collaudo Consolidato!" >  ./email-text/email-body.txt
+          passKeyValProperties
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+
+#  - put: send-email
+#    params:
+#      subject: ./email-text/email-subject.txt
+#      body: ./email-text/email-body.txt
+
+common-git-params: &common-git-params
+  BUILD_OPTIONS: ((build-options))
+  GIT_EMAIL: ((git-email))
+  GIT_NAME: ((git-name))
+  CURRENT_BRANCH: ((app-branch))
+  TRUSTSTORE: ((truststore))
+  GITHUB_PRIVATE_KEY: ((github-private-key))
+  M2_SETTINGS_REPO_ID: ((m2-settings-repo-id))
+  M2_SETTINGS_REPO_PASSWORD: ((m2-settings-repo-password))
+  M2_SETTINGS_REPO_USERNAME: ((m2-settings-repo-username))
+  M2_SETTINGS_REPO_MIRROR_URL: ((repo-with-binaries))
+  M2_SETTINGS_REPO_SITE_URL: ((repo-with-site))
+  M2_SETTINGS_REPO_RELEASE_URL: ((repo-with-binaries-for-upload))
+  M2_SETTINGS_REPO_SNAPSHOTS_URL: ((repo-with-binaries-snapshots))
+  M2_SETTINGS_REPO_GIT_SERVER_URL: ((gitlab-server-url))
+  M2_SETTINGS_REPO_SONAR_URL: ((sonar-host-url))
+  M2_SETTINGS_REPO_SONAR_TOKEN: ((sonar-login-key))
+
+somar-params: &sonar-params
+  SONAR_BRANCH: ((app-branch))
+  USERNAME: ((github-username))
+  PASSWORD: ((github-password))
+
+pvcs-params: &pvcs-params
+  PVCS_URL: ((pvcs-url))
+  PVCS_USERNAME: ((pvcs-username))
+  PVCS_PASSWORD: ((pvcs-password))
+  PVCS_CHECKOUTDIR: ((pvcs-checkoutdir))

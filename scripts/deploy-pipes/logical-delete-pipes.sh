@@ -1,18 +1,21 @@
-CONCOURSE_URL=http://10.56.253.197:8080
-CONCOURSE_TEAM=main
-CONCOURSE_USERNAME=admin
-CONCOURSE_PASSWORD=e8apq0ezgu5g6ck0kogc
+#!/bin/bash
+
+source ./concourse-logical-params.sh
 
 function deleteDeployPipe(){
   DEV=$1
   APP_NAME=$2
 
-  fly -t automate login -c $CONCOURSE_URL -n $CONCOURSE_TEAM -u $CONCOURSE_USERNAME -p $CONCOURSE_PASSWORD
-  fly -t automate sync
-
   PIPELINE_NAME=${DEV}-deploy-${APP_NAME}
 
-  echo "Deleting pipeline ${PIPELINE_NAME}"
+  deletePipe ${PIPELINE_NAME}
+}
+
+function deletePipe(){
+  PIPELINE_NAME=$1
+
+  fly -t automate login -c $CONCOURSE_URL -n $CONCOURSE_TEAM -u $CONCOURSE_USERNAME -p $CONCOURSE_PASSWORD
+  fly -t automate sync
 
   fly -t automate destroy-pipeline -p ${PIPELINE_NAME} -n
 }
@@ -26,4 +29,5 @@ do
   deleteDeployPipe "dev3" ${APP_NAME}
   deleteDeployPipe "dev4" ${APP_NAME}
 
+  deletePipe release-${APP_NAME}
 done < "logical-apps"
