@@ -48,6 +48,7 @@ export PASSED_SPRING_BOOT_APP_NAME="${ARTIFACT_ID}-${ARTIFACT_VERSION}-${RANDOM_
 # Push the app to PCF
 #cf push ${PASSED_SPRING_BOOT_APP_NAME} -p ${PASSED_JAR_FILE} -m ${APP_MEMORY_LIMIT} -k ${APP_DISK_LIMIT} -i ${APP_INSTANCES}
 
+
 # Checks the state of the application
 APP_STATE=$(cf curl ${PASSED_PCF_APPS_URL} | jq '.resources[].entity | select(.name == "'${PASSED_SPRING_BOOT_APP_NAME}'" ) | .state' | sed -e 's/^"//' -e 's/"$//')
 
