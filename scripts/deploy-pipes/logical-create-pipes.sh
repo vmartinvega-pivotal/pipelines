@@ -31,8 +31,8 @@ function releasePipeline(){
   PIPE_URL=$4
   PREFIX_PIPE_NAME=$5
 
-  sed "s/app-url: #APPS-URL#/app-url: https:\/\/gitlab-sdp.telecomitalia.local\/factory-micros\/${INPUT_APP_NAME}.git/" ${PIPE_PARAMS} > params-logical-1-${APP_NAME}.yml
-  sed "s/app-branch: #APPS_BRANCH#/app-branch: ${INPUT_APP_BRANCH}/" params-logical-1-${APP_NAME}.yml > params-logical-${APP_NAME}.yml
+  sed "s/app-url: #APPS-URL#/app-url: https:\/\/gitlab-sdp.telecomitalia.local\/factory-micros\/${INPUT_APP_NAME}.git/" ${PIPE_PARAMS} > params-logical-1-${INPUT_APP_NAME}.yml
+  sed "s/app-branch: #APPS_BRANCH#/app-branch: ${INPUT_APP_BRANCH}/" params-logical-1-${INPUT_APP_NAME}.yml > params-logical-${INPUT_APP_NAME}.yml
 
   PIPELINE_NAME=${PREFIX_PIPE_NAME}-${INPUT_APP_NAME}
 
@@ -51,14 +51,14 @@ do
   APP_BRANCH=$(echo ${app} | awk -F"@" '{print $2}')  
   APP_BRANCH_EVO=$(echo ${app} | awk -F"@" '{print $3}')
 
-  deployToEnviroment "dev1-collcon" ${APP_NAME} ${APP_BRANCH}
-  deployToEnviroment "dev2-collcon" ${APP_NAME} ${APP_BRANCH}
-  deployToEnviroment "dev3-collcon" ${APP_NAME} ${APP_BRANCH}
-  deployToEnviroment "dev4-collcon" ${APP_NAME} ${APP_BRANCH}
-  deployToEnviroment "dev1-collevo" ${APP_NAME} ${APP_BRANCH_EVO}
-  deployToEnviroment "dev2-collevo" ${APP_NAME} ${APP_BRANCH_EVO}
-  deployToEnviroment "dev3-collevo" ${APP_NAME} ${APP_BRANCH_EVO}
-  deployToEnviroment "dev4-collevo" ${APP_NAME} ${APP_BRANCH_EVO}
+  #deployToEnviroment "dev1-collcon" ${APP_NAME} ${APP_BRANCH}
+  #deployToEnviroment "dev2-collcon" ${APP_NAME} ${APP_BRANCH}
+  #deployToEnviroment "dev3-collcon" ${APP_NAME} ${APP_BRANCH}
+  #deployToEnviroment "dev4-collcon" ${APP_NAME} ${APP_BRANCH}
+  #deployToEnviroment "dev1-collevo" ${APP_NAME} ${APP_BRANCH_EVO}
+  #deployToEnviroment "dev2-collevo" ${APP_NAME} ${APP_BRANCH_EVO}
+  #deployToEnviroment "dev3-collevo" ${APP_NAME} ${APP_BRANCH_EVO}
+  #deployToEnviroment "dev4-collevo" ${APP_NAME} ${APP_BRANCH_EVO}
 
   releasePipeline ${APP_NAME} ${APP_BRANCH} "logical-params-template-release-coll-evolutivo-pipe.yml" ${PIPELINE_RELEASE_COLL_CONSOLIDATO_YML} "release-collcon"
   releasePipeline ${APP_NAME} ${APP_BRANCH_EVO} "logical-params-template-release-coll-evolutivo-pipe.yml" ${PIPELINE_RELEASE_COLL_EVOLUTIVO_YML} "release-collevo"
