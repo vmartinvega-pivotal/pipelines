@@ -112,7 +112,8 @@ jobs:
       file: keyvalout/keyval.properties
   - task: deploy-streams
     privileged: true
-    file: tools/tasks/logical/deploy-streams/task.yml
+    #file: tools/tasks/logical/deploy-streams/task.yml
+    file: tools/tasks/logical/do-nothing/task.yml
     input_mapping: {repo: logical_compiled_files, config: config-logical-micro}
     params:
       ENVIRONMENT_TO_DEPLOY: dev4
@@ -269,7 +270,8 @@ jobs:
       trigger: false
   - task: shipit-task-to-collaudo
     privileged: true
-    file: tools/tasks/logical/deploy-streams/task.yml
+    #file: tools/tasks/logical/deploy-streams/task.yml
+    file: tools/tasks/logical/do-nothing/task.yml
     input_mapping: {repo: repo-coll-evo, config: config-logical-micro}
     params:
       ENVIRONMENT_TO_DEPLOY: collaudo-evolutivo

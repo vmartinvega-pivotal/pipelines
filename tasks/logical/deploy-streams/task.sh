@@ -39,7 +39,7 @@ echo "Deploying to ${ENVIRONMENT_TO_DEPLOY}"
 
 chmod +x ${ROOT_FOLDER}/${CONFIG_RESOURCE}/NFS-bind.sh
 
-#./microservice.sh ../${CONFIG_RESOURCE}/${ENVIRONMENT_TO_DEPLOY}.env microservice.env redeploy  
+./microservice.sh ../${CONFIG_RESOURCE}/${ENVIRONMENT_TO_DEPLOY}.env microservice.env redeploy  
 #./microservice.sh ../${CONFIG_RESOURCE}/${ENVIRONMENT_TO_DEPLOY}.env microservice.env deploy
 
 echo "--- Deploy Streams ---"
