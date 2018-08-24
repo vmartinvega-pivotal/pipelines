@@ -180,7 +180,7 @@ jobs:
     - get: repo
     - get: keyval
       passed:
-      - integration-test
+      - fortify-scan
       trigger: true
   - task: sonarqube
     privileged: true

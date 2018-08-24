@@ -16,10 +16,10 @@ do
   fly -t automate sync
  
   PIPELINE_RELEASE_NAME=release-${APP_NAME}
-  PIPELINE_SNAPSHOT_NAME=snapshot-${APP_NAME}
+  #PIPELINE_SNAPSHOT_NAME=snapshot-${APP_NAME}
 
   fly -t automate sp -p ${PIPELINE_RELEASE_NAME} -c "${PIPELINE_RELEASE_YML}" -l params-build-${APP_NAME}.yml -n
-  fly -t automate sp -p ${PIPELINE_SNAPSHOT_NAME} -c "${PIPELINE_SNAPSHOT_YML}" -l params-build-${APP_NAME}.yml -n
+  #fly -t automate sp -p ${PIPELINE_SNAPSHOT_NAME} -c "${PIPELINE_SNAPSHOT_YML}" -l params-build-${APP_NAME}.yml -n
   rm params-build-${APP_NAME}.yml
   rm params-build-1-${APP_NAME}.yml
 done < "physical-apps"

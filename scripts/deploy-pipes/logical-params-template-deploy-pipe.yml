@@ -1,8 +1,8 @@
 # LOGICAL MICROSERVICE RESPOSITORY 
 app-url: #APPS-URL#
 app-branch: #APPS_BRANCH#
-github-username: andrea.lambruschini
-github-password: zxcdsa01!
+github-username: concourse
+github-password: P@$$w0rd
 github-private-key: |
   -----BEGIN RSA PRIVATE KEY-----
   MIIEpAIBAAKCAQEAql94gY9lKowQVzkM3f9K68Zk9rCG7XxD5JkT+nPlmCCXBh7N
@@ -31,8 +31,8 @@ github-private-key: |
   s7jH5CF88qHkNr+skW4pUa0R7+cDgd7iK5MLpPM7l27TpFKoUWmDYGVh+Kk9cN9W
   CcOPtp7nXRUwWmTS4GG0mVA6M7j3S0QVsnPcqDBgAm0UOkdCWaaaJA==
   -----END RSA PRIVATE KEY-----
-git-email: andrea.lambruschini@telecomitalia.it
-git-name: devops-sdp
+git-email: concourse@telecomitalia.it
+git-name: concourse
 
 # Environment to deploy
 environment-to-deploy: #ENV_TO_DEPLOY#
