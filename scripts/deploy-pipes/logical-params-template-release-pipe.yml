@@ -58,7 +58,7 @@ build-options: "-Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allo
 truststore: "concourse-truststore.jks"
 
 # Config Logical Microservices properties
-config-scripts-url: https://gitlab-sdp.telecomitalia.local/demodevops/config.git
+config-scripts-url: https://gitlab-sdp.telecomitalia.local/factory-micros/config.git
 config-branch: master
 
 # Soap UI tests configuration

@@ -62,11 +62,11 @@ mv ${TMPDIR}/${REPO_RESOURCE}/apps-version.env "${ROOT_FOLDER}/${REPO_RESOURCE}"
 
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
+
 git add pom.xml
-git add app-descriptor.df
 git add apps-version.env
 #git add compiled/*
-
+#git add app-descriptor.df
 git commit -m "[ci skip] Adding pom.xml for the current version, and all compiled files"
 
 echo "--- Prepare Release ---"
