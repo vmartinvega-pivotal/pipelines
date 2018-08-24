@@ -55,17 +55,17 @@ prepareScriptsToDeploy
 mv ${TMPDIR}/${REPO_RESOURCE}/app-descriptor.df "${ROOT_FOLDER}/${REPO_RESOURCE}"/app-descriptor.df
 mv ${TMPDIR}/${REPO_RESOURCE}/apps-version.env "${ROOT_FOLDER}/${REPO_RESOURCE}"/apps-version.env
 
-if [ -d ${ROOT_FOLDER}/${REPO_RESOURCE}/compiled ]; then
-    rm -Rf ${ROOT_FOLDER}/${REPO_RESOURCE}/compiled
-fi 
-cp -r ${TMPDIR}/${REPO_RESOURCE}/compiled "${ROOT_FOLDER}/${REPO_RESOURCE}"/
+#if [ -d ${ROOT_FOLDER}/${REPO_RESOURCE}/compiled ]; then
+#    rm -Rf ${ROOT_FOLDER}/${REPO_RESOURCE}/compiled
+#fi 
+#cp -r ${TMPDIR}/${REPO_RESOURCE}/compiled "${ROOT_FOLDER}/${REPO_RESOURCE}"/
 
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
 git add pom.xml
 git add app-descriptor.df
 git add apps-version.env
-git add compiled/*
+#git add compiled/*
 
 git commit -m "[ci skip] Adding pom.xml for the current version, and all compiled files"
 
