@@ -1,9 +1,1 @@
-fastdata-source@master
-fastdata-processor@master
-fastdata-sink-mongodb@master
-informativa-processor-apigw@master
-informativa-processor-mongodb@master
-informativa-processor-legacy@master
-json-projection@master
-informativa-splitter@master
-mongodb-bulk-import-sink@master
+fastdata-source@1.7
