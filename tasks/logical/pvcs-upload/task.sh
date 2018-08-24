@@ -36,7 +36,8 @@ PVCS_PATH=${TMPDIR}/pvcs/vicente_test
 mkdir -p ${PVCS_PATH} 
 cd ${PVCS_PATH}
 
-svn checkout --config-option servers:global:store-plaintext-passwords=no --username=${PVCS_USERNAME} --password=${PVCS_PASSWORD} ${PVCS_URL}
+#TODO: uncomment
+#svn checkout --config-option servers:global:store-plaintext-passwords=no --username=${PVCS_USERNAME} --password=${PVCS_PASSWORD} ${PVCS_URL}
 
 FOLDER_TO_WORK_IN_PVCS=${PVCS_PATH}/${PVCS_CHECKOUTDIR}/vicente
 if [ -d ${FOLDER_TO_WORK_IN_PVCS} ]; then
@@ -68,11 +69,13 @@ done
 mkdir ${FOLDER_TO_WORK_IN_PVCS}/micros-binaries
 #cp target/poms/*.jar ${FOLDER_TO_WORK_IN_PVCS}/micros-binaries
 
-svn add --force ${FOLDER_TO_WORK_IN_PVCS}
+#TODO: uncomment
+#svn add --force ${FOLDER_TO_WORK_IN_PVCS}
 
 cd ${PVCS_PATH}/${PVCS_CHECKOUTDIR}
 
-svn commit -m "Logical microservice version ${PASSED_TAG_RELEASED_CREATED}" --username=${PVCS_USERNAME} --password=${PVCS_PASSWORD}
+# TODO: uncomment
+#svn commit -m "Logical microservice version ${PASSED_TAG_RELEASED_CREATED}" --username=${PVCS_USERNAME} --password=${PVCS_PASSWORD}
 
 echo "--- Pvcs Upload ---"
 echo ""

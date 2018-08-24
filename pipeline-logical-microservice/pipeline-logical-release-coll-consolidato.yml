@@ -253,6 +253,26 @@ jobs:
 #      subject: ./email-text/email-subject.txt
 #      body: ./email-text/email-body.txt
 
+- name: Ship-Collaudo-Con
+  plan:
+  - aggregate:
+    - get: tools
+    - get: repo-coll-con
+    - get: config-logical-micro
+    - get: keyval
+      passed:
+      - pvcs-upload
+      trigger: false
+  - task: shipit-task-to-collaudo
+    privileged: true
+    file: tools/tasks/logical/deploy-streams/task.yml
+    input_mapping: {repo: repo-coll-con, config: config-logical-micro}
+    params:
+      ENVIRONMENT_TO_DEPLOY: collaudo-consolidato
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+
 common-git-params: &common-git-params
   BUILD_OPTIONS: ((build-options))
   GIT_EMAIL: ((git-email))

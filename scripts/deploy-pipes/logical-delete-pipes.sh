@@ -29,5 +29,6 @@ do
   deleteDeployPipe "dev3" ${APP_NAME}
   deleteDeployPipe "dev4" ${APP_NAME}
 
-  deletePipe release-${APP_NAME}
+  deletePipe release-coll-evo-${APP_NAME}
+  deletePipe release-coll-con-${APP_NAME}
 done < "logical-apps"
