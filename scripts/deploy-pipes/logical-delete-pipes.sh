@@ -24,11 +24,15 @@ while IFS= read -r app
 do
   APP_NAME=$(echo ${app} | awk -F"@" '{print $1}')
 
-  deleteDeployPipe "dev1" ${APP_NAME}
-  deleteDeployPipe "dev2" ${APP_NAME}
-  deleteDeployPipe "dev3" ${APP_NAME}
-  deleteDeployPipe "dev4" ${APP_NAME}
+  deleteDeployPipe "dev1-collevo" ${APP_NAME}
+  deleteDeployPipe "dev2-collevo" ${APP_NAME}
+  deleteDeployPipe "dev3-collevo" ${APP_NAME}
+  deleteDeployPipe "dev4-collevo" ${APP_NAME}
+  deleteDeployPipe "dev1-collcon" ${APP_NAME}
+  deleteDeployPipe "dev2-collcon" ${APP_NAME}
+  deleteDeployPipe "dev3-collcon" ${APP_NAME}
+  deleteDeployPipe "dev4-collcon" ${APP_NAME}
 
-  deletePipe release-coll-evo-${APP_NAME}
-  deletePipe release-coll-con-${APP_NAME}
+  deletePipe release-collevo-${APP_NAME}
+  deletePipe release-collcon-${APP_NAME}
 done < "logical-apps"

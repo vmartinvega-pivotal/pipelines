@@ -211,7 +211,8 @@ jobs:
       trigger: true
   - task: pvcs-upload
     privileged: true
-    file: tools/tasks/logical/pvcs-upload/task.yml
+#    file: tools/tasks/logical/pvcs-upload/task.yml
+     file: tools/tasks/logical/do-nothing/task.yml
     input_mapping: {repo: repo-coll-con}
     params:
       <<: *common-git-params
