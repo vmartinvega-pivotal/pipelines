@@ -64,7 +64,7 @@ jobs:
     params:
       file: keyvalout/keyval.properties
 
-- name: deploy-microservice
+- name: smoke-test
   public: true
   plan:
   - aggregate:
@@ -74,24 +74,16 @@ jobs:
       passed:
       - unit-test
       trigger: true
-  - task: deploy-microservice
+  - task: smoke-test
     privileged: true
-    file: tools/tasks/physical/deploy-springboot-app/task.yml
+    file: tools/tasks/physical/smoke-test/task.yml
     params:
       <<: *common-params
-      PWS_USER: ((pws-user))
-      PWS_PWD: ((pws-pwd))
-      PWS_ORG: ((pws-org))
-      PWS_SPACE: ((pws-space))
-      PWS_API: ((pws-api))
-      APP_MEMORY_LIMIT: ((app-memory-limit))
-      APP_DISK_LIMIT: ((app-disk-limit))
-      APP_INSTANCES: ((app-instances))
   - put: keyval
     params:
       file: keyvalout/keyval.properties
 
-- name: undeploy-microservice
+- name: integration-test
   public: true
   plan:
   - aggregate:
@@ -99,21 +91,86 @@ jobs:
     - get: repo
     - get: keyval
       passed:
-      - deploy-microservice
+      - smoke-test
       trigger: true
-  - task: undeploy-microservice
+  - task: integration-test
     privileged: true
-    file: tools/tasks/physical/undeploy-springboot-app/task.yml
+    file: tools/tasks/physical/integration-test/task.yml
     params:
       <<: *common-params
-      PWS_USER: ((pws-user))
-      PWS_PWD: ((pws-pwd))
-      PWS_ORG: ((pws-org))
-      PWS_SPACE: ((pws-space))
-      PWS_API: ((pws-api))
   - put: keyval
     params:
       file: keyvalout/keyval.properties
+  
+- name: fortify-scan
+  public: true
+  plan:
+  - aggregate:
+    - get: tools
+    - get: repo
+    - get: keyval
+      passed:
+      - integration-test
+      trigger: true
+  - task: fortify-scan
+    privileged: true
+    file: tools/tasks/physical/fortify-scan/task.yml
+    params:
+      <<: *common-params
+  - put: keyval
+    params:
+      file: keyvalout/keyval.properties
+
+#- name: deploy-microservice
+#  public: true
+#  plan:
+#  - aggregate:
+#    - get: tools
+#    - get: repo
+#    - get: keyval
+#      passed:
+#      - unit-test
+#      trigger: true
+#  - task: deploy-microservice
+#    privileged: true
+#    file: tools/tasks/physical/deploy-springboot-app/task.yml
+#    params:
+#      <<: *common-params
+#      PWS_USER: ((pws-user))
+#      PWS_PWD: ((pws-pwd))
+#      PWS_ORG: ((pws-org))
+#      PWS_SPACE: ((pws-space))
+#      PWS_API: ((pws-api))
+#      APP_MEMORY_LIMIT: ((app-memory-limit))
+#      APP_DISK_LIMIT: ((app-disk-limit))
+#      APP_INSTANCES: ((app-instances))
+#  - put: keyval
+#    params:
+#      file: keyvalout/keyval.properties
+
+#- name: undeploy-microservice
+#  public: true
+#  plan:
+#  - aggregate:
+#    - get: tools
+#    - get: repo
+#    - get: keyval
+#      passed:
+#      - deploy-microservice
+#      trigger: true
+#  - task: undeploy-microservice
+#    privileged: true
+#    file: tools/tasks/physical/undeploy-springboot-app/task.yml
+#    params:
+#      <<: *common-params
+#      PWS_USER: ((pws-user))
+#      PWS_PWD: ((pws-pwd))
+#      PWS_ORG: ((pws-org))
+#      PWS_SPACE: ((pws-space))
+#      PWS_API: ((pws-api))
+#  - put: keyval
+#    params:
+#      file: keyvalout/keyval.properties
 
 - name: sonarqube
   public: true
@@ -123,7 +180,7 @@ jobs:
     - get: repo
     - get: keyval
       passed:
-      - undeploy-microservice
+      - integration-test
       trigger: true
   - task: sonarqube
     privileged: true
@@ -155,9 +212,9 @@ jobs:
   - put: keyval
     params:
       file: keyvalout/keyval.properties
-  - put: repo
-    params:
-      file: out
+#  - put: repo
+#    params:
+#      repository: out
 
 common-params: &common-params
   BUILD_OPTIONS: ((build-options))
