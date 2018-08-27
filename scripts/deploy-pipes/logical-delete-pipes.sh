@@ -4,9 +4,10 @@ source ./concourse-logical-params.sh
 
 function deleteDeployPipe(){
   DEV=$1
-  APP_NAME=$2
+  INPUT_APP_NAME=$2
+  INPUT_PREFIX=$3
 
-  PIPELINE_NAME=${DEV}-deploy-${APP_NAME}
+  PIPELINE_NAME=${DEV}-${INPUT_PREFIX}-${INPUT_APP_NAME}
 
   deletePipe ${PIPELINE_NAME}
 }
@@ -24,15 +25,17 @@ while IFS= read -r app
 do
   APP_NAME=$(echo ${app} | awk -F"@" '{print $1}')
 
-  deleteDeployPipe "dev1-collevo" ${APP_NAME}
-  deleteDeployPipe "dev2-collevo" ${APP_NAME}
-  deleteDeployPipe "dev3-collevo" ${APP_NAME}
-  deleteDeployPipe "dev4-collevo" ${APP_NAME}
-  deleteDeployPipe "dev1-collcon" ${APP_NAME}
-  deleteDeployPipe "dev2-collcon" ${APP_NAME}
-  deleteDeployPipe "dev3-collcon" ${APP_NAME}
-  deleteDeployPipe "dev4-collcon" ${APP_NAME}
+  deleteDeployPipe "dev1" ${APP_NAME} "collcon"
+  deleteDeployPipe "dev2" ${APP_NAME} "collcon"
+  deleteDeployPipe "dev3" ${APP_NAME} "collcon"
+  deleteDeployPipe "dev4" ${APP_NAME} "collcon"
+  deleteDeployPipe "dev1" ${APP_NAME} "collevo"
+  deleteDeployPipe "dev2" ${APP_NAME} "collevo"
+  deleteDeployPipe "dev3" ${APP_NAME} "collevo"
+  deleteDeployPipe "dev4" ${APP_NAME} "collevo"
 
   deletePipe release-collevo-${APP_NAME}
   deletePipe release-collcon-${APP_NAME}
+  deletePipe systemtest-collcon-${APP_NAME}
+  deletePipe systemtest-collevo-${APP_NAME}
 done < "logical-apps"

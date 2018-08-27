@@ -5,6 +5,7 @@ source ./concourse-logical-params.sh
 PIPELINE_DEPLOY_YML=../../pipeline-logical-microservice/pipeline-deploy.yml
 PIPELINE_RELEASE_COLL_CONSOLIDATO_YML=../../pipeline-logical-microservice/pipeline-logical-release-coll-consolidato.yml
 PIPELINE_RELEASE_COLL_EVOLUTIVO_YML=../../pipeline-logical-microservice/pipeline-logical-release-coll-evolutivo.yml
+PIPELINE_SYSTEM_TEST=../../pipeline-logical-microservice/pipeline-logical-system-test.yml
 
 function deployToEnviroment(){
   DEV=$1
@@ -16,7 +17,7 @@ function deployToEnviroment(){
   sed "s/app-branch: #APPS_BRANCH#/app-branch: ${INPUT_APP_BRANCH}/" params-logical-1-${INPUT_APP_NAME}.yml > params-logical-2-${INPUT_APP_NAME}.yml
   sed "s/environment-to-deploy: #ENV_TO_DEPLOY#/environment-to-deploy: ${DEV}/" params-logical-2-${INPUT_APP_NAME}.yml > params-logical-${INPUT_APP_NAME}.yml
 
-  PIPELINE_NAME=${DEV}-${INPUT_PREFIX}deploy-${INPUT_APP_NAME}
+  PIPELINE_NAME=${DEV}-${INPUT_PREFIX}-${INPUT_APP_NAME}
 
   fly -t automate sp -p ${PIPELINE_NAME} -c "${PIPELINE_DEPLOY_YML}" -l params-logical-${INPUT_APP_NAME}.yml -n
 
@@ -33,7 +34,9 @@ function releasePipeline(){
   PREFIX_PIPE_NAME=$5
 
   sed "s/app-url: #APPS-URL#/app-url: https:\/\/gitlab-sdp.telecomitalia.local\/factory-micros\/${INPUT_APP_NAME}.git/" ${PIPE_PARAMS} > params-logical-1-${INPUT_APP_NAME}.yml
-  sed "s/app-branch: #APPS_BRANCH#/app-branch: ${INPUT_APP_BRANCH}/" params-logical-1-${INPUT_APP_NAME}.yml > params-logical-${INPUT_APP_NAME}.yml
+  sed "s/app-branch: #APPS_BRANCH#/app-branch: ${INPUT_APP_BRANCH}/" params-logical-1-${INPUT_APP_NAME}.yml > params-logical-2-${INPUT_APP_NAME}.yml
+  sed "s/concourse-pipeline-name: #PIPELINE_COLL_EVOLUTIVO_NAME#/concourse-pipeline-name: release-collevo-${INPUT_APP_NAME}/" params-logical-2-${INPUT_APP_NAME}.yml > params-logical-3-${INPUT_APP_NAME}.yml
+  sed "s/concourse-pipeline-name-consolidato: #PIPELINE_COLL_CONSOLIDATO_NAME#/concourse-pipeline-name-consolidato: release-collcon-${INPUT_APP_NAME}/" params-logical-3-${INPUT_APP_NAME}.yml > params-logical-${INPUT_APP_NAME}.yml
 
   PIPELINE_NAME=${PREFIX_PIPE_NAME}-${INPUT_APP_NAME}
 
@@ -41,6 +44,8 @@ function releasePipeline(){
 
   rm params-logical-${INPUT_APP_NAME}.yml
   rm params-logical-1-${INPUT_APP_NAME}.yml
+  rm params-logical-2-${INPUT_APP_NAME}.yml
+  rm params-logical-3-${INPUT_APP_NAME}.yml
 }
 
 fly -t automate login -c $CONCOURSE_URL -n $CONCOURSE_TEAM -u $CONCOURSE_USERNAME -p $CONCOURSE_PASSWORD
@@ -61,6 +66,8 @@ do
   deployToEnviroment "dev3" ${APP_NAME} ${APP_BRANCH_EVO} "collevo"
   deployToEnviroment "dev4" ${APP_NAME} ${APP_BRANCH_EVO} "collevo"
 
-  releasePipeline ${APP_NAME} ${APP_BRANCH} "logical-params-template-release-coll-evolutivo-pipe.yml" ${PIPELINE_RELEASE_COLL_CONSOLIDATO_YML} "release-collcon"
+  releasePipeline ${APP_NAME} ${APP_BRANCH} "logical-params-template-release-coll-consolidato-pipe.yml" ${PIPELINE_RELEASE_COLL_CONSOLIDATO_YML} "release-collcon"
   releasePipeline ${APP_NAME} ${APP_BRANCH_EVO} "logical-params-template-release-coll-evolutivo-pipe.yml" ${PIPELINE_RELEASE_COLL_EVOLUTIVO_YML} "release-collevo"
+  releasePipeline ${APP_NAME} ${APP_BRANCH} "logical-params-template-release-coll-consolidato-pipe.yml" ${PIPELINE_SYSTEM_TEST} "systemtest-collcon"
+  releasePipeline ${APP_NAME} ${APP_BRANCH_EVO} "logical-params-template-release-coll-consolidato-pipe.yml" ${PIPELINE_SYSTEM_TEST} "systemtest-collevo"
 done < "logical-apps"

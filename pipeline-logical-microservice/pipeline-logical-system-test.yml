@@ -37,26 +37,6 @@ resources:
     password: ((github-password))
     skip_ssl_verification: true
 
-- name: repo-coll-con-put
-  type: git
-  source:
-    uri: ((app-url))
-    branch: ((app-branch))
-    username: ((github-username))
-    password: ((github-password))
-    skip_ssl_verification: true
-    disable_ci_skip: false
-
-- name: repo-coll-con-put1
-  type: git
-  source:
-    uri: ((app-url))
-    branch: ((app-branch))
-    username: ((github-username))
-    password: ((github-password))
-    skip_ssl_verification: true
-    disable_ci_skip: false
-
 - name: keyval
   type: keyval
 
@@ -96,7 +76,7 @@ jobs:
     - get: tools
     - get: repo-coll-con
     - get: config-logical-micro
-      trigger: true
+      trigger: false
   - task: compile-logical-microservice
     privileged: true
     file: tools/tasks/logical/compile-logical/task.yml
@@ -141,65 +121,6 @@ jobs:
     params:
       file: keyvalout/keyval.properties
 
-- name: create-release
-  public: true
-  plan:
-  - aggregate:
-    - get: tools
-    - get: repo-coll-con
-    - get: config-logical-micro
-    - get: keyval
-      passed:
-      - soapui-tests
-      trigger: true
-  - task: prepare-release
-    privileged: true
-    file: tools/tasks/logical/prepare-release/task.yml
-    input_mapping: {repo: repo-coll-con, config: config-logical-micro}
-    output_mapping: {filesout: prepare-release-files }
-    params:
-      <<: *common-git-params
-      <<: *sonar-params
-  - put: keyval
-    params:
-      file: keyvalout/keyval.properties
-  - put: repo-coll-con-put
-    params:
-      repository: out
-  - task: create-release-step1
-    privileged: true
-    file: tools/tasks/logical/create-release-step1/task.yml
-    input_mapping: {repo: repo-coll-con-put, files: prepare-release-files}
-    output_mapping: {filesout: create-release-step1-files }
-    params:
-      <<: *common-git-params
-      <<: *sonar-params
-  - put: keyval
-    params:
-      file: keyvalout/keyval.properties
-  - put: repo-coll-con-put1
-    params:
-      repository: out
-  - task: create-release-step2
-    privileged: true
-    file: tools/tasks/logical/create-release-step2/task.yml
-    input_mapping: {repo: repo-coll-con-put1, files: create-release-step1-files}
-    params:
-      <<: *common-git-params
-      <<: *sonar-params
-  - put: keyval
-    params:
-      file: keyvalout/keyval.properties
-  - put: repo-coll-con
-    params:
-      repository: out
-  - put: repo-coll-con-put
-    params:
-      repository: out
-  - put: repo-coll-con-put1
-    params:
-      repository: out
-
 - name: pvcs-upload
   public: true
   plan:
@@ -208,7 +129,7 @@ jobs:
     - get: repo-coll-con
     - get: keyval
       passed:
-      - create-release
+      - soapui-tests
       trigger: true
   - task: pvcs-upload
     privileged: true
@@ -254,48 +175,6 @@ jobs:
 #    params:
 #      subject: ./email-text/email-subject.txt
 #      body: ./email-text/email-body.txt
-
-- name: Ship-Collaudo-Con
-  plan:
-  - aggregate:
-    - get: tools
-    - get: repo-coll-con
-    - get: config-logical-micro
-    - get: keyval
-      passed:
-      - pvcs-upload
-      trigger: false
-  - task: shipit-task-to-collaudo
-    privileged: true
-    #file: tools/tasks/logical/deploy-streams/task.yml
-    file: tools/tasks/logical/do-nothing/task.yml
-    input_mapping: {repo: repo-coll-con, config: config-logical-micro}
-    params:
-      ENVIRONMENT_TO_DEPLOY: collaudo-consolidato
-  - put: keyval
-    params:
-      file: keyvalout/keyval.properties
-
-- name: Ship-Production
-  plan:
-  - aggregate:
-    - get: tools
-    - get: repo-coll-con
-    - get: config-logical-micro
-    - get: keyval
-      passed:
-      - Ship-Collaudo-Con
-      trigger: false
-  - task: shipit-task-to-production
-    privileged: true
-    #file: tools/tasks/logical/deploy-streams/task.yml
-    file: tools/tasks/logical/do-nothing/task.yml
-    input_mapping: {repo: repo-coll-con, config: config-logical-micro}
-    params:
-      ENVIRONMENT_TO_DEPLOY: prod
-  - put: keyval
-    params:
-      file: keyvalout/keyval.properties
 
 common-git-params: &common-git-params
   BUILD_OPTIONS: ((build-options))
