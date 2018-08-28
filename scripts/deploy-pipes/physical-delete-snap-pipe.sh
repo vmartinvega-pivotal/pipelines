@@ -2,6 +2,17 @@
 
 source ./concourse-physical-params.sh
 
+programname=$0
+
+function usage {
+    echo "usage: $programname [physical app name] [develop branch]"
+    exit 1
+}
+
+if [ "$#" -lt 1 ]; then
+  usage
+fi
+
 APP_NAME=$1
 APP_BRANCH=$2
 

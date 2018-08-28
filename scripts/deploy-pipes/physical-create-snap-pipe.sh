@@ -4,6 +4,17 @@ source ./concourse-physical-params.sh
 
 PIPELINE_SNAPSHOT_YML=../../pipeline-physical-microservice/pipeline-snapshot.yml
 
+programname=$0
+
+function usage {
+    echo "usage: $programname [app name] [develop branch]"
+    exit 1
+}
+
+if [ "$#" -lt 1 ]; then
+  usage
+fi
+
 APP_NAME=$1
 APP_BRANCH=$2
 

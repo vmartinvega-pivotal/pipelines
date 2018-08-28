@@ -19,4 +19,4 @@ outputs:
   - name: keyvalout
 
 run:
-  path: tools/tasks/logical/prepare-release/task.sh
+  path: tools/tasks/logical/exchange-branches/task.sh
