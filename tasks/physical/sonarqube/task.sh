@@ -15,6 +15,7 @@ export KEYVALOUTPUT_RESOURCE=keyvalout
 export KEYVAL_RESOURCE=keyval
 
 export TRUSTSTORE_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/truststore/concourse-truststore.jks"
+chmod 777 ${TRUST_STORE_FILE}
 
 # Source all usefull scripts
 source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/source-all.sh
@@ -29,8 +30,8 @@ touch $propsFile
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
 echo "--- Sonarqube ---"
-#mvn --batch-mode sonar:sonar -Djavax.net.ssl.trustStore=${TRUSTSTORE_FILE} -Dsonar.branch=${SONAR_BRANCH}
-#mvn --batch-mode sonar:sonar -Dsonar.branch=${SONAR_BRANCH}
+mvn -X compile -DskipTests=true ${BUILD_OPTIONS}
+mvn --batch-mode sonar:sonar -Djavax.net.ssl.trustStore=${TRUSTSTORE_FILE} -Dsonar.branch=${SONAR_BRANCH}
 echo "--- Sonarqube ---"
 echo ""
 
