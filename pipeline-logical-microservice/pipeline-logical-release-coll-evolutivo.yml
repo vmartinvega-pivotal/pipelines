@@ -96,7 +96,7 @@ jobs:
     - get: tools
     - get: repo-coll-evo
     - get: config-logical-micro
-      trigger: true
+      trigger: false
   - task: compile-logical-microservice
     privileged: true
     file: tools/tasks/logical/compile-logical/task.yml

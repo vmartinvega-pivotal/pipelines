@@ -11,6 +11,17 @@ function prepareScriptsToDeploy(){
   # Resolve ranges for the dependencies
   mvn versions:resolve-ranges -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
 
+  # Checks that all dependencies were resolved correctly
+  
+  checkDependencies="$(checkDependenciesListVersions pom.xml)"
+  echo "checkDependenciesListVersions result=${checkDependencies}"
+
+  if [[ $checkDependencies = "false" ]]
+  then
+    echo "ERROR: Not all dependencies for the logical microservice were resolved correctly!!!"
+    exit 1
+  fi
+
   # Get the dependencies for the logical microservice from the compiled pom.xml
   #mvn dependency:list -DexcludeTransitive=true -DoutputFile=dependencies.list -Djavax.net.ssl.trustStore=${TRUST_STORE_FILE}
   python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/list-dependencies-pom.py pom.xml dependencies.list 
@@ -211,6 +222,18 @@ function getPomVersion(){
 #
 function getVersionFromPomVersion(){
   echo $(python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/regex-match.py "\d+\.\d+\.\d+" $1 "find" 0)
+}
+
+# Checks that all dependencies versions for the logical microservice have been resolved, that is,
+# all matches the regular expression "\d+\.\d+\.\d+"
+#
+# Arguments:
+# 1 - Pom file
+#
+# Result true if all matches the regular expression, otherwise false
+#
+function checkDependenciesListVersions(){}
+  echo $(python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/check-dependencies-list-version.py $1)
 }
 
 # Checks if the branch name starts with the version extracted from the POM version

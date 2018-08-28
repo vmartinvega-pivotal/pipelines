@@ -31,11 +31,27 @@ then
   exit 1
 fi
 
+# Checks if there is some SNAPSHOT version in the apps-version.env file in that case if we are in the
+# compilatino for release this proccess should fail
+echo RESULT=$(cat ${ROOT_FOLDER}/${REPO_RESOURCE}/apps-version.env | grep SNAPSHOT | wc -l)
+if [[ $RESULT = "0" ]]
+then
+  echo "DEBUG: Success!! There are not SNAPSHOT releases in the apps-version.env file"
+else
+  echo "DEBUG: Failed!! There are SNAPSHOT releases in the apps-version.env!!!" 
+  exit 1
+fi
+
 echo "--- Compile Logical ---"
 
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
 prepareScriptsToDeploy
+retval=$?
+if [ $retval -ne 0 ]; then
+  echo "Something was wrong with the compilation!! Existing..."
+  exit 1
+fi
 
 echo "--- Compile Logical ---"
 echo ""

@@ -23,7 +23,7 @@ exportKeyValProperties
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
 echo "--- Build ---"
-mvn -X clean install -DskipTests=true ${BUILD_OPTIONS} 
+mvn -X compile -DskipTests=true ${BUILD_OPTIONS} 
 echo "--- Build ---"
 echo ""
 
