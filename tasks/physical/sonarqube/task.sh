@@ -29,8 +29,8 @@ touch $propsFile
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
 echo "--- Sonarqube ---"
-mvn --batch-mode sonar:sonar -Djavax.net.ssl.trustStore=${TRUSTSTORE_FILE} -Dsonar.branch=${SONAR_BRANCH}
-#mvn --batch-mode sonar:sonar -Dsonar.branch=${SONAR_BRANCH}
+#mvn --batch-mode sonar:sonar -Djavax.net.ssl.trustStore=${TRUSTSTORE_FILE} -Dsonar.branch=${SONAR_BRANCH}
+mvn --batch-mode sonar:sonar -Dsonar.branch=${SONAR_BRANCH}
 echo "--- Sonarqube ---"
 echo ""
 
