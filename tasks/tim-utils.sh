@@ -232,7 +232,7 @@ function getVersionFromPomVersion(){
 #
 # Result true if all matches the regular expression, otherwise false
 #
-function checkDependenciesListVersions(){}
+function checkDependenciesListVersions(){
   echo $(python ${ROOT_FOLDER}/${TOOLS_RESOURCE}/python/check-dependencies-list-version.py $1)
 }
 
