@@ -15,7 +15,7 @@ export KEYVALOUTPUT_RESOURCE=keyvalout
 export KEYVAL_RESOURCE=keyval
 
 export TRUSTSTORE_FILE="${ROOT_FOLDER}/${TOOLS_RESOURCE}/truststore/concourse-truststore.jks"
-chmod 777 ${TRUST_STORE_FILE}
+chmod 777 ${TRUSTSTORE_FILE}
 
 # Source all usefull scripts
 source "${ROOT_FOLDER}/${TOOLS_RESOURCE}"/tasks/source-all.sh
