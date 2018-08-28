@@ -17,7 +17,7 @@ function deployToEnviroment(){
   sed "s/app-branch: #APPS_BRANCH#/app-branch: ${INPUT_APP_BRANCH}/" params-logical-1-${INPUT_APP_NAME}.yml > params-logical-2-${INPUT_APP_NAME}.yml
   sed "s/environment-to-deploy: #ENV_TO_DEPLOY#/environment-to-deploy: ${DEV}/" params-logical-2-${INPUT_APP_NAME}.yml > params-logical-${INPUT_APP_NAME}.yml
 
-  PIPELINE_NAME=${DEV}-${INPUT_PREFIX}-${INPUT_APP_NAME}
+  PIPELINE_NAME=${DEV}-${INPUT_PREFIX}-${INPUT_APP_NAME}-${INPUT_APP_BRANCH}
 
   fly -t automate sp -p ${PIPELINE_NAME} -c "${PIPELINE_DEPLOY_YML}" -l params-logical-${INPUT_APP_NAME}.yml -n
 
@@ -38,7 +38,7 @@ function releasePipeline(){
   sed "s/concourse-pipeline-name: #PIPELINE_COLL_EVOLUTIVO_NAME#/concourse-pipeline-name: release-collevo-${INPUT_APP_NAME}/" params-logical-2-${INPUT_APP_NAME}.yml > params-logical-3-${INPUT_APP_NAME}.yml
   sed "s/concourse-pipeline-name-consolidato: #PIPELINE_COLL_CONSOLIDATO_NAME#/concourse-pipeline-name-consolidato: release-collcon-${INPUT_APP_NAME}/" params-logical-3-${INPUT_APP_NAME}.yml > params-logical-${INPUT_APP_NAME}.yml
 
-  PIPELINE_NAME=${PREFIX_PIPE_NAME}-${INPUT_APP_NAME}
+  PIPELINE_NAME=${PREFIX_PIPE_NAME}-${INPUT_APP_NAME}-${INPUT_APP_BRANCH}
 
   fly -t automate sp -p ${PIPELINE_NAME} -c "${PIPE_URL}" -l params-logical-${INPUT_APP_NAME}.yml -n
 
@@ -47,6 +47,22 @@ function releasePipeline(){
   rm params-logical-2-${INPUT_APP_NAME}.yml
   rm params-logical-3-${INPUT_APP_NAME}.yml
 }
+
+programname=$0
+
+function usage {
+    # Format for the file
+    # <app-name>@branch-con@branch-evo
+    #
+    echo "usage: $programname [apps file]"
+    exit 1
+}
+
+if [ "$#" -lt 1 ]; then
+  usage
+fi
+
+INPUT_FILE=$1
 
 fly -t automate login -c $CONCOURSE_URL -n $CONCOURSE_TEAM -u $CONCOURSE_USERNAME -p $CONCOURSE_PASSWORD
 fly -t automate sync
@@ -57,17 +73,17 @@ do
   APP_BRANCH=$(echo ${app} | awk -F"@" '{print $2}')  
   APP_BRANCH_EVO=$(echo ${app} | awk -F"@" '{print $3}')
 
-  deployToEnviroment "dev1" ${APP_NAME} ${APP_BRANCH} "collcon"
-  deployToEnviroment "dev2" ${APP_NAME} ${APP_BRANCH} "collcon"
-  deployToEnviroment "dev3" ${APP_NAME} ${APP_BRANCH} "collcon"
-  deployToEnviroment "dev4" ${APP_NAME} ${APP_BRANCH} "collcon"
-  deployToEnviroment "dev1" ${APP_NAME} ${APP_BRANCH_EVO} "collevo"
-  deployToEnviroment "dev2" ${APP_NAME} ${APP_BRANCH_EVO} "collevo"
-  deployToEnviroment "dev3" ${APP_NAME} ${APP_BRANCH_EVO} "collevo"
-  deployToEnviroment "dev4" ${APP_NAME} ${APP_BRANCH_EVO} "collevo"
+  deployToEnviroment "dev1" ${APP_NAME} ${APP_BRANCH} "con"
+  deployToEnviroment "dev2" ${APP_NAME} ${APP_BRANCH} "con"
+  deployToEnviroment "dev3" ${APP_NAME} ${APP_BRANCH} "con"
+  deployToEnviroment "dev4" ${APP_NAME} ${APP_BRANCH} "con"
+  deployToEnviroment "dev1" ${APP_NAME} ${APP_BRANCH_EVO} "evo"
+  deployToEnviroment "dev2" ${APP_NAME} ${APP_BRANCH_EVO} "evo"
+  deployToEnviroment "dev3" ${APP_NAME} ${APP_BRANCH_EVO} "evo"
+  deployToEnviroment "dev4" ${APP_NAME} ${APP_BRANCH_EVO} "evo"
 
-  releasePipeline ${APP_NAME} ${APP_BRANCH} "logical-params-template-release-coll-consolidato-pipe.yml" ${PIPELINE_RELEASE_COLL_CONSOLIDATO_YML} "release-collcon"
-  releasePipeline ${APP_NAME} ${APP_BRANCH_EVO} "logical-params-template-release-coll-evolutivo-pipe.yml" ${PIPELINE_RELEASE_COLL_EVOLUTIVO_YML} "release-collevo"
-  releasePipeline ${APP_NAME} ${APP_BRANCH} "logical-params-template-release-coll-consolidato-pipe.yml" ${PIPELINE_SYSTEM_TEST} "systemtest-collcon"
-  releasePipeline ${APP_NAME} ${APP_BRANCH_EVO} "logical-params-template-release-coll-consolidato-pipe.yml" ${PIPELINE_SYSTEM_TEST} "systemtest-collevo"
-done < "logical-apps"
+  releasePipeline ${APP_NAME} ${APP_BRANCH} "logical-params-template-release-coll-consolidato-pipe.yml" ${PIPELINE_RELEASE_COLL_CONSOLIDATO_YML} "release-con"
+  releasePipeline ${APP_NAME} ${APP_BRANCH_EVO} "logical-params-template-release-coll-evolutivo-pipe.yml" ${PIPELINE_RELEASE_COLL_EVOLUTIVO_YML} "release-evo"
+  releasePipeline ${APP_NAME} ${APP_BRANCH} "logical-params-template-release-coll-consolidato-pipe.yml" ${PIPELINE_SYSTEM_TEST} "systemtest-con"
+  releasePipeline ${APP_NAME} ${APP_BRANCH_EVO} "logical-params-template-release-coll-consolidato-pipe.yml" ${PIPELINE_SYSTEM_TEST} "systemtest-evo"
+done < "${INPUT_FILE}"
