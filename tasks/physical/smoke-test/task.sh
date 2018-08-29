@@ -23,8 +23,7 @@ exportKeyValProperties
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
 echo "--- Smoke Test ---"
-echo "Running Smoke tests ..."
-echo "--- Smoke Test ---"
+mvn test -Dgroups="smoke.Smoke"
 echo ""
 
 # Adding values to the next job
