@@ -23,7 +23,8 @@ exportKeyValProperties
 cd "${ROOT_FOLDER}/${REPO_RESOURCE}" || exit
 
 echo "--- Integration Test ---"
-echo "Running Integration tests ..."
+echo "Running Integration tests and skipping unit tests..."
+mvn verify -DskipUnitTests ${BUILD_OPTIONS}
 echo "--- Integration Test ---"
 echo ""
 
